@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium", "Vindinium\Vindinium.csproj", "{20BC83ED-8BCE-4DFE-BFDD-5340B252B7DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.UnitTests", "Vindinium.UnitTests\Vindinium.UnitTests.csproj", "{D93DB49D-E9A7-4E26-A43D-3FAB844F6207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.MonteCarlo", "Vindinium.MonteCarlo\Vindinium.MonteCarlo.csproj", "{9635D3AB-3E8C-43D4-B40E-4FBCC027ADF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{845B3113-39EE-47C6-97DA-0240F1E04B0D}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		doc\key.txt = doc\key.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20BC83ED-8BCE-4DFE-BFDD-5340B252B7DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20BC83ED-8BCE-4DFE-BFDD-5340B252B7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20BC83ED-8BCE-4DFE-BFDD-5340B252B7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20BC83ED-8BCE-4DFE-BFDD-5340B252B7DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D93DB49D-E9A7-4E26-A43D-3FAB844F6207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93DB49D-E9A7-4E26-A43D-3FAB844F6207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93DB49D-E9A7-4E26-A43D-3FAB844F6207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D93DB49D-E9A7-4E26-A43D-3FAB844F6207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9635D3AB-3E8C-43D4-B40E-4FBCC027ADF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9635D3AB-3E8C-43D4-B40E-4FBCC027ADF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9635D3AB-3E8C-43D4-B40E-4FBCC027ADF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9635D3AB-3E8C-43D4-B40E-4FBCC027ADF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
