@@ -56,6 +56,8 @@
     <Compile Include="MoveDirection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Net\Client.cs" />
+    <Compile Include="Net\ClientParameters.cs" />
     <Compile Include="PlayerType.cs">
       <SubType>Code</SubType>
     </Compile>

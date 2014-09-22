@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using Vindinium.Serialization;
+
+namespace Vindinium.Net
+{
+	public class Client
+	{
+		private const string ContentType = "application/x-www-form-urlencoded";
+
+		/// <summary>Gets the last response.</summary>
+		public GameResponse Response { get; protected set; }
+
+		/// <summary>Returns true if the game is finished, otherwise false.</summary>
+		public bool IsFinished { get { return this.Response.game.finished; } }
+
+		/// <summary>Gets the client parameters.</summary>
+		public ClientParameters Parameters { get; protected set; }
+
+		/// <summary>Gets the game URL.</summary>
+		public string GameUrl { get { return this.Response.playUrl; } }
+
+		/// <summary>Gets the player.</summary>
+		public PlayerType Player { get { return (PlayerType)this.Response.hero.id; } }
+
+		/// <summary>Creates a game.</summary>
+		public void CreateGame(string uri, string parameters)
+		{
+			SendRequest(this.Parameters.Url, this.Parameters.GetCreateGameData());
+		}
+		
+		/// <summary>Plays a move.</summary>
+		public void Move(MoveDirection direction)
+		{
+			SendRequest(this.GameUrl, this.Parameters.GetMoveData(direction));
+		}
+
+		private void SendRequest(string uri, string parameters)
+		{
+			using (var client = new WebClient())
+			{
+				client.Headers[HttpRequestHeader.ContentType] = Client.ContentType;
+				var json = client.UploadString(uri, parameters);
+				this.Response = GameResponse.FromJson(json);
+			}
+		}
+	}
+}

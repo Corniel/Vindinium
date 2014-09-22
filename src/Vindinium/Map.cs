@@ -73,19 +73,20 @@ namespace Vindinium
 		private Tile Spawn4;
 
 		/// <summary>Parses a map.</summary>
-		public static Map Parse(string str)
+		public static Map Parse(string[] lines)
 		{
-			var map = new Map();
-
-			var lines = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
+			if (lines == null)
+			{
+				throw new ArgumentNullException("lines");
+			}
 			if (lines.Length == 0 || !lines.All(line => lines[0].Length == line.Length))
 			{
 				throw new ArgumentException("Invalid map");
 			}
 
 			var tiles = ParseTiles(lines);
-
+			
+			var map = new Map();
 			map.AssignTiles(tiles);
 			map.AssignNeighbors();
 			map.AssignMines();
@@ -93,6 +94,13 @@ namespace Vindinium
 			map.AssignTavernes();
 
 			return map;
+		}
+		/// <summary>Parses a map.</summary>
+		public static Map Parse(string str)
+		{
+			var lines = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+			return Parse(lines);
 		}
 		
 		private static List<Tile> ParseTiles(string[] lines)

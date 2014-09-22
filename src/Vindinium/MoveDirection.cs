@@ -1,4 +1,5 @@
-﻿namespace Vindinium
+﻿using System.Collections.Generic;
+namespace Vindinium
 {
 	/// <summary>Represents the move direction.</summary>
 	/// <remarks>
@@ -22,10 +23,22 @@
 		x = 4,
 	}
 
-	/// <summary>Extra ove directions.</summary>
+	/// <summary>Extra move directions.</summary>
 	public static class MoveDirections
 	{
 		/// <summary>Gets all directions.</summary>
 		public static readonly MoveDirection[] All = new MoveDirection[] { MoveDirection.N, MoveDirection.W, MoveDirection.S, MoveDirection.E, MoveDirection.x };
+
+		/// <summary>Gets the label of the move direction.</summary>
+		public static string ToLabel(this MoveDirection move){return Label[move];}
+
+		/// <summary>Gets the labels for the move directions.</summary>
+		public static readonly Dictionary<MoveDirection, string> Label = new Dictionary<MoveDirection, string>() { 
+			{ MoveDirection.N, "North" },
+			{ MoveDirection.S, "South" },
+			{ MoveDirection.W, "West" },
+			{ MoveDirection.E, "East" },
+			{ MoveDirection.x, "Stay" },
+		};
 	}
 }
