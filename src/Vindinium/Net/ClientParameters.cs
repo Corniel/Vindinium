@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 
@@ -11,6 +12,7 @@ namespace Vindinium.Net
 		public ClientParameters()
 		{
 			this.Turns = 1200;
+			this.Runs = 1;
 		}
 
 		/// <summary>The indentifying key.</summary>
@@ -22,6 +24,8 @@ namespace Vindinium.Net
 		public bool IsTraining { get; set; }
 		/// <summary>The number of turns.</summary>
 		public int Turns { get; set; }
+		/// <summary>The number of turns.</summary>
+		public int Runs { get; set; }
 		/// <summary>The name of the map.</summary>
 		public string Map { get; set; }
 
@@ -56,7 +60,7 @@ namespace Vindinium.Net
 		}
 
 		/// <summary>Creates client parameters.</summary>
-		public static ClientParameters Create(string key, string serverUrl, bool trainingsmode, int turns = 1200, string map = null)
+		public static ClientParameters Create(string key, string serverUrl, bool trainingsmode, int turns = 1200, int runs = 1, string map = null)
 		{
 			if (String.IsNullOrEmpty(key)) { throw new ArgumentNullException("key"); }
 			if (String.IsNullOrEmpty(key)) { throw new ArgumentNullException("serverUrl"); }
@@ -65,12 +69,27 @@ namespace Vindinium.Net
 			var parameters = new ClientParameters()
 			{
 				Key = key,
-				Url = Path.Combine(serverUrl, "api", trainingsmode ? "training" : "arena"),
+				Url = Path.Combine(serverUrl, "api", trainingsmode ? "training" : "arena").Replace('\\', '/'),
 				IsTraining = trainingsmode,
 				Turns = turns,
 				Map = map,
 			};
 			return parameters;
+		}
+
+		public static ClientParameters FromConfig()
+		{
+			var key = ConfigurationManager.AppSettings["key"];
+			var url = ConfigurationManager.AppSettings["url"];
+			var map = ConfigurationManager.AppSettings["map"];
+			var trainingsmode = ConfigurationManager.AppSettings["training"] != "false";
+			int turns = 1200;
+			int runs = 1;
+
+			int.TryParse(ConfigurationManager.AppSettings["turns"], out turns);
+			int.TryParse(ConfigurationManager.AppSettings["runs"], out runs);
+
+			return Create(key, url, trainingsmode, turns, runs, map);
 		}
 	}
 }

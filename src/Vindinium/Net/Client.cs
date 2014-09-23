@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Vindinium.Serialization;
 
 namespace Vindinium.Net
@@ -11,6 +6,11 @@ namespace Vindinium.Net
 	public class Client
 	{
 		private const string ContentType = "application/x-www-form-urlencoded";
+
+		public Client(ClientParameters parameters)
+		{
+			this.Parameters = parameters;
+		}
 
 		/// <summary>Gets the last response.</summary>
 		public GameResponse Response { get; protected set; }
@@ -28,7 +28,7 @@ namespace Vindinium.Net
 		public PlayerType Player { get { return (PlayerType)this.Response.hero.id; } }
 
 		/// <summary>Creates a game.</summary>
-		public void CreateGame(string uri, string parameters)
+		public void CreateGame()
 		{
 			SendRequest(this.Parameters.Url, this.Parameters.GetCreateGameData());
 		}

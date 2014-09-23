@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9635D3AB-3E8C-43D4-B40E-4FBCC027ADF7}</ProjectGuid>
+    <ProjectGuid>{FD01556E-38A1-4B45-BF86-3E16610117AF}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vindinium.MonteCarlo</RootNamespace>
-    <AssemblyName>MonteCarlo</AssemblyName>
+    <RootNamespace>Vindinium.Random</RootNamespace>
+    <AssemblyName>Vindinium.Random</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -40,24 +40,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Troschuetz.Random">
-      <HintPath>..\packages\Troschuetz.Random.3.2.0\lib\net40-client\Troschuetz.Random.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MonteCarloSimulation.cs" />
-    <Compile Include="MonteCarlo.cs" />
+    <Compile Include="RandomBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config.sample" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vindinium\Vindinium.csproj">
       <Project>{20bc83ed-8bce-4dfe-bfdd-5340b252b7db}</Project>
       <Name>Vindinium</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config.sample" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
