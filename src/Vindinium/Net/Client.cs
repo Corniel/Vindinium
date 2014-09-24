@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Vindinium.Serialization;
 
 namespace Vindinium.Net
@@ -16,7 +17,10 @@ namespace Vindinium.Net
 		public GameResponse Response { get; protected set; }
 
 		/// <summary>Returns true if the game is finished, otherwise false.</summary>
-		public bool IsFinished { get { return this.Response.game.finished; } }
+		public bool IsFinished { get { return this.Response.game.finished || this.IsCrashed; } }
+
+		/// <summary>Returns true if the game crashed, otherwise false.</summary>
+		public bool IsCrashed { get; set; }
 
 		/// <summary>Gets the client parameters.</summary>
 		public ClientParameters Parameters { get; protected set; }
@@ -41,11 +45,19 @@ namespace Vindinium.Net
 
 		private void SendRequest(string uri, string parameters)
 		{
-			using (var client = new WebClient())
+			try
 			{
-				client.Headers[HttpRequestHeader.ContentType] = Client.ContentType;
-				var json = client.UploadString(uri, parameters);
-				this.Response = GameResponse.FromJson(json);
+				using (var client = new WebClient())
+				{
+					client.Headers[HttpRequestHeader.ContentType] = Client.ContentType;
+					var json = client.UploadString(uri, parameters);
+					this.Response = GameResponse.FromJson(json);
+				}
+			}
+			catch (Exception x)
+			{
+				Console.WriteLine(x);
+				this.IsCrashed = true;
 			}
 		}
 	}

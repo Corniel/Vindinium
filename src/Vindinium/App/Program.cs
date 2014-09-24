@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.IO;
+using System.Net;
 using Vindinium.Net;
 
 namespace Vindinium.App
@@ -21,29 +17,45 @@ namespace Vindinium.App
 
 		public void Run()
 		{
-			int runs = this.Parameters.Runs;
-
-			while (runs == -1 || runs-- > 0)
+			int left = this.Parameters.Runs;
+			int run = 0;
+			while (left == -1 || left-- > 0)
 			{
+				Console.WriteLine("Run {0} of {1}", run++, left == -1 ? "oo" : this.Parameters.Runs.ToString());
+
 				this.Client = new Client(this.Parameters);
 				this.Client.CreateGame();
+				
+				using (var writer = new StreamWriter("replay.html", true))
+				{
+					writer.WriteLine("<a href='{0}'>{0}</a><br />", this.Client.Response.viewUrl);
+				}
+				
 				CreateGame();
 
-				while (!this.Client.IsFinished)
+				while (!this.Client.IsFinished && !this.Client.IsCrashed)
 				{
-					var move = GetMove();
-					this.Client.Move(move);
+					try
+					{
+						Console.Write("{0,4}\r", this.Client.Response.game.turn);
+						var move = GetMove();
+						this.Client.Move(move);
+					}
+					catch (WebException x)
+					{
+						Console.WriteLine(x.Message);
+						this.Client.IsCrashed = true;
+					}
+					catch (Exception x)
+					{
+						Console.WriteLine(x);
+						this.Client.IsCrashed = true;
+					}
 				}
+				Console.WriteLine(this.Client.Response.viewUrl);
 			}
 		}
-		protected virtual void CreateGame()
-		{
-			//opens up a webpage so you can view the game, doing it async so we dont time out
-			new Thread(delegate()
-			{
-				Process.Start(this.Client.Response.viewUrl);
-			}).Start();
-		}
+		protected virtual void CreateGame() { }
 		
 		protected abstract MoveDirection GetMove();
 

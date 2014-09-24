@@ -213,5 +213,9 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#Personal
 /src/packages
 /doc
+key.txt
+*.config

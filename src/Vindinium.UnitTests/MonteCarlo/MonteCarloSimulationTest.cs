@@ -22,7 +22,7 @@ namespace Vindinium.UnitTests.MonteCarlo
 			var state = State.Create(MapTest.Map16);
 
 			var simSingle = new MonteCarloSimulation(17, false);
-			var act = simSingle.GetMove(MapTest.Map16, state, SimulationTime);
+			var act = simSingle.GetMove(MapTest.Map16, PlayerType.Hero1, state, SimulationTime, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Single)", simSingle.Simulations / SimulationTime.TotalMilliseconds);
 
 			Assert.AreEqual(MoveDirection.E, act);
@@ -38,7 +38,7 @@ namespace Vindinium.UnitTests.MonteCarlo
 			var state = State.Create(MapTest.Map16);
 
 			var simParallel = new MonteCarloSimulation(17, true);
-			var act = simParallel.GetMove(MapTest.Map16, state, SimulationTime);
+			var act = simParallel.GetMove(MapTest.Map16, PlayerType.Hero1, state, SimulationTime, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Parallel)", simParallel.Simulations / SimulationTime.TotalMilliseconds);
 
 			Assert.AreEqual(MoveDirection.E, act);
@@ -52,7 +52,7 @@ namespace Vindinium.UnitTests.MonteCarlo
 
 			var time = TimeSpan.FromSeconds(2);
 
-			var moveSingle = simSingle.GetMove(MapTest.Map16, state, time);
+			var moveSingle = simSingle.GetMove(MapTest.Map16, PlayerType.Hero1, state, time, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Single)", simSingle.Simulations / time.TotalMilliseconds);
 		}
 	}

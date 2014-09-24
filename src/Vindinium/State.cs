@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Vindinium
 {
@@ -406,6 +404,40 @@ namespace Vindinium
 			}
 		}
 
+		/// <summary>Updates the state.</summary>
+		public State Update(Serialization.Game game)
+		{
+			var state = new State()
+			{
+				turn = (ushort)game.turn,
+				hero1 = Hero.Create(game.heroes[0]),
+				hero2 = Hero.Create(game.heroes[1]),
+				hero3 = Hero.Create(game.heroes[2]),
+				hero4 = Hero.Create(game.heroes[3]),
+				mines0 = mines0,
+				mines1 = mines1,
+			};
+
+			var index = 0;
+
+			for (int p = 0; p < game.board.tiles.Length; p += 2)
+			{
+				if (game.board.tiles[p] == '$')
+				{
+					switch (game.board.tiles[p + 1])
+					{
+						case '1': state.SetMine(index, PlayerType.Hero1); break;
+						case '2': state.SetMine(index, PlayerType.Hero2); break;
+						case '3': state.SetMine(index, PlayerType.Hero3); break;
+						case '4': state.SetMine(index, PlayerType.Hero4); break;
+						case '-':
+						default: state.SetMine(index, PlayerType.None); break; 
+					}
+					index++;
+				}
+			}
+			return state;
+		}
 
 		/// <summary>Represents the state as unit test string.</summary>
 		public string ToUnitTestString()

@@ -11,7 +11,7 @@ namespace Vindinium.Net
 		/// <summary>Constructor.</summary>
 		public ClientParameters()
 		{
-			this.Turns = 1200;
+			this.Turns = 300;
 			this.Runs = 1;
 		}
 
@@ -60,7 +60,7 @@ namespace Vindinium.Net
 		}
 
 		/// <summary>Creates client parameters.</summary>
-		public static ClientParameters Create(string key, string serverUrl, bool trainingsmode, int turns = 1200, int runs = 1, string map = null)
+		public static ClientParameters Create(string key, string serverUrl, bool trainingsmode, int turns = 300, int runs = 1, string map = null)
 		{
 			if (String.IsNullOrEmpty(key)) { throw new ArgumentNullException("key"); }
 			if (String.IsNullOrEmpty(key)) { throw new ArgumentNullException("serverUrl"); }
@@ -83,10 +83,13 @@ namespace Vindinium.Net
 			var url = ConfigurationManager.AppSettings["url"];
 			var map = ConfigurationManager.AppSettings["map"];
 			var trainingsmode = ConfigurationManager.AppSettings["training"] != "false";
-			int turns = 1200;
+			int turns = 300;
 			int runs = 1;
 
-			int.TryParse(ConfigurationManager.AppSettings["turns"], out turns);
+			if (trainingsmode)
+			{
+				int.TryParse(ConfigurationManager.AppSettings["turns"], out turns);
+			}
 			int.TryParse(ConfigurationManager.AppSettings["runs"], out runs);
 
 			return Create(key, url, trainingsmode, turns, runs, map);

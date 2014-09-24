@@ -10,6 +10,8 @@ namespace Vindinium.Serialization
 		[DataMember]
 		public int id;
 
+		public PlayerType Player { get { return (PlayerType)id; } }
+
 		[DataMember]
 		public string name;
 

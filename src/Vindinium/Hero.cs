@@ -146,6 +146,12 @@ namespace Vindinium
 		/// <summary>The hero loses a mine.</summary>
 		public Hero LoseMine(int mines)
 		{
+#if DEBUG
+			if (mines < 1)
+			{
+				throw new ArgumentOutOfRangeException("mines", "should be at least 1.");
+			}
+#endif
 			var val = m_Value ^ (MaskMines << PositionMines);
 			val |= (ulong)((mines - 1)) << PositionMines;
 
@@ -284,6 +290,15 @@ namespace Vindinium
 			hero.m_Value |= ((ulong)gold) << PositionGold;
 
 			return hero;
+		}
+
+		/// <summary>Creates a hero based on the serialization hero.</summary>
+		/// <remarks>
+		/// The X and Y coordinate of the Pos object are flipped.
+		/// </remarks>
+		public static Hero Create(Serialization.Hero hero)
+		{
+			return new Hero(hero.life, hero.pos.y, hero.pos.x, hero.mineCount, hero.gold);
 		}
 	}
 }
