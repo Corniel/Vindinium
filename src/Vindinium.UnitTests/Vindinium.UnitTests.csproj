@@ -65,6 +65,7 @@
     <Compile Include="MonteCarlo\MonteCarloSimulationTest.cs" />
     <Compile Include="Serialization\GameResponseTest.cs" />
     <Compile Include="StateTest.cs" />
+    <Compile Include="TileTypesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

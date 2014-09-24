@@ -7,6 +7,23 @@ namespace Vindinium.UnitTests
 	public class HeroTest
 	{
 		[Test]
+		public void Create_Serialization_AreEqual()
+		{
+			var serialization = new Vindinium.Serialization.Hero()
+			{
+				pos = new Vindinium.Serialization.Pos() {  x = 12, y = 13 },
+				gold = 14,
+				mineCount = 7,
+				life = 99,
+				id = 4,
+			};
+
+			var act = Hero.Create(serialization);
+			var exp = "Hero[13,12] Health: 99, Mines: 7, Gold: 14";
+			Assert.AreEqual(exp, act.DebugToString());
+		}
+
+		[Test]
 		public void Initial_XAndY_AreEqual()
 		{
 			var hero = Hero.Initial(23, 24);

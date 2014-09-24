@@ -3,7 +3,7 @@ namespace Vindinium
 {
 	public static class Bits
 	{
-		/// <summary>Gets a (zero index based) UIn32 flag mask.</summary>
+		/// <summary>Gets a (zero index based) UInt32 flag mask.</summary>
 		/// <param name="index">
 		/// The index of the bit to test for.
 		/// </param>
@@ -47,7 +47,7 @@ namespace Vindinium
 			}
 		}
 
-		/// <summary>Gets a (zero index based) UIn32 mask.</summary>
+		/// <summary>Gets a (zero index based) UInt32 mask.</summary>
 		/// <param name="index">
 		/// The index of the bit to test for.
 		/// </param>
@@ -123,7 +123,7 @@ namespace Vindinium
 			}
 		}
 
-		/// <summary>Gets a (zero index based) UIn32 unflag mask.</summary>
+		/// <summary>Gets a (zero index based) UInt32 unflag mask.</summary>
 		/// <param name="index">
 		/// The index of the bit to test for.
 		/// </param>
@@ -164,6 +164,83 @@ namespace Vindinium
 				case 30: return 0xbfffffff;
 				case 31: return 0x7fffffff;
 				default: throw new ArgumentOutOfRangeException("index", "Index should be in the range [0, 31].");
+			}
+		}
+
+		/// <summary>Gets a (zero index based) UInt64 unflag mask.</summary>
+		/// <param name="index">
+		/// The index of the bit to test for.
+		/// </param>
+		public static ulong GetUnflagMaskUInt64(int index)
+		{
+			switch (index)
+			{
+				case 00: return 0xfffffffffffffffe;
+				case 01: return 0xfffffffffffffffd;
+				case 02: return 0xfffffffffffffffb;
+				case 03: return 0xfffffffffffffff7;
+				case 04: return 0xffffffffffffffef;
+				case 05: return 0xffffffffffffffdf;
+				case 06: return 0xffffffffffffffbf;
+				case 07: return 0xffffffffffffff7f;
+				case 08: return 0xfffffffffffffeff;
+				case 09: return 0xfffffffffffffdff;
+				case 10: return 0xfffffffffffffbff;
+				case 11: return 0xfffffffffffff7ff;
+				case 12: return 0xffffffffffffefff;
+				case 13: return 0xffffffffffffdfff;
+				case 14: return 0xffffffffffffbfff;
+				case 15: return 0xffffffffffff7fff;
+				case 16: return 0xfffffffffffeffff;
+				case 17: return 0xfffffffffffdffff;
+				case 18: return 0xfffffffffffbffff;
+				case 19: return 0xfffffffffff7ffff;
+				case 20: return 0xffffffffffefffff;
+				case 21: return 0xffffffffffdfffff;
+				case 22: return 0xffffffffffbfffff;
+				case 23: return 0xffffffffff7fffff;
+				case 24: return 0xfffffffffeffffff;
+				case 25: return 0xfffffffffdffffff;
+				case 26: return 0xfffffffffbffffff;
+				case 27: return 0xfffffffff7ffffff;
+				case 28: return 0xffffffffefffffff;
+				case 29: return 0xffffffffdfffffff;
+				case 30: return 0xffffffffbfffffff;
+				case 31: return 0xffffffff7fffffff;
+				case 32: return 0xfffffffeffffffff;
+				case 33: return 0xfffffffdffffffff;
+				case 34: return 0xfffffffbffffffff;
+				case 35: return 0xfffffff7ffffffff;
+				case 36: return 0xffffffefffffffff;
+				case 37: return 0xffffffdfffffffff;
+				case 38: return 0xffffffbfffffffff;
+				case 39: return 0xffffff7fffffffff;
+				case 40: return 0xfffffeffffffffff;
+				case 41: return 0xfffffdffffffffff;
+				case 42: return 0xfffffbffffffffff;
+				case 43: return 0xfffff7ffffffffff;
+				case 44: return 0xffffefffffffffff;
+				case 45: return 0xffffdfffffffffff;
+				case 46: return 0xffffbfffffffffff;
+				case 47: return 0xffff7fffffffffff;
+				case 48: return 0xfffeffffffffffff;
+				case 49: return 0xfffdffffffffffff;
+				case 50: return 0xfffbffffffffffff;
+				case 51: return 0xfff7ffffffffffff;
+				case 52: return 0xffefffffffffffff;
+				case 53: return 0xffdfffffffffffff;
+				case 54: return 0xffbfffffffffffff;
+				case 55: return 0xff7fffffffffffff;
+				case 56: return 0xfeffffffffffffff;
+				case 57: return 0xfdffffffffffffff;
+				case 58: return 0xfbffffffffffffff;
+				case 59: return 0xf7ffffffffffffff;
+				case 60: return 0xefffffffffffffff;
+				case 61: return 0xdfffffffffffffff;
+				case 62: return 0xbfffffffffffffff;
+				case 63: return 0x7fffffffffffffff;
+
+				default: throw new ArgumentOutOfRangeException("index", "Index should be in the range [0, 63].");
 			}
 		}
 

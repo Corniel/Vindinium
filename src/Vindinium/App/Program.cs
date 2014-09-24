@@ -25,6 +25,8 @@ namespace Vindinium.App
 
 				this.Client = new Client(this.Parameters);
 				this.Client.CreateGame();
+
+				if (this.Client.IsCrashed) { continue; }
 				
 				using (var writer = new StreamWriter("replay.html", true))
 				{

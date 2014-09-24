@@ -232,6 +232,7 @@ namespace Vindinium
 				// died trying to get a mine.
 				if (health == Hero.HealthMin)
 				{
+					state.ownership = ownership.ChangeOwnership(player, PlayerType.None, map.Mines.Length);
 					hero = Hero.Respawn(map.GetSpawn(player), gold);
 				}
 				// try to battle.

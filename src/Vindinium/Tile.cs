@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vindinium
 {
@@ -61,6 +59,7 @@ namespace Vindinium
 			this.Directions = m_Neighbors.Keys.Where(d => m_Neighbors[d] != null).ToArray();
 		}
 
+		[ExcludeFromCodeCoverage]
 		public string DebugToString()
 		{
 			return string.Format("Tile[{0},{1}] {2}, Neighbors: {3}",

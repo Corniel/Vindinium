@@ -1,32 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Linq;
 
 namespace Vindinium
 {
 	[DebuggerDisplay("{DebugToString()}")]
 	public struct MineOwnership
 	{
+		public const int IndexMax = 64;
 		public static readonly MineOwnership Empty = default(MineOwnership);
 
-		private ulong m_Value;
-		private uint m_Index;
+		private ulong m_Index;
+		private ulong m_Value0;
+		private ulong m_Value1;
 
 		public PlayerType this[int index]
 		{
 			get
 			{
-				if ((m_Index & Bits.GetFlagMaskUInt32(index)) == 0)
+				if ((m_Index & Bits.GetFlagMaskUInt64(index)) == 0)
 				{
 					return PlayerType.None;
 				}
-				var val = 3 & (m_Value >> (index << 1));
+				ulong val = 0;
+				switch (index >> 5)
+				{
+					case 01: val = 3 & (m_Value1 >> ((31 & index) << 1)); break;
+					default: val = 3 & (m_Value0 >> (index << 1)); break;
+				}
 				switch (val)
 				{
 					default:
@@ -40,29 +42,49 @@ namespace Vindinium
 
 		public MineOwnership Set(int index, PlayerType player)
 		{
-			var index2 = index << 1;
+			var index2 = (31 & index) << 1;
+			var bank = index >> 5;
 
 			var mines = new MineOwnership()
 			{
 				// copy the value but clear the index spot.
-				m_Value = m_Value & (UInt64.MaxValue ^ (3UL << index2)),
+				m_Value0 = m_Value0,
+				m_Value1 = m_Value1,
 				m_Index = m_Index,
 			};
-			
+			switch (bank)
+			{
+				case 01: mines.m_Value1 &= (UInt64.MaxValue ^ (3UL << index2)); break;
+				default: mines.m_Value0 &= (UInt64.MaxValue ^ (3UL << index2)); break;
+			}
+
 			// remove all.
 			if (player == PlayerType.None)
 			{
-				mines.m_Index &= Bits.GetUnflagMaskUInt32(index);
+				mines.m_Index &= Bits.GetFlagMaskUInt64(index);
 			}
 			else
 			{
-				mines.m_Index |= Bits.GetFlagMaskUInt32(index);
+				mines.m_Index |= Bits.GetFlagMaskUInt64(index);
 
-				switch (player)
+				switch (bank)
 				{
-					case PlayerType.Hero2: mines.m_Value |= 1UL << index2; break;
-					case PlayerType.Hero3: mines.m_Value |= 2UL << index2; break;
-					case PlayerType.Hero4: mines.m_Value |= 3UL << index2; break;
+					case 1:
+						switch (player)
+						{
+							case PlayerType.Hero2: mines.m_Value1 |= 1UL << index2; break;
+							case PlayerType.Hero3: mines.m_Value1 |= 2UL << index2; break;
+							case PlayerType.Hero4: mines.m_Value1 |= 3UL << index2; break;
+						}
+						break;
+					default:
+						switch (player)
+						{
+							case PlayerType.Hero2: mines.m_Value0 |= 1UL << index2; break;
+							case PlayerType.Hero3: mines.m_Value0 |= 2UL << index2; break;
+							case PlayerType.Hero4: mines.m_Value0 |= 3UL << index2; break;
+						}
+						break;
 				}
 			}
 			return mines;
@@ -74,7 +96,8 @@ namespace Vindinium
 #endif
 			var mines = new MineOwnership()
 			{
-				m_Value = m_Value,
+				m_Value0 = m_Value0,
+				m_Value1 = m_Value1,
 				m_Index = m_Index,
 			};
 
@@ -82,23 +105,58 @@ namespace Vindinium
 			{
 				for (int index = 0; index < mineLength; index++)
 				{
-					mines.m_Value &= (UInt64.MaxValue ^ (3UL << (index << 1)));
-					mines.m_Index &= Bits.GetUnflagMaskUInt32(index);
+					var shft = (31 & index) << 1;
+					var bank = index >> 5;
+					var cur = (PlayerType)(1 + (3 & (mines.m_Value0 >> shft)));
+
+					if (cur == curOwner)
+					{
+						switch (bank)
+						{
+							case 01: mines.m_Value1 &= (UInt64.MaxValue ^ (3UL << shft)); break;
+							default: mines.m_Value0 &= (UInt64.MaxValue ^ (3UL << shft)); break;
+						}
+						mines.m_Index &= Bits.GetUnflagMaskUInt64(index);
+					}
 				}
 			}
 			else
 			{
 				for (int index = 0; index < mineLength; index++)
 				{
-					var index2 = index << 1;
-					mines.m_Value &= (UInt64.MaxValue ^ (3UL << index2));
-					mines.m_Index &= Bits.GetUnflagMaskUInt32(index);
+					var shft = (31 & index) << 1;
+					var bank = index >> 5;
 
-					switch (newOwner)
+					PlayerType cur = PlayerType.None;
+					switch (bank)
 					{
-						case PlayerType.Hero2: mines.m_Value |= 1UL << index2; break;
-						case PlayerType.Hero3: mines.m_Value |= 2UL << index2; break;
-						case PlayerType.Hero4: mines.m_Value |= 3UL << index2; break;
+						case 01: cur = (PlayerType)(1 + (3 & (mines.m_Value1 >> shft))); break;
+						default: cur = (PlayerType)(1 + (3 & (mines.m_Value0 >> shft))); break;
+					}
+
+					if (cur == curOwner)
+					{
+						switch (bank)
+						{
+							case 1:
+								mines.m_Value1 &= (UInt64.MaxValue ^ (3UL << shft));
+								switch (newOwner)
+								{
+									case PlayerType.Hero2: mines.m_Value1 |= 1UL << shft; break;
+									case PlayerType.Hero3: mines.m_Value1 |= 2UL << shft; break;
+									case PlayerType.Hero4: mines.m_Value1 |= 3UL << shft; break;
+								}
+								break;
+							default:
+								mines.m_Value0 &= (UInt64.MaxValue ^ (3UL << shft));
+								switch (newOwner)
+								{
+									case PlayerType.Hero2: mines.m_Value0 |= 1UL << shft; break;
+									case PlayerType.Hero3: mines.m_Value0 |= 2UL << shft; break;
+									case PlayerType.Hero4: mines.m_Value0 |= 3UL << shft; break;
+								}
+								break;
+						}
 					}
 				}
 			}
@@ -108,26 +166,26 @@ namespace Vindinium
 		public int Count(PlayerType player)
 		{
 			var count = 0;
-			for (int index = 0; index < 32; index++)
+			for (int index = 0; index < IndexMax; index++)
 			{
 				if (this[index] == player)
 				{
-					index++;
+					count++;
 				}
 			}
 			return count;
 		}
-	
+
 		public string DebugToString()
 		{
 			var sb = new StringBuilder();
 
-			for (int index = 0; index < 32; index++)
+			for (int index = 0; index < IndexMax; index++)
 			{
 				switch (this[index])
 				{
 					default:
-					case PlayerType.None:  sb.Append('.'); break;
+					case PlayerType.None: sb.Append('.'); break;
 					case PlayerType.Hero1: sb.Append('1'); break;
 					case PlayerType.Hero2: sb.Append('2'); break;
 					case PlayerType.Hero3: sb.Append('3'); break;
@@ -174,9 +232,18 @@ namespace Vindinium
 
 			for (int index = 0; index < mines.Length; index++)
 			{
-				ownership = ownership.Set(index, mines[index]);
+				if (mines[index] != PlayerType.None)
+				{
+					ownership = ownership.Set(index, mines[index]);
+				}
 			}
 			return ownership;
+		}
+
+		public override bool Equals(object obj) { return base.Equals(obj); }
+		public override int GetHashCode()
+		{
+			return m_Index.GetHashCode() ^ m_Value0.GetHashCode();
 		}
 	}
 }

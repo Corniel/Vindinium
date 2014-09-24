@@ -25,7 +25,7 @@ namespace Vindinium.UnitTests.MonteCarlo
 			var act = simSingle.GetMove(MapTest.Map16, PlayerType.Hero1, state, SimulationTime, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Single)", simSingle.Simulations / SimulationTime.TotalMilliseconds);
 
-			Assert.AreEqual(MoveDirection.E, act);
+			Assert.AreEqual(MoveDirection.S, act);
 		}
 
 		/// <summary>Tests the speed of the parallel monte carlo approach.</summary>
@@ -41,7 +41,7 @@ namespace Vindinium.UnitTests.MonteCarlo
 			var act = simParallel.GetMove(MapTest.Map16, PlayerType.Hero1, state, SimulationTime, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Parallel)", simParallel.Simulations / SimulationTime.TotalMilliseconds);
 
-			Assert.AreEqual(MoveDirection.E, act);
+			Assert.AreEqual(MoveDirection.S, act);
 		}
 		[Test]
 		public void GetMove_Performance_()
