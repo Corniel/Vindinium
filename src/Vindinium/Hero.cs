@@ -9,9 +9,9 @@ using System.Xml.Serialization;
 namespace Vindinium
 {
 	/// <summary>Represents a Hero (state) in Vindinium.</summary>
-    [DebuggerDisplay("{DebugToString()}")]
+	[DebuggerDisplay("{DebugToString()}")]
 	public struct Hero : ISerializable, IXmlSerializable
-    {
+	{
 		public const int PositionX = 8;
 		public const int PositionY = 16;
 		public const int PositionMines = 24;
@@ -21,6 +21,8 @@ namespace Vindinium
 		public const ulong MaskDimension = Bits.Mask08;
 		public const ulong MaskDimensions = Bits.Mask16;
 		public const ulong MaskMines = Bits.Mask08;
+		public const ulong MaskClearMines = (ulong.MaxValue ^ (MaskMines << PositionMines));
+		public const ulong MaskClearHealth = (ulong.MaxValue ^ MaskHealth);
 
 		public const int HealthMax = 100;
 		public const int HealthTavern = 50;
@@ -72,49 +74,49 @@ namespace Vindinium
 
 		/// <summary>The underlying value.</summary>
 		private ulong m_Value;
-		
-        #region (XML) (De)serialization
+
+		#region (XML) (De)serialization
 
 		/// <summary>Initializes a new instance of Hero based on the serialization info.</summary>
-        /// <param name="info">The serialization info.</param>
-        /// <param name="context">The streaming context.</param>
+		/// <param name="info">The serialization info.</param>
+		/// <param name="context">The streaming context.</param>
 		private Hero(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) { throw new ArgumentNullException("info"); }
-            m_Value = info.GetUInt64("Value");
-        }
+		{
+			if (info == null) { throw new ArgumentNullException("info"); }
+			m_Value = info.GetUInt64("Value");
+		}
 
 		/// <summary>Adds the underlying propererty of Hero to the serialization info.</summary>
-        /// <param name="info">The serialization info.</param>
-        /// <param name="context">The streaming context.</param>
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) { throw new ArgumentNullException("info"); }
-            info.AddValue("Value", m_Value);
-        }
+		/// <param name="info">The serialization info.</param>
+		/// <param name="context">The streaming context.</param>
+		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			if (info == null) { throw new ArgumentNullException("info"); }
+			info.AddValue("Value", m_Value);
+		}
 
 		/// <summary>Gets the xml schema to (de) serialize a Hero.</summary>
-        /// <remarks>
-        /// Returns null as no schema is required.
-        /// </remarks>
-        XmlSchema IXmlSerializable.GetSchema() { return null; }
+		/// <remarks>
+		/// Returns null as no schema is required.
+		/// </remarks>
+		XmlSchema IXmlSerializable.GetSchema() { return null; }
 
 		/// <summary>Reads the Hero from an xml writer.</summary>
-        /// <param name="reader">An xml reader.</param>
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            var s = reader.ReadElementString();
+		/// <param name="reader">An xml reader.</param>
+		void IXmlSerializable.ReadXml(XmlReader reader)
+		{
+			var s = reader.ReadElementString();
 			m_Value = XmlConvert.ToUInt64(s);
-        }
+		}
 
 		/// <summary>Writes the Hero to an xml writer.</summary>
-        /// <param name="writer">An xml writer.</param>
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            writer.WriteString(XmlConvert.ToString(m_Value));
-        }
+		/// <param name="writer">An xml writer.</param>
+		void IXmlSerializable.WriteXml(XmlWriter writer)
+		{
+			writer.WriteString(XmlConvert.ToString(m_Value));
+		}
 
-        #endregion
+		#endregion
 
 		#region properties
 
@@ -147,32 +149,43 @@ namespace Vindinium
 		public Hero LoseMine(int mines)
 		{
 #if DEBUG
-			if (mines < 1)
+			if (mines < 1 || mines != this.Mines)
 			{
 				throw new ArgumentOutOfRangeException("mines", "should be at least 1.");
 			}
 #endif
-			var val = m_Value ^ (MaskMines << PositionMines);
-			val |= (ulong)((mines - 1)) << PositionMines;
+			unchecked
+			{
+				var val = m_Value & Hero.MaskClearMines;
 
-			return new Hero() { m_Value = val };
+				val |= (ulong)((mines - 1)) << PositionMines;
+
+				return new Hero() { m_Value = val };
+			}
 		}
 
 		/// <summary>Gets a version of the hero who is just slapped.</summary>
 		public Hero Slapped(int health)
 		{
+#if DEBUG
+			if (health < 1 || health != this.Health)
+			{
+				throw new ArgumentOutOfRangeException("health", "should be at least 1.");
+			}
+#endif
 			unchecked
 			{
 				health -= Hero.HealthBattle;
-				var val = (m_Value ^ (MaskHealth)) | (ulong)health;
+				var val = m_Value & Hero.MaskClearHealth;
+				val |= (ulong)health;
 				return new Hero() { m_Value = val };
 			}
 		}
-		
+
 		/// <summary>Returns a System.String that represents the current BIC for debug purposes.</summary>
 		public string DebugToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, 
+			return string.Format(CultureInfo.InvariantCulture,
 				"Hero[{0},{1}] Health: {2}, Mines: {3}, Gold: {4:#,##0}",
 				X, Y, Health, Mines, Gold);
 		}
@@ -183,7 +196,7 @@ namespace Vindinium
 		public override int GetHashCode() { return m_Value.GetHashCode(); }
 
 		/// <summary>Returns true if the object equals the hero otherwise false.</summary>
-		public override bool Equals(object obj){return base.Equals(obj);}
+		public override bool Equals(object obj) { return base.Equals(obj); }
 
 		/// <summary>Returns true if the left and right operand are not equal, otherwise false.</summary>
 		/// <param name="left">The left operand.</param>
