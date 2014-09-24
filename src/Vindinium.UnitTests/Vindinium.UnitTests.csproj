@@ -60,6 +60,7 @@
     <Compile Include="DistanceTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="MapTest.cs" />
+    <Compile Include="MineOwnershipTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MonteCarlo\MonteCarloSimulationTest.cs" />
     <Compile Include="Serialization\GameResponseTest.cs" />

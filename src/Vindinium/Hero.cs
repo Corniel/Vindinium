@@ -215,13 +215,13 @@ namespace Vindinium
 		}
 		#endregion
 
-		/// <summary>Gets an intial Hero.</summary>
+		/// <summary>Gets an initial Hero.</summary>
 		public static Hero Initial(int x, int y)
 		{
 			return new Hero(Hero.HealthMax, x, y, 0, 0);
 		}
 
-		/// <summary>Gets an intial Hero.</summary>
+		/// <summary>Gets an initial Hero.</summary>
 		public static Hero Initial(Map map, PlayerType player)
 		{
 			var tile = map.GetSpawn(player);

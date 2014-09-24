@@ -55,6 +55,7 @@
     <Compile Include="Map.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MineOwnership.cs" />
     <Compile Include="MoveDirection.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -52,7 +52,7 @@ Mines: 1.3.............................";
 		{
 			var map = MapTest.Map06;
 
-			var mines = new int[] { 1, 1, 1, 4 };
+			var mines = MineOwnership.Create( 1, 1, 1, 4 );
 			var hero1 = new Hero(18, 3, 3, 3, 100);
 			var hero2 = new Hero(80, 2, 3, 0, 101);
 			var hero3 = new Hero(81, 4, 4, 0, 102);
