@@ -97,5 +97,11 @@ namespace Vindinium.UnitTests
 			Assert.AreEqual(act[13, 14], act.GetSpawn(PlayerType.Hero3), "Hero3");
 			Assert.AreEqual(act[13, 05], act.GetSpawn(PlayerType.Hero4), "Hero4");
 		}
+
+		[Test]
+		public void GetDistances_Tile_DistancesArray()
+		{
+			Distance[,] act = MapTest.Map16.GetDistances(MapTest.Map16[13, 12]);
+		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Vindinium.App
 		public void Run()
 		{
 			int left = this.Parameters.Runs;
-			int run = 0;
+			int run = 1;
 			while (left == -1 || left-- > 0)
 			{
 				Console.WriteLine("Run {0} of {1}", run++, left == -1 ? "oo" : this.Parameters.Runs.ToString());

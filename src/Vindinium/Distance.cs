@@ -19,8 +19,11 @@ namespace Vindinium
         /// <summary>Represents an unknown distance.</summary>
 		public static readonly Distance Unknown = new Distance() { m_Value = default(UInt16) };
 
-        /// <summary>Represents an unknown (but set) distance.</summary>
+        /// <summary>Represents a distance of zero.</summary>
 		public static readonly Distance Zero = new Distance() { m_Value = UInt16.MaxValue };
+
+		/// <summary>Represents a distance of one.</summary>
+		public static readonly Distance One = new Distance() { m_Value = UInt16.MaxValue - 1 };
 
 		/// <summary>Constructs a distance.</summary>
 		private Distance(UInt16 val)
@@ -209,14 +212,19 @@ namespace Vindinium
         /// </returns>
 		public int CompareTo(Distance other) { return other.m_Value.CompareTo(m_Value); }
 
-
 		public static Distance operator ++(Distance org)
 		{
-			return new Distance() { m_Value = (UInt16)(org.m_Value - 1) };
+			unchecked
+			{
+				return new Distance() { m_Value = (UInt16)(org.m_Value - 1) };
+			}
 		}
 		public static Distance operator --(Distance org)
 		{
-			return new Distance() { m_Value = (UInt16)(org.m_Value + 1) };
+			unchecked
+			{
+				return new Distance() { m_Value = (UInt16)(org.m_Value + 1) };
+			}
 		}
 
         /// <summary>Returns true if the left operator is less then the right operator, otherwise false.</summary>
@@ -246,10 +254,10 @@ namespace Vindinium
         public static implicit operator Distance(Int32 val) { return new Distance((UInt16)val); }
 
 		#endregion
+		
+		#region Factory methods
 
-        #region Factory methods
-
-        /// <summary>Converts the string to a Distance.</summary>
+		/// <summary>Converts the string to a Distance.</summary>
         /// <param name="s">
         /// A string containing a Distance to convert.
         /// </param>

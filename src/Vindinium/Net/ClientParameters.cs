@@ -72,6 +72,7 @@ namespace Vindinium.Net
 				Url = Path.Combine(serverUrl, "api", trainingsmode ? "training" : "arena").Replace('\\', '/'),
 				IsTraining = trainingsmode,
 				Turns = turns,
+				Runs = runs,
 				Map = map,
 			};
 			return parameters;

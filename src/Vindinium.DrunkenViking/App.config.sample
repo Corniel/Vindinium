@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<appSettings>
+		<add key="key" value ="key"/>
+		<add key="url" value ="http://vindinium.org"/>
+		<add key="map" value =""/>
+		<add key="runs" value ="1"/>
+		<add key="turns" value ="1200"/>
+		<add key="training" value ="true"/>
+		<add key="maxtime" value ="700"/>
+	</appSettings>
+</configuration>

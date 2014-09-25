@@ -18,6 +18,9 @@ namespace Vindinium
 			this.MineIndex = -1;
 
 			m_Neighbors[MoveDirection.x] = this;
+
+			this.IsMine = tp >= TileType.GoldMine1 && tp <= TileType.GoldMine;
+			this.IsPassable = tp == TileType.Empty || (tp >= TileType.Hero1 && tp <= TileType.Hero4);
 		}
 
 		public int X { get; protected set; }
@@ -26,11 +29,9 @@ namespace Vindinium
 
 		public TileType TileType { get; protected set; }
 
-		public bool IsMine()
-		{
-			return this.TileType >= TileType.GoldMine1 && this.TileType <= TileType.GoldMine;
-		}
-		
+		public bool IsMine { get; protected set; }
+		public bool IsPassable { get; protected set; }
+
 		/// <summary>Gets the index of the mine.</summary>
 		public int MineIndex { get; internal set; }
 
@@ -65,5 +66,7 @@ namespace Vindinium
 			return string.Format("Tile[{0},{1}] {2}, Neighbors: {3}",
 				X, Y, TileType, Neighbors == null ? 0 : Neighbors.Length);
 		}
+
+		
 	}
 }

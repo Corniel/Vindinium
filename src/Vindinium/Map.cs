@@ -145,7 +145,7 @@ namespace Vindinium
 		}
 		private void AssignMines()
 		{
-			this.Mines = m_All.Where(tile => tile.IsMine()).ToArray();
+			this.Mines = m_All.Where(tile => tile.IsMine).ToArray();
 			int mineIndex = 0;
 			foreach (var mine in this.Mines)
 			{
@@ -193,6 +193,34 @@ namespace Vindinium
 		private void AssignTavernes()
 		{
 			this.Tavernes = m_All.Where(tile => tile.TileType == TileType.Taverne).ToArray();
+		}
+
+		public Distance[,] GetDistances(Tile tile)
+		{
+			var distances = Distances.Create(this.Height, this.Width);
+
+			var dis = Distance.Zero;
+			var queue = new Queue<Tile>();
+			queue.Enqueue(tile);
+
+			while (queue.Count > 0)
+			{
+				int size = queue.Count;
+				for (int i = 0; i < size; i++)
+				{
+					var t = queue.Dequeue();
+					distances[t.X, t.Y] = dis;
+					foreach (var n in t.Neighbors)
+					{
+						if (n.IsPassable && distances[n.X, n.Y] == Distance.Unknown)
+						{
+							queue.Enqueue(n);
+						}
+					}
+				}
+				dis++;
+			}
+			return distances;
 		}
 	}
 }
