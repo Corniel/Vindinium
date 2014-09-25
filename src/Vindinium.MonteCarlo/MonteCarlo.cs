@@ -8,7 +8,8 @@ namespace Vindinium.MonteCarlo
 	{
 		public MonteCarlo()
 		{
-			this.Simulation = new MonteCarloSimulation(17, true);
+			var runParallel = ConfigurationManager.AppSettings["run-parallel"] == "true";
+			this.Simulation = new MonteCarloSimulation(17, runParallel);
 			this.MaxRuns = int.Parse(ConfigurationManager.AppSettings["maxruns"]);
 			this.Timout = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["maxtime"]));
 		}

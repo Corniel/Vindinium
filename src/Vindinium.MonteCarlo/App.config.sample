@@ -9,5 +9,6 @@
 		<add key="training" value ="true"/>
 		<add key="maxruns" value ="1000"/>
 		<add key="maxtime" value ="700"/>
+		<add key="run-parallel" value ="false"/>
 	</appSettings>
 </configuration>
