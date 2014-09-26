@@ -66,7 +66,5 @@ namespace Vindinium
 			return string.Format("Tile[{0},{1}] {2}, Neighbors: {3}",
 				X, Y, TileType, Neighbors == null ? 0 : Neighbors.Length);
 		}
-
-		
 	}
 }

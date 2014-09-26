@@ -18,6 +18,16 @@ namespace Vindinium
 			return new Distance[rows, cols];
 		}
 
+		public static Distance Get(this Distance[,] distances, Tile tile)
+		{
+			return distances[tile.X, tile.Y];
+		}
+
+		public static void Set(this Distance[,] distances, Tile tile, Distance distance)
+		{
+			distances[tile.X, tile.Y] = distance;
+		}
+
 		/// <summary>Clears the distances.</summary>
 		public static void Clear(this Distance[,] distances)
 		{
@@ -35,7 +45,7 @@ namespace Vindinium
 				sb.Append('|');
 				for (var x = 0; x < distances.GetLength(0); x++)
 				{
-					sb.AppendFormat("{0,2}|", distances[x, y]);
+					sb.AppendFormat("{0,2}|", distances[x, y] == Distance.Unknown ? "" : distances[x, y].ToString());
 				}
 				sb.AppendLine();
 				sb.AppendLine(new string('-', distances.GetLength(0) * 3 + 1));

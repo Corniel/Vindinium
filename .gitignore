@@ -218,4 +218,4 @@ pip-log.txt
 /src/packages
 /doc
 key.txt
-*.config
+[Aa]pp.config

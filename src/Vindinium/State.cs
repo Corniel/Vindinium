@@ -17,6 +17,9 @@ namespace Vindinium
 		/// <summary>Gets the turn of the state.</summary>
 		public int Turn { get { return turn; } }
 
+		/// <summary>Gets the mines.</summary>
+		public MineOwnership Mines { get { return ownership; } }
+
 		/// <summary>Gets the player who has to move.</summary>
 		public PlayerType PlayerToMove
 		{

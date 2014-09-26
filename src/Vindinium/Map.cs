@@ -195,13 +195,18 @@ namespace Vindinium
 			this.Tavernes = m_All.Where(tile => tile.TileType == TileType.Taverne).ToArray();
 		}
 
-		public Distance[,] GetDistances(Tile tile)
+		public Distance[,] GetDistances(params Tile[] tiles)
 		{
 			var distances = Distances.Create(this.Height, this.Width);
 
 			var dis = Distance.Zero;
 			var queue = new Queue<Tile>();
-			queue.Enqueue(tile);
+			foreach (var tile in tiles)
+			{
+				queue.Enqueue(tile);
+				distances.Set(tile, dis);
+			}
+			dis++;
 
 			while (queue.Count > 0)
 			{
@@ -209,12 +214,12 @@ namespace Vindinium
 				for (int i = 0; i < size; i++)
 				{
 					var t = queue.Dequeue();
-					distances[t.X, t.Y] = dis;
 					foreach (var n in t.Neighbors)
 					{
-						if (n.IsPassable && distances[n.X, n.Y] == Distance.Unknown)
+						if (n.IsPassable && distances.Get(n) == Distance.Unknown)
 						{
 							queue.Enqueue(n);
+							distances.Set(n, dis);
 						}
 					}
 				}
