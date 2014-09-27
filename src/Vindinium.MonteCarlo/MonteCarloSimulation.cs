@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Troschuetz.Random.Generators;
 
@@ -112,7 +111,7 @@ namespace Vindinium
 			playerToMove = PlayerTypes.Next[playerToMove];
 			hero = new_state.GetHero(playerToMove);
 			source = map[hero];
-			target = source.Neighbors[rnd.Next(source.Neighbors.Length)];
+			target = source.Targets[rnd.Next(source.Targets.Length)];
 
 			return GetScore(map, new_state, hero, playerToMove, source, target, playerToSimulate, rnd, turns);
 		}

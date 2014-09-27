@@ -37,9 +37,7 @@ namespace Vindinium.MonteCarlo
 		protected override MoveDirection GetMove()
 		{
 			this.State = this.State.Update(this.Client.Response.game);
-
-			Console.WriteLine(this.State.GetHero(this.Player).DebugToString());
-
+			//Console.WriteLine(this.State.GetHero(this.Player).DebugToString());
 			var move = this.Simulation.GetMove(this.Map, this.Player, this.State, this.Timout, this.Parameters.Turns, this.MaxRuns);
 			Console.WriteLine("{0,4} Move: {1}, {2:#,##0.0}, {3:0.00}k, {4:0.0}s, {5:0.00}k/s",
 				this.State.Turn,

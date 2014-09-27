@@ -10,5 +10,6 @@
 		<add key="maxruns" value ="1000"/>
 		<add key="maxtime" value ="700"/>
 		<add key="run-parallel" value ="false"/>
+		<add key="maps" value ="*\Vindinium\maps"/>
 	</appSettings>
 </configuration>
