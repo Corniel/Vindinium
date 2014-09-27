@@ -22,7 +22,7 @@ Hero[5,0] Health: 100, Mines: 0, Gold: 0
 Hero[0,5] Health: 100, Mines: 0, Gold: 0
 Hero[5,5] Health: 100, Mines: 0, Gold: 0
 Turn: 1
-Mines: 1...............................................................";
+Mines: 1...................";
 
 			AreEqual(exp1, act1);
 
@@ -32,7 +32,7 @@ Hero[5,1] Health: 99, Mines: 0, Gold: 0
 Hero[0,5] Health: 100, Mines: 0, Gold: 0
 Hero[5,5] Health: 100, Mines: 0, Gold: 0
 Turn: 2
-Mines: 1...............................................................";
+Mines: 1...................";
 
 			AreEqual(exp2, act2);
 
@@ -42,7 +42,7 @@ Hero[5,1] Health: 99, Mines: 0, Gold: 0
 Hero[0,5] Health: 79, Mines: 1, Gold: 1
 Hero[5,5] Health: 100, Mines: 0, Gold: 0
 Turn: 3
-Mines: 1.3.............................................................";
+Mines: 1.3.................";
 
 			AreEqual(exp3, act3);
 		}
@@ -64,7 +64,7 @@ Hero[2,3] Health: 80, Mines: 0, Gold: 101
 Hero[4,4] Health: 81, Mines: 0, Gold: 102
 Hero[1,5] Health: 82, Mines: 1, Gold: 103
 Turn: 16
-Mines: 1114............................................................";
+Mines: 1114................";
 
 			AreEqual(exp0, act0);
 
@@ -74,7 +74,7 @@ Hero[2,3] Health: 79, Mines: 3, Gold: 104
 Hero[4,4] Health: 81, Mines: 0, Gold: 102
 Hero[1,5] Health: 82, Mines: 1, Gold: 103
 Turn: 17
-Mines: 2224............................................................";
+Mines: 2224................";
 
 			AreEqual(exp1, act1);
 		}
@@ -96,7 +96,7 @@ Hero[2,3] Health: 80, Mines: 0, Gold: 101
 Hero[4,4] Health: 81, Mines: 0, Gold: 102
 Hero[1,5] Health: 82, Mines: 1, Gold: 103
 Turn: 16
-Mines: 1114............................................................";
+Mines: 1114................";
 
 			AreEqual(exp0, act0);
 
@@ -106,9 +106,37 @@ Hero[2,3] Health: 80, Mines: 0, Gold: 101
 Hero[4,4] Health: 81, Mines: 0, Gold: 102
 Hero[1,5] Health: 82, Mines: 1, Gold: 103
 Turn: 17
-Mines: 1114............................................................";
+Mines: 1114................";
 
 			AreEqual(exp1, act1);
+		}
+
+		[Test]
+		public void Move_TakeMineAndKillOpponent_MinesMatchesMinePerHero()
+		{
+			var map = MapTest.Map18;
+
+			var hero1 = Hero.Create(100, map[04, 02], 0, 266);
+			var hero2 = Hero.Create(008, map[02, 03], 1, 210);
+			var hero3 = Hero.Create(001, map[14, 15], 2, 336);
+			var hero4 = Hero.Create(001, map[04, 03], 5, 630);
+			var mines = MineOwnership.Create(0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 4, 0, 0, 0, 0, 0, 2, 3, 0, 3);
+			var state = State.Create(789, hero1, hero2, hero3, hero4, mines);
+
+			Console.WriteLine(state.ToUnitTestString());
+
+			var source = map[4, 2];
+			var target = map[4, 1];
+
+			var act = state.Move(map, hero1, PlayerType.Hero1, source, target);
+			var exp = @"Hero[4,2] Health: 79, Mines: 6, Gold: 272
+Hero[2,3] Health: 8, Mines: 1, Gold: 210
+Hero[14,15] Health: 1, Mines: 2, Gold: 336
+Hero[14,2] Health: 100, Mines: 0, Gold: 630
+Turn: 790
+Mines: ..1..11.111.....23.3";
+
+			AreEqual(exp, act);
 		}
 
 		private static void AreEqual(string exp, State act)

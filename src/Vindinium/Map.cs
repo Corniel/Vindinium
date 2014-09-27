@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Vindinium
 {
@@ -95,6 +98,7 @@ namespace Vindinium
 			map.AssignSpawns();
 			map.AssignTavernes();
 
+			map.LogMap(lines);
 			return map;
 		}
 		/// <summary>Parses a map.</summary>
@@ -105,6 +109,42 @@ namespace Vindinium
 			return Parse(lines);
 		}
 		
+		/// <summary>Logs the created map, to the map file.</summary>
+		private void LogMap(string[] lines)
+		{
+			var logpath = ConfigurationManager.AppSettings["maps"];
+			if (!string.IsNullOrEmpty(logpath))
+			{
+				var dir = new DirectoryInfo(logpath);
+				if (!dir.Exists) { dir.Create(); }
+
+				var hash = lines[0].GetHashCode();
+				for(int i = 1; i < lines.Length;i++)
+				{
+					hash^= lines[i].GetHashCode();
+				}
+
+				var filename = string.Format("{0:000}x{1:000}_{2:00}m_{3}t_hash{4}.txt",
+					this.Width, this.Height,
+					this.Mines.Length,
+					this.Count,
+					hash);
+
+				var file = new FileInfo(Path.Combine(dir.FullName, filename));
+				if (!file.Exists)
+				{
+					using (var writer = new StreamWriter(file.FullName))
+					{
+						foreach (var line in lines)
+						{
+							writer.WriteLine(line);
+						}
+						writer.Flush();
+					}
+				}
+			}
+		}
+
 		private static List<Tile> ParseTiles(string[] lines)
 		{
 			var tiles = new List<Tile>();
@@ -226,6 +266,60 @@ namespace Vindinium
 				dis++;
 			}
 			return distances;
+		}
+
+		public string ToUnitTestString(State state)
+		{
+			var sb = new StringBuilder();
+
+			for (int y = 0; y < this.Height; y++)
+			{
+				sb.AppendLine();
+				for (int x = 0; x < this.Width; x++)
+				{
+					var tile = this[x, y];
+					if (tile == null)
+					{
+						sb.Append("##");
+					}
+					else if (tile.GetOccupied(state) != PlayerType.None)
+					{
+						var hero = tile.GetOccupied(state);
+						switch (hero)
+						{
+							default:
+							case PlayerType.None: sb.Append("@-"); break;
+							case PlayerType.Hero1: sb.Append("@1"); break;
+							case PlayerType.Hero2: sb.Append("@2"); break;
+							case PlayerType.Hero3: sb.Append("@3"); break;
+							case PlayerType.Hero4: sb.Append("@4"); break;
+						}
+					}
+					else if (tile.IsMine)
+					{
+						var owner = state.Mines[tile.MineIndex];
+						switch (owner)
+						{
+							default:
+							case PlayerType.None: sb.Append("$-"); break;
+							case PlayerType.Hero1: sb.Append("$1"); break;
+							case PlayerType.Hero2: sb.Append("$2"); break;
+							case PlayerType.Hero3: sb.Append("$3"); break;
+							case PlayerType.Hero4: sb.Append("$4"); break;
+						}
+					}
+					else if (tile.TileType == TileType.Taverne)
+					{
+						sb.Append("[]");
+					}
+					else
+					{
+						sb.Append("  ");
+					}
+				}
+			}
+			sb.AppendLine();
+			return sb.ToString();
 		}
 	}
 }

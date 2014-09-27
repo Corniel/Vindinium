@@ -14,10 +14,11 @@ namespace Vindinium
 			this.Y = y;
 			this.Dimensions = ((ulong)x << Hero.PositionX | (ulong)y << Hero.PositionY);
 			this.TileType = tp;
-			this.Neighbors = m_Neighbors.Values.ToArray();
+			this.Neighbors = m_Targets.Values.ToArray();
 			this.MineIndex = -1;
 
-			m_Neighbors[MoveDirection.x] = this;
+			m_Targets[MoveDirection.x] = this;
+			this.Targets = m_Targets.Values.ToArray();
 
 			this.IsMine = tp >= TileType.GoldMine1 && tp <= TileType.GoldMine;
 			this.IsPassable = tp == TileType.Empty || (tp >= TileType.Hero1 && tp <= TileType.Hero4);
@@ -32,14 +33,31 @@ namespace Vindinium
 		public bool IsMine { get; protected set; }
 		public bool IsPassable { get; protected set; }
 
+		/// <summary>Gets tye player type of the hero who occupies the tile.</summary>
+		/// <remarks>
+		/// Returns none if the tile is not occupied.
+		/// </remarks>
+		public PlayerType GetOccupied(State state)
+		{
+			foreach (var player in PlayerTypes.All)
+			{
+				if (state.GetHero(player).Dimensions == this.Dimensions)
+				{
+					return player;
+				}
+			}
+			return PlayerType.None;
+		}
+
 		/// <summary>Gets the index of the mine.</summary>
 		public int MineIndex { get; internal set; }
 
 		public Tile[] Neighbors { get; protected set; }
+		public Tile[] Targets { get; protected set; }
 		public MoveDirection[] Directions { get; protected set; }
-		public Tile this[MoveDirection dir] { get { return m_Neighbors[dir]; } }
+		public Tile this[MoveDirection dir] { get { return m_Targets[dir]; } }
 
-		protected Dictionary<MoveDirection, Tile> m_Neighbors = new Dictionary<MoveDirection, Tile>()
+		protected Dictionary<MoveDirection, Tile> m_Targets = new Dictionary<MoveDirection, Tile>()
 		{
 			{ MoveDirection.N, null },
 			{ MoveDirection.E, null },
@@ -49,15 +67,19 @@ namespace Vindinium
 
 		internal void SetNeighbor(Tile neighbor, MoveDirection dir)
 		{
-			m_Neighbors[dir] = neighbor;
-			
+			m_Targets[dir] = neighbor;
+
 			// All neighbors.
-			this.Neighbors = m_Neighbors.Values
+			this.Neighbors = m_Targets.Values
 				.Where(n => n != null &&
 					n != this).ToArray();
 
+			// All targets.
+			this.Targets = m_Targets.Values
+				.Where(n => n != null).ToArray();
+
 			// All possible directions including stay.
-			this.Directions = m_Neighbors.Keys.Where(d => m_Neighbors[d] != null).ToArray();
+			this.Directions = m_Targets.Keys.Where(d => m_Targets[d] != null).ToArray();
 		}
 
 		[ExcludeFromCodeCoverage]

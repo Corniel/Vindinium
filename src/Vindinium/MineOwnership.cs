@@ -1,249 +1,36 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace Vindinium
 {
-	[DebuggerDisplay("{DebugToString()}")]
-	public struct MineOwnership
+	public static class MineOwnership
 	{
-		public const int IndexMax = 64;
-		public static readonly MineOwnership Empty = default(MineOwnership);
-
-		private ulong m_Index;
-		private ulong m_Value0;
-		private ulong m_Value1;
-
-		public PlayerType this[int index]
+		public static IMineOwnership Create(Map map)
 		{
-			get
+			if (map.Mines.Length <= 20)
 			{
-				if ((m_Index & Bits.GetFlagMaskUInt64(index)) == 0)
-				{
-					return PlayerType.None;
-				}
-				ulong val = 0;
-				switch (index >> 5)
-				{
-					case 01: val = 3 & (m_Value1 >> ((31 & index) << 1)); break;
-					default: val = 3 & (m_Value0 >> (index << 1)); break;
-				}
-				switch (val)
-				{
-					default:
-					case 0: return PlayerType.Hero1;
-					case 1: return PlayerType.Hero2;
-					case 2: return PlayerType.Hero3;
-					case 3: return PlayerType.Hero4;
-				}
-			}
-		}
-
-		public MineOwnership Set(int index, PlayerType player)
-		{
-			var index2 = (31 & index) << 1;
-			var bank = index >> 5;
-
-			var mines = new MineOwnership()
-			{
-				// copy the value but clear the index spot.
-				m_Value0 = m_Value0,
-				m_Value1 = m_Value1,
-				m_Index = m_Index,
-			};
-			switch (bank)
-			{
-				case 01: mines.m_Value1 &= (UInt64.MaxValue ^ (3UL << index2)); break;
-				default: mines.m_Value0 &= (UInt64.MaxValue ^ (3UL << index2)); break;
-			}
-
-			// remove all.
-			if (player == PlayerType.None)
-			{
-				mines.m_Index &= Bits.GetFlagMaskUInt64(index);
+				return MineOwnership20.Empty;
 			}
 			else
 			{
-				mines.m_Index |= Bits.GetFlagMaskUInt64(index);
-
-				switch (bank)
-				{
-					case 1:
-						switch (player)
-						{
-							case PlayerType.Hero2: mines.m_Value1 |= 1UL << index2; break;
-							case PlayerType.Hero3: mines.m_Value1 |= 2UL << index2; break;
-							case PlayerType.Hero4: mines.m_Value1 |= 3UL << index2; break;
-						}
-						break;
-					default:
-						switch (player)
-						{
-							case PlayerType.Hero2: mines.m_Value0 |= 1UL << index2; break;
-							case PlayerType.Hero3: mines.m_Value0 |= 2UL << index2; break;
-							case PlayerType.Hero4: mines.m_Value0 |= 3UL << index2; break;
-						}
-						break;
-				}
+				return MineOwnership64.Empty;
 			}
-			return mines;
-		}
-		public MineOwnership ChangeOwnership(PlayerType curOwner, PlayerType newOwner, int mineLength)
-		{
-#if DEBUG
-			if (curOwner == PlayerType.None) { throw new ArgumentException("The current owner should be set.", "curOwner"); }
-#endif
-			var mines = new MineOwnership()
-			{
-				m_Value0 = m_Value0,
-				m_Value1 = m_Value1,
-				m_Index = m_Index,
-			};
-
-			if (newOwner == PlayerType.None)
-			{
-				for (int index = 0; index < mineLength; index++)
-				{
-					var shft = (31 & index) << 1;
-					var bank = index >> 5;
-					var cur = (PlayerType)(1 + (3 & (mines.m_Value0 >> shft)));
-
-					if (cur == curOwner)
-					{
-						switch (bank)
-						{
-							case 01: mines.m_Value1 &= (UInt64.MaxValue ^ (3UL << shft)); break;
-							default: mines.m_Value0 &= (UInt64.MaxValue ^ (3UL << shft)); break;
-						}
-						mines.m_Index &= Bits.GetUnflagMaskUInt64(index);
-					}
-				}
-			}
-			else
-			{
-				for (int index = 0; index < mineLength; index++)
-				{
-					var shft = (31 & index) << 1;
-					var bank = index >> 5;
-
-					PlayerType cur = PlayerType.None;
-					switch (bank)
-					{
-						case 01: cur = (PlayerType)(1 + (3 & (mines.m_Value1 >> shft))); break;
-						default: cur = (PlayerType)(1 + (3 & (mines.m_Value0 >> shft))); break;
-					}
-
-					if (cur == curOwner)
-					{
-						switch (bank)
-						{
-							case 1:
-								mines.m_Value1 &= (UInt64.MaxValue ^ (3UL << shft));
-								switch (newOwner)
-								{
-									case PlayerType.Hero2: mines.m_Value1 |= 1UL << shft; break;
-									case PlayerType.Hero3: mines.m_Value1 |= 2UL << shft; break;
-									case PlayerType.Hero4: mines.m_Value1 |= 3UL << shft; break;
-								}
-								break;
-							default:
-								mines.m_Value0 &= (UInt64.MaxValue ^ (3UL << shft));
-								switch (newOwner)
-								{
-									case PlayerType.Hero2: mines.m_Value0 |= 1UL << shft; break;
-									case PlayerType.Hero3: mines.m_Value0 |= 2UL << shft; break;
-									case PlayerType.Hero4: mines.m_Value0 |= 3UL << shft; break;
-								}
-								break;
-						}
-					}
-				}
-			}
-			return mines;
 		}
 
-		public int Count(PlayerType player)
-		{
-			var count = 0;
-			for (int index = 0; index < IndexMax; index++)
-			{
-				if (this[index] == player)
-				{
-					count++;
-				}
-			}
-			return count;
-		}
-
-		public string DebugToString()
-		{
-			var sb = new StringBuilder();
-
-			for (int index = 0; index < IndexMax; index++)
-			{
-				switch (this[index])
-				{
-					default:
-					case PlayerType.None: sb.Append('.'); break;
-					case PlayerType.Hero1: sb.Append('1'); break;
-					case PlayerType.Hero2: sb.Append('2'); break;
-					case PlayerType.Hero3: sb.Append('3'); break;
-					case PlayerType.Hero4: sb.Append('4'); break;
-				}
-			}
-			return sb.ToString();
-		}
-
-		/// <summary>Creates mine ownership from tiles.</summary>
-		public static MineOwnership CreateFromTiles(string tiles)
-		{
-			var mines = MineOwnership.Empty;
-
-			var index = 0;
-
-			for (int p = 0; p < tiles.Length; p += 2)
-			{
-				if (tiles[p] == '$')
-				{
-					switch (tiles[p + 1])
-					{
-						case '1': mines = mines.Set(index, PlayerType.Hero1); break;
-						case '2': mines = mines.Set(index, PlayerType.Hero2); break;
-						case '3': mines = mines.Set(index, PlayerType.Hero3); break;
-						case '4': mines = mines.Set(index, PlayerType.Hero4); break;
-						case '-':
-						default: break;
-					}
-					index++;
-				}
-			}
-			return mines;
-		}
-
-		public static MineOwnership Create(params int[] mines)
+		public static IMineOwnership Create(params int[] mines)
 		{
 			return Create(mines.Select(mine => (PlayerType)mine).ToArray());
 		}
 
-		public static MineOwnership Create(params PlayerType[] mines)
+		public static IMineOwnership Create(params PlayerType[] mines)
 		{
-			var ownership = MineOwnership.Empty;
-
-			for (int index = 0; index < mines.Length; index++)
+			if (mines.Length <= 20)
 			{
-				if (mines[index] != PlayerType.None)
-				{
-					ownership = ownership.Set(index, mines[index]);
-				}
+				return MineOwnership20.Create(mines.Select(mine => (PlayerType)mine).ToArray());
 			}
-			return ownership;
-		}
-
-		public override bool Equals(object obj) { return base.Equals(obj); }
-		public override int GetHashCode()
-		{
-			return m_Index.GetHashCode() ^ m_Value0.GetHashCode();
+			else
+			{
+				return MineOwnership64.Create(mines.Select(mine => (PlayerType)mine).ToArray());
+			}
 		}
 	}
 }

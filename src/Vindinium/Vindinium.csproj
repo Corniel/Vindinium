@@ -52,10 +52,15 @@
     <Compile Include="Hero.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMineOwnership.cs" />
     <Compile Include="Map.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MineOwnership.cs" />
+    <Compile Include="MineOwnership20.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MineOwnership64.cs" />
     <Compile Include="MoveDirection.cs">
       <SubType>Code</SubType>
     </Compile>

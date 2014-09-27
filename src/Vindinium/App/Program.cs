@@ -27,12 +27,12 @@ namespace Vindinium.App
 				this.Client.CreateGame();
 
 				if (this.Client.IsCrashed) { continue; }
-				
+
 				using (var writer = new StreamWriter("replay.html", true))
 				{
 					writer.WriteLine("<a href='{0}'>{0}</a><br />", this.Client.Response.viewUrl);
 				}
-				
+
 				CreateGame();
 
 				while (!this.Client.IsFinished && !this.Client.IsCrashed)
@@ -57,8 +57,9 @@ namespace Vindinium.App
 				Console.WriteLine(this.Client.Response.viewUrl);
 			}
 		}
+
 		protected virtual void CreateGame() { }
-		
+
 		protected abstract MoveDirection GetMove();
 
 		public static void DoMain(string[] args)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Vindinium
@@ -12,13 +11,13 @@ namespace Vindinium
 		private Hero hero2;
 		private Hero hero3;
 		private Hero hero4;
-		private MineOwnership ownership;
+		private IMineOwnership ownership;
 
 		/// <summary>Gets the turn of the state.</summary>
 		public int Turn { get { return turn; } }
 
 		/// <summary>Gets the mines.</summary>
-		public MineOwnership Mines { get { return ownership; } }
+		public IMineOwnership Mines { get { return ownership; } }
 
 		/// <summary>Gets the player who has to move.</summary>
 		public PlayerType PlayerToMove
@@ -55,9 +54,9 @@ namespace Vindinium
 				case PlayerType.Hero2: return hero2;
 				case PlayerType.Hero3: return hero3;
 				case PlayerType.Hero4: return hero4;
-			case PlayerType.None:
+				case PlayerType.None:
 				default:
-				throw new NotSupportedException();
+					throw new NotSupportedException();
 			}
 		}
 		/// <summary>Sets the hero.</summary>
@@ -78,7 +77,6 @@ namespace Vindinium
 		}
 
 		#endregion
-
 
 		/// <summary>Returns true if the tile is occupied by another the the requested player.</summary>
 		public PlayerType GetOccupied(Tile tile, PlayerType player)
@@ -172,6 +170,14 @@ namespace Vindinium
 		{
 			unchecked
 			{
+#if DEBUG
+				var test = GetHero(player);
+				if (hero != test)
+				{
+					throw new Exception("Invalid hero.");
+				}
+#endif
+
 				var state = new State()
 				{
 					turn = (ushort)(turn + 1),
@@ -235,7 +241,7 @@ namespace Vindinium
 				// died trying to get a mine.
 				if (health == Hero.HealthMin)
 				{
-					state.ownership = ownership.ChangeOwnership(player, PlayerType.None, map.Mines.Length);
+					state.ownership = state.ownership.ChangeOwnership(player, PlayerType.None, map.Mines.Length);
 					hero = Hero.Respawn(map.GetSpawn(player), gold);
 				}
 				// try to battle.
@@ -260,7 +266,7 @@ namespace Vindinium
 									if (map.Mines.Length > 28)
 									{
 									}
-									state.ownership = ownership.ChangeOwnership(other_player, player, map.Mines.Length);
+									state.ownership = state.ownership.ChangeOwnership(other_player, player, map.Mines.Length);
 								}
 								break;
 							}
@@ -273,6 +279,15 @@ namespace Vindinium
 
 				state.SetHero(player, hero);
 
+#if DEBUG
+				if (state.hero1.Mines != state.Mines.Count(PlayerType.Hero1) ||
+					state.hero2.Mines != state.Mines.Count(PlayerType.Hero2) ||
+					state.hero3.Mines != state.Mines.Count(PlayerType.Hero3) ||
+					state.hero4.Mines != state.Mines.Count(PlayerType.Hero4))
+				{
+					throw new Exception("Invalid state");
+				}
+#endif
 				return state;
 			}
 		}
@@ -287,7 +302,7 @@ namespace Vindinium
 				hero2 = Hero.Create(game.heroes[1]),
 				hero3 = Hero.Create(game.heroes[2]),
 				hero4 = Hero.Create(game.heroes[3]),
-				ownership = MineOwnership.CreateFromTiles(game.board.tiles),
+				ownership = ownership.UpdateFromTiles(game.board.tiles),
 			};
 			return state;
 		}
@@ -314,17 +329,17 @@ namespace Vindinium
 				Hero.Initial(map, PlayerType.Hero2),
 				Hero.Initial(map, PlayerType.Hero3),
 				Hero.Initial(map, PlayerType.Hero4),
-				MineOwnership.Empty);
+				MineOwnership.Create(map));
 		}
 
 		/// <summary>Creates a state.</summary>
 		public static State Create(
-			int turn, 
-			Hero hero1, 
+			int turn,
+			Hero hero1,
 			Hero hero2,
-			Hero hero3, 
+			Hero hero3,
 			Hero hero4,
-			MineOwnership ownership)
+			IMineOwnership ownership)
 		{
 			var state = new State()
 			{

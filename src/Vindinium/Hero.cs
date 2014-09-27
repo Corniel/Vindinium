@@ -203,7 +203,7 @@ namespace Vindinium
 		/// <param name="right">The right operand</param>
 		public static bool operator ==(Hero left, Hero right)
 		{
-			return left.Equals(right);
+			return left.m_Value == right.m_Value;
 		}
 
 		/// <summary>Returns true if the left and right operand are equal, otherwise false.</summary>

@@ -15,7 +15,27 @@ namespace Vindinium.UnitTests
 			"  []    []  \r\n" +
 			"@3$-    $-@4\r\n");
 
-		public static readonly Map Map16 = Map.Parse(
+		public static readonly Map Map18 = Map.Parse(
+			"$-                                $-\r\n" +
+			"    ##  $-                $-  ##    \r\n" +
+			"        @1                  @4      \r\n" +
+			"####        ##  $-$-  ##        ####\r\n" +
+			"##    ##  ##  ##    ##  ##  ##    ##\r\n" +
+			"$-                                $-\r\n" +
+			"        ##      [][]      ##        \r\n" +
+			"  ##      $-  ##    ##  $-      ##  \r\n" +
+			"                                    \r\n" +
+			"                                    \r\n" +
+			"  ##      $-  ##    ##  $-      ##  \r\n" +
+			"        ##      [][]      ##        \r\n" +
+			"$-                                $-\r\n" +
+			"##    ##  ##  ##    ##  ##  ##    ##\r\n" +
+			"####        ##  $-$-  ##        ####\r\n" +
+			"                                    \r\n" +
+			"    ##@2$-                $-@3##    \r\n" +
+			"$-                                $-\r\n");
+
+		public static readonly Map Map20 = Map.Parse(
 			"######$-    $-############$-    $-######\r\n" +
 			"######        ##        ##        ######\r\n" +
 			"####[]    ####            ####    []####\r\n" +
@@ -77,7 +97,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void Parse_Map16_Successful()
 		{
-			var act = Map16;
+			var act = Map20;
 
 			Assert.AreEqual(28, act.Mines.Length, "Mines");
 			Assert.AreEqual(4, act.Tavernes.Length, "Tavernes");
@@ -90,7 +110,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void GetSpwan_Map16_Successful()
 		{
-			var act = Map16;
+			var act = Map20;
 
 			Assert.AreEqual(null, act.GetSpawn(PlayerType.None), "None");
 			Assert.AreEqual(act[06, 05], act.GetSpawn(PlayerType.Hero1), "Hero1");
@@ -102,7 +122,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void GetDistances_Tile_DistancesArray()
 		{
-			Distance[,] distances = MapTest.Map16.GetDistances(MapTest.Map16[13, 12]);
+			Distance[,] distances = MapTest.Map20.GetDistances(MapTest.Map20[13, 12]);
 			var act = distances.ToUnitTestString();
 			Console.WriteLine(act);
 			var exp = @"
@@ -156,8 +176,8 @@ namespace Vindinium.UnitTests
 		public void GetDistances_Performance_DistancesArray()
 		{
 			var sw = new Stopwatch();
-			var map = MapTest.Map16;
-			var runs = 10;
+			var map = MapTest.Map20;
+			var runs = 100;
 
 			sw.Start();
 			for (var run = 0; run < runs; run++)

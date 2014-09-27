@@ -4,14 +4,14 @@ using System;
 namespace Vindinium.UnitTests
 {
 	[TestFixture]
-	public class MineOwnershipTest
+	public class MineOwnership64Test
 	{
-		public static readonly MineOwnership TestValue = MineOwnership.Create(0, 0, 1, 1, 1, 4, 2, 0, 3, 0, 4, 1, 0, 0, 0, 0, 1);
+		public static readonly IMineOwnership TestValue = MineOwnership64.Create(0, 0, 1, 1, 1, 4, 2, 0, 3, 0, 4, 1, 0, 0, 0, 0, 1);
 
 		[Test]
 		public void Set_0Hero1_AreEqual()
 		{
-			var act = MineOwnership.Empty.Set(0, PlayerType.Hero1);
+			var act = MineOwnership64.Empty.Set(0, PlayerType.Hero1);
 			var exp = "1...............................................................";
 			Assert.AreEqual(exp, act.DebugToString());
 		}
@@ -19,7 +19,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void Set_3Hero1_AreEqual()
 		{
-			var act = MineOwnership.Empty.Set(3, PlayerType.Hero1);
+			var act = MineOwnership64.Empty.Set(3, PlayerType.Hero1);
 			var exp = "...1............................................................";
 			Assert.AreEqual(exp, act.DebugToString());
 		}
@@ -27,7 +27,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void Set_4Hero2_AreEqual()
 		{
-			var act = MineOwnership.Empty.Set(4, PlayerType.Hero2);
+			var act = MineOwnership64.Empty.Set(4, PlayerType.Hero2);
 			var exp = "....2...........................................................";
 			Assert.AreEqual(exp, act.DebugToString());
 		}
@@ -35,14 +35,14 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void Set_15Hero3_AreEqual()
 		{
-			var act = MineOwnership.Empty.Set(15, PlayerType.Hero3);
+			var act = MineOwnership64.Empty.Set(15, PlayerType.Hero3);
 			var exp = "...............3................................................";
 			Assert.AreEqual(exp, act.DebugToString());
 		}
 		[Test]
 		public void Set_63Hero4_AreEqual()
 		{
-			var act = MineOwnership.Empty.Set(63, PlayerType.Hero4);
+			var act = MineOwnership64.Empty.Set(63, PlayerType.Hero4);
 			var exp = "...............................................................4";
 			Assert.AreEqual(exp, act.DebugToString());
 		}
@@ -50,7 +50,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void Create_Int32Array_AreEqual()
 		{
-			var act = MineOwnership.Create(0, 0, 1, 1, 1, 4, 2, 0, 3, 0, 4, 1, 0, 0, 0, 0, 1);
+			var act = MineOwnership64.Create(0, 0, 1, 1, 1, 4, 2, 0, 3, 0, 4, 1, 0, 0, 0, 0, 1);
 			var exp = "..11142.3.41....1...............................................";
 			Assert.AreEqual(exp, act.DebugToString());
 		}
@@ -138,7 +138,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void CreateFromTiles_String_EqualsTestStruct()
 		{
-			var act = MineOwnership.CreateFromTiles("$-  $-  $1  $1  $1$4##$2  []  $-  $3  $-  $4  $1  $-  $-  $-  $-  $1");
+			var act = MineOwnership64.Empty.UpdateFromTiles("$-  $-  $1  $1  $1$4##$2  []  $-  $3  $-  $4  $1  $-  $-  $-  $-  $1");
 			var exp = TestValue;
 			Assert.AreEqual(exp, act);
 		}
@@ -146,7 +146,7 @@ namespace Vindinium.UnitTests
 		[Test]
 		public void GetHashCode_Empty_0()
 		{
-			var act =  MineOwnership.Empty.GetHashCode();
+			var act =  MineOwnership64.Empty.GetHashCode();
 			var exp = 0;
 			Assert.AreEqual(exp, act);
 		}
