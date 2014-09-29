@@ -15,7 +15,8 @@ namespace Vindinium
 		public const int PositionX = 8;
 		public const int PositionY = 16;
 		public const int PositionMines = 24;
-		public const int PositionGold = 32;
+		public const int PostionIsCrashed = 32;
+		public const int PositionGold = 33;
 
 		public const ulong MaskHealth = Bits.Mask07;
 		public const ulong MaskDimension = Bits.Mask08;
@@ -23,6 +24,7 @@ namespace Vindinium
 		public const ulong MaskMines = Bits.Mask08;
 		public const ulong MaskClearMines = (ulong.MaxValue ^ (MaskMines << PositionMines));
 		public const ulong MaskClearHealth = (ulong.MaxValue ^ MaskHealth);
+		public const ulong MaskIsCrashed = 1UL << PostionIsCrashed;
 
 		public const int HealthMax = 100;
 		public const int HealthTavern = 50;
@@ -38,7 +40,7 @@ namespace Vindinium
 		private const int GoldMin = 0;
 
 		/// <summary>Constructs a new Hero</summary>
-		public Hero(int health, int x, int y, int mines, int gold)
+		public Hero(int health, int x, int y, int mines, int gold, bool isCrashed = false)
 		{
 			#region Garding (Debug only)
 #if DEBUG
@@ -70,6 +72,10 @@ namespace Vindinium
 			m_Value |= ((ulong)y) << PositionY;
 			m_Value |= ((ulong)mines) << PositionMines;
 			m_Value |= ((ulong)gold) << PositionGold;
+			if (isCrashed)
+			{
+				m_Value |= MaskIsCrashed;
+			}
 		}
 
 		/// <summary>The underlying value.</summary>
@@ -134,6 +140,9 @@ namespace Vindinium
 		/// <summary>Gets the the number of gold mines owned by the Hero.</summary>
 		public int Mines { get { return (int)((m_Value >> PositionMines) & MaskMines); } }
 
+		/// <summary>Returns true if the hero is crashed, otherwise false.</summary>
+		public bool IsCrashed { get { return (m_Value & MaskIsCrashed) != 0; } }
+
 		/// <summary>Gets the the amount of gold of the Hero.</summary>
 		public int Gold { get { return (int)(m_Value >> PositionGold); } }
 
@@ -186,8 +195,8 @@ namespace Vindinium
 		public string DebugToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-				"Hero[{0},{1}] Health: {2}, Mines: {3}, Gold: {4:#,##0}",
-				X, Y, Health, Mines, Gold);
+				"Hero[{0},{1}] Health: {2}, Mines: {3}, Gold: {4:#,##0}{5}",
+				X, Y, Health, Mines, Gold, IsCrashed ? ", Crashed" : "");
 		}
 
 		#region IEquatable
@@ -268,7 +277,7 @@ namespace Vindinium
 		}
 
 		/// <summary>Creates a new hero.</summary>
-		public static Hero Create(int health, Tile location, int mines, int gold)
+		public static Hero Create(int health, Tile location, int mines, int gold, bool isCrashed = false)
 		{
 			#region Garding (Debug only)
 #if DEBUG
@@ -301,7 +310,10 @@ namespace Vindinium
 			hero.m_Value |= location.Dimensions;
 			hero.m_Value |= ((ulong)mines) << PositionMines;
 			hero.m_Value |= ((ulong)gold) << PositionGold;
-
+			if (isCrashed)
+			{
+				hero.m_Value |= MaskIsCrashed;
+			}
 			return hero;
 		}
 
@@ -311,7 +323,7 @@ namespace Vindinium
 		/// </remarks>
 		public static Hero Create(Serialization.Hero hero)
 		{
-			return new Hero(hero.life, hero.pos.y, hero.pos.x, hero.mineCount, hero.gold);
+			return new Hero(hero.life, hero.pos.y, hero.pos.x, hero.mineCount, hero.gold, hero.crashed);
 		}
 	}
 }
