@@ -111,7 +111,7 @@ namespace Vindinium
 			playerToMove = PlayerTypes.Next[playerToMove];
 			hero = new_state.GetHero(playerToMove);
 			source = map[hero];
-			target = source.Targets[rnd.Next(source.Targets.Length)];
+			target = hero.IsCrashed ? source : source.Targets[rnd.Next(source.Targets.Length)];
 
 			return GetScore(map, new_state, hero, playerToMove, source, target, playerToSimulate, rnd, turns);
 		}

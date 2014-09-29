@@ -19,13 +19,12 @@ namespace Vindinium.UnitTests.MonteCarlo
 		[Test]
 		public void GetMoveSingle_Simulation_()
 		{
-			var state = State.Create(MapTest.Map16);
+			var map = MapTest.Map18;
+			var state = State.Create(map);
 
 			var simSingle = new MonteCarloSimulation(17, false);
-			var act = simSingle.GetMove(MapTest.Map16, PlayerType.Hero1, state, SimulationTime, 300);
+			var act = simSingle.GetMove(map, PlayerType.Hero1, state, SimulationTime, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Single)", simSingle.Simulations / SimulationTime.TotalMilliseconds);
-
-			Assert.AreEqual(MoveDirection.S, act);
 		}
 
 		/// <summary>Tests the speed of the parallel monte carlo approach.</summary>
@@ -35,24 +34,24 @@ namespace Vindinium.UnitTests.MonteCarlo
 		[Test]
 		public void GetMoveParallel_Simulation_()
 		{
-			var state = State.Create(MapTest.Map16);
+			var map = MapTest.Map18;
+			var state = State.Create(map);
 
 			var simParallel = new MonteCarloSimulation(17, true);
-			var act = simParallel.GetMove(MapTest.Map16, PlayerType.Hero1, state, SimulationTime, 300);
+			var act = simParallel.GetMove(map, PlayerType.Hero1, state, SimulationTime, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Parallel)", simParallel.Simulations / SimulationTime.TotalMilliseconds);
-
-			Assert.AreEqual(MoveDirection.S, act);
 		}
 		[Test]
 		public void GetMove_Performance_()
 		{
-			var state = State.Create(MapTest.Map16);
+			var map = MapTest.Map18;
+			var state = State.Create(map);
 
 			var simSingle = new MonteCarloSimulation(17, false);
 
 			var time = TimeSpan.FromSeconds(2);
 
-			var moveSingle = simSingle.GetMove(MapTest.Map16, PlayerType.Hero1, state, time, 300);
+			var moveSingle = simSingle.GetMove(map, PlayerType.Hero1, state, time, 300);
 			Console.WriteLine("{0:#,##0.00}k/s (Single)", simSingle.Simulations / time.TotalMilliseconds);
 		}
 	}
