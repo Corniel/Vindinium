@@ -58,7 +58,7 @@ namespace Vindinium
 		/// <summary>Gets the mines of the map.</summary>
 		public Tile[] Mines { get; protected set; }
 
-		/// <summary>Gerts the (re)spawn tile for a player.</summary>
+		/// <summary>Gets the (re)spawn tile for a player.</summary>
 		public Tile GetSpawn(PlayerType player)
 		{
 			switch (player)
@@ -76,6 +76,22 @@ namespace Vindinium
 		private Tile Spawn2;
 		private Tile Spawn3;
 		private Tile Spawn4;
+
+		public void Update(Serialization.Game game)
+		{
+			foreach (var hero in game.heroes)
+			{
+				if (hero.crashed)
+				{
+					var spawn = GetSpawn((PlayerType)hero.id);
+					var current = this[hero.pos.y, hero.pos.x];
+					if (spawn.IsPassable && current == spawn)
+					{
+						spawn.IsPassable = false;
+					}
+				}
+			}
+		}
 
 		/// <summary>Parses a map.</summary>
 		public static Map Parse(string[] lines)

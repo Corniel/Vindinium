@@ -31,9 +31,9 @@ namespace Vindinium
 		public TileType TileType { get; protected set; }
 
 		public bool IsMine { get; protected set; }
-		public bool IsPassable { get; protected set; }
+		public bool IsPassable { get; internal set; }
 
-		/// <summary>Gets tye player type of the hero who occupies the tile.</summary>
+		/// <summary>Gets the player type of the hero who occupies the tile.</summary>
 		/// <remarks>
 		/// Returns none if the tile is not occupied.
 		/// </remarks>
