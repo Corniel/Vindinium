@@ -46,6 +46,12 @@ namespace Vindinium
 		public Hero Hero4 { get { return hero4; } }
 
 		/// <summary>Gets a hero based on the player type.</summary>
+		public Hero GetActiveHero()
+		{
+			return GetHero(this.PlayerToMove);
+		}
+
+		/// <summary>Gets a hero based on the player type.</summary>
 		public Hero GetHero(PlayerType player)
 		{
 			switch (player)

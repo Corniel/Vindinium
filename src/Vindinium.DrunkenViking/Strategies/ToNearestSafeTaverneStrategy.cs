@@ -21,12 +21,16 @@ namespace Vindinium.DrunkenViking.Strategies
 
 			this.Candidate = MoveDirection.x;
 
-			var distances = Map.GetDistances(Map.Tavernes,
-				PlayerTypes.Other[playerToMove]
+			var tavernes = Map.Tavernes;
+			var blocked = PlayerTypes.Other[playerToMove]
 					.Where(p => !state.GetHero(p).IsCrashed)
-					.Select(p => this.Map[state.GetHero(p)]));
+					.Select(p => this.Map[state.GetHero(p)])
+					.SelectMany(t => t.Targets);
 
+
+			var distances = Map.GetDistances(tavernes, blocked);
 			var distance = distances.Get(location);
+
 			foreach (var dir in location.Directions)
 			{
 				var test = distances.Get(location[dir]);
@@ -36,7 +40,6 @@ namespace Vindinium.DrunkenViking.Strategies
 					break;
 				}
 			}
-
 			return Candidate != MoveDirection.x;
 		}
 

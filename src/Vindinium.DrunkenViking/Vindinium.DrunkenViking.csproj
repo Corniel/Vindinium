@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Decisions\ChildNode.cs" />
+    <Compile Include="Decisions\Node.cs" />
+    <Compile Include="Decisions\NodeLookup.cs" />
+    <Compile Include="Decisions\PathGenerator.cs" />
+    <Compile Include="Decisions\PlanType.cs" />
+    <Compile Include="Decisions\RootNode.cs" />
     <Compile Include="DrunkenVikingBot.cs" />
     <Compile Include="NodeState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +78,7 @@
       <Name>Vindinium</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

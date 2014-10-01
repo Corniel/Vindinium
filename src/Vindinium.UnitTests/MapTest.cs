@@ -7,6 +7,8 @@ namespace Vindinium.UnitTests
 	[TestFixture]
 	public class MapTest
 	{
+		#region Maps
+
 		public static readonly Map Map06 = Map.Parse(
 			"@1$-    $-@2\r\n" +
 			"  []    []  \r\n" +
@@ -68,6 +70,8 @@ namespace Vindinium.UnitTests
 			"####[]    ####            ####    []####\r\n" +
 			"######        ##        ##        ######\r\n" +
 			"######$-    $-############$-    $-######\r\n");
+
+		#endregion
 
 		[Test, ExpectedException(typeof(ArgumentException))]
 		public void Parse_InvalidString_ThrowsException()
@@ -237,7 +241,6 @@ namespace Vindinium.UnitTests
 |  |  |  |  | 4| 5|  |  |  |  |  |  |  |  | 5| 4|  |  |  |  |
 -------------------------------------------------------------
 ";
-
 			Assert.AreEqual(exp, act);
 		}
 

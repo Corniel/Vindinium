@@ -21,6 +21,7 @@ namespace Vindinium
 			this.Targets = m_Targets.Values.ToArray();
 
 			this.IsMine = tp >= TileType.GoldMine1 && tp <= TileType.GoldMine;
+			this.IsTaverne = tp == TileType.Taverne;
 			this.IsPassable = tp == TileType.Empty || (tp >= TileType.Hero1 && tp <= TileType.Hero4);
 		}
 
@@ -31,6 +32,7 @@ namespace Vindinium
 		public TileType TileType { get; protected set; }
 
 		public bool IsMine { get; protected set; }
+		public bool IsTaverne { get; protected set; }
 		public bool IsPassable { get; internal set; }
 
 		/// <summary>Gets the player type of the hero who occupies the tile.</summary>
@@ -51,6 +53,7 @@ namespace Vindinium
 
 		/// <summary>Gets the index of the mine.</summary>
 		public int MineIndex { get; internal set; }
+		
 
 		public Tile[] Neighbors { get; protected set; }
 		public Tile[] Targets { get; protected set; }

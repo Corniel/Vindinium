@@ -16,13 +16,17 @@ namespace Vindinium.DrunkenViking.Strategies
 		{
 			this.Candidate = MoveDirection.x;
 
-			var distances = Map.GetDistances(
-				Map.Mines.Where(t => state.Mines[t.MineIndex] != playerToMove),
-				PlayerTypes.Other[playerToMove]
+			var mines = Map.Mines.Where(t => state.Mines[t.MineIndex] != playerToMove);
+			var blocked = PlayerTypes.Other[playerToMove]
 					.Where(p => !state.GetHero(p).IsCrashed)
-					.Select(p => this.Map[state.GetHero(p)]));
+					.Select(p => this.Map[state.GetHero(p)])
+					// twice, we want to run away after we catch the mine too.
+					.SelectMany(t => t.Targets)
+					.SelectMany(t => t.Targets);
 
+			var distances = Map.GetDistances(mines, blocked);
 			var distance = distances.Get(location);
+
 			foreach (var dir in location.Directions)
 			{
 				var test = distances.Get(location[dir]);
@@ -32,7 +36,6 @@ namespace Vindinium.DrunkenViking.Strategies
 					break;
 				}
 			}
-
 			return Candidate != MoveDirection.x;
 		}
 
