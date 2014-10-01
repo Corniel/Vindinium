@@ -8,5 +8,6 @@
 		<add key="turns" value ="1200"/>
 		<add key="training" value ="true"/>
 		<add key="maxtime" value ="700"/>
+		<add key="maps" value ="*\Vindinium\maps"/>
 	</appSettings>
 </configuration>
