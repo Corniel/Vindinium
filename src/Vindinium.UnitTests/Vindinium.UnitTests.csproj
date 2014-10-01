@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DistanceTest.cs" />
+    <Compile Include="DrunkenViking\NodeStateTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="MineOwnership20Test.cs" />
@@ -73,6 +74,10 @@
     <EmbeddedResource Include="Serialization\GameResponse.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vindinium.DrunkenViking\Vindinium.DrunkenViking.csproj">
+      <Project>{f021d10e-0740-4bfd-a2fb-732296939cac}</Project>
+      <Name>Vindinium.DrunkenViking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vindinium\Vindinium.csproj">
       <Project>{20bc83ed-8bce-4dfe-bfdd-5340b252b7db}</Project>
       <Name>Vindinium</Name>

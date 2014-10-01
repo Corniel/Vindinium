@@ -18,6 +18,9 @@ namespace Vindinium
 	{
 		/// <summary>Represents an unknown distance.</summary>
 		public static readonly Distance Unknown = new Distance() { m_Value = default(UInt16) };
+		
+		/// <summary>Represents an unknown distance.</summary>
+		public static readonly Distance Blocked = new Distance() { m_Value = 1 };
 
 		/// <summary>Represents a distance of zero.</summary>
 		public static readonly Distance Zero = new Distance() { m_Value = UInt16.MaxValue };
@@ -136,6 +139,7 @@ namespace Vindinium
 		/// </param>
 		public string ToString(string format, IFormatProvider formatProvider)
 		{
+			if (m_Value == Blocked.m_Value) { return "X"; }
 			return IsUnknown() ? "?" : ((int)this).ToString(format, formatProvider);
 		}
 

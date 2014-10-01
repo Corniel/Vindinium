@@ -21,18 +21,15 @@ namespace Vindinium
 		public static readonly Dictionary<PlayerType, PlayerType[]> Other = new Dictionary<PlayerType, PlayerType[]>()
 		{
 			{ PlayerType.Hero1, new PlayerType[]{ PlayerType.Hero2, PlayerType.Hero3, PlayerType.Hero4 } },
-			{ PlayerType.Hero2, new PlayerType[]{ PlayerType.Hero1, PlayerType.Hero3, PlayerType.Hero4 } },
-			{ PlayerType.Hero3, new PlayerType[]{ PlayerType.Hero1, PlayerType.Hero2, PlayerType.Hero4 } },
+			{ PlayerType.Hero2, new PlayerType[]{ PlayerType.Hero3, PlayerType.Hero4, PlayerType.Hero1 } },
+			{ PlayerType.Hero3, new PlayerType[]{ PlayerType.Hero4, PlayerType.Hero1, PlayerType.Hero2 } },
 			{ PlayerType.Hero4, new PlayerType[]{ PlayerType.Hero1, PlayerType.Hero2, PlayerType.Hero3 } },
 		};
 
 		/// <summary>Gets the others for a player type.</summary>
-		public static readonly Dictionary<PlayerType, PlayerType> Next = new Dictionary<PlayerType, PlayerType>()
+		public static PlayerType Next(PlayerType playerToMove)
 		{
-			{ PlayerType.Hero1, PlayerType.Hero2  },
-			{ PlayerType.Hero2, PlayerType.Hero3  },
-			{ PlayerType.Hero3, PlayerType.Hero4  },
-			{ PlayerType.Hero4, PlayerType.Hero1  },
-		};
+			return Other[playerToMove][0];
+		}
 	}
 }

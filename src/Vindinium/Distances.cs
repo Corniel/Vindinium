@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Vindinium
 {
@@ -9,31 +8,16 @@ namespace Vindinium
 		/// <summary>Creates distances.</summary>
 		public static Distance[,] Create(int size)
 		{
-			return Create(size, size);
+			return MultipleArrayExtensions.Create<Distance>(size);
 		}
 
 		/// <summary>Creates distances.</summary>
 		public static Distance[,] Create(int rows, int cols)
 		{
-			return new Distance[rows, cols];
+			return MultipleArrayExtensions.Create<Distance>(rows, cols);
 		}
 
-		public static Distance Get(this Distance[,] distances, Tile tile)
-		{
-			return distances[tile.X, tile.Y];
-		}
-
-		public static void Set(this Distance[,] distances, Tile tile, Distance distance)
-		{
-			distances[tile.X, tile.Y] = distance;
-		}
-
-		/// <summary>Clears the distances.</summary>
-		public static void Clear(this Distance[,] distances)
-		{
-			Array.Clear(distances, 0, distances.Length);
-		}
-
+		/// <summary>Represents the distance array as unit test string.</summary>
 		public static string ToUnitTestString(this Distance[,] distances)
 		{
 			var sb = new StringBuilder();

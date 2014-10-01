@@ -284,6 +284,62 @@ namespace Vindinium
 			return distances;
 		}
 
+		public Distance[,] GetDistances(IEnumerable<Tile> targets, IEnumerable<Tile> enermies)
+		{
+			var distances = Distances.Create(this.Height, this.Width);
+
+			var dis = Distance.Zero;
+
+			var qOppo = new Queue<Tile>();
+
+			foreach (var tile in enermies.SelectMany(e => e.Targets).Where(t=> t.IsPassable))
+			{
+				qOppo.Enqueue(tile);
+				distances.Set(tile, Distance.Blocked);
+			}
+			
+			var queue = new Queue<Tile>();
+			foreach (var tile in targets)
+			{
+				queue.Enqueue(tile);
+				distances.Set(tile, dis);
+			}
+			dis++;
+
+			while (queue.Count > 0)
+			{
+				int sOppo = qOppo.Count;
+				for (int i = 0; i < sOppo; i++)
+				{
+					var t = qOppo.Dequeue();
+					foreach (var n in t.Neighbors)
+					{
+						if (n.IsPassable && distances.Get(n) == Distance.Unknown)
+						{
+							qOppo.Enqueue(n);
+							distances.Set(n, Distance.Blocked);
+						}
+					}
+				}
+
+				int size = queue.Count;
+				for (int i = 0; i < size; i++)
+				{
+					var t = queue.Dequeue();
+					foreach (var n in t.Neighbors)
+					{
+						if (n.IsPassable && distances.Get(n) == Distance.Unknown)
+						{
+							queue.Enqueue(n);
+							distances.Set(n, dis);
+						}
+					}
+				}
+				dis++;
+			}
+			return distances;
+		}
+
 		public string ToUnitTestString(State state)
 		{
 			var sb = new StringBuilder();
