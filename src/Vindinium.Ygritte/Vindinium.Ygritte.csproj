@@ -50,6 +50,7 @@
     <Compile Include="Decisions\NodeLookup.cs" />
     <Compile Include="Decisions\PlanType.cs" />
     <Compile Include="Decisions\RootNode.cs" />
+    <Compile Include="Decisions\Score.cs" />
     <Compile Include="YgritteBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
