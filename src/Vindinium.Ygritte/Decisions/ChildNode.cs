@@ -4,16 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vindinium.DrunkenViking.Decisions
+namespace Vindinium.Ygritte.Decisions
 {
 	public class ChildNode : Node
 	{
 		public ChildNode()
 		{
 			this.Plans = new Queue<PlanType>();
+			this.Children = new List<ChildNode>();
 		}
 		
 		public Queue<PlanType> Plans { get; protected set; }
+
+		public List<ChildNode> Children { get; set; }
+
+		public override void Process(int turn)
+		{
+			if (this.Plans.Count > 0)
+			{
+				var plan = this.Plans.Dequeue();
+			}
+		}
 
 		public override void GeneratePlans(Map map)
 		{
@@ -63,19 +74,13 @@ namespace Vindinium.DrunkenViking.Decisions
 				}
 			}
 		}
-
-		public override int GetScore(PlayerType player)
-		{
-			throw new NotImplementedException();
-		}
-
-
-		public static Node Create(State state)
+		public static Node Create(Map map, State state)
 		{
 			var child = new ChildNode()
 			{
 				State = state,
 			};
+			child.GeneratePlans(map);
 			return child;
 		}
 	}

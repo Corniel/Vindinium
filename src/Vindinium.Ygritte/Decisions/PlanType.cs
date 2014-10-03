@@ -1,4 +1,4 @@
-﻿namespace Vindinium.DrunkenViking.Decisions
+﻿namespace Vindinium.Ygritte.Decisions
 {
 	public enum PlanType
 	{

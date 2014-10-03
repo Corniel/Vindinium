@@ -31,5 +31,10 @@ namespace Vindinium
 		{
 			return Other[playerToMove][0];
 		}
+
+		public static bool IsOppo(this PlayerType player, PlayerType check)
+		{
+			return player != check && player > PlayerType.None;
+		}
 	}
 }

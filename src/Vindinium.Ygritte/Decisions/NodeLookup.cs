@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vindinium.DrunkenViking.Decisions
+namespace Vindinium.Ygritte.Decisions
 {
 	public class NodeLookup
 	{
 		private Dictionary<int, Dictionary<State, Node>> lookup = new Dictionary<int, Dictionary<State, Node>>();
 
-		public Node Get(int turn, State state)
+		public Node Get(int turn, Map map, State state)
 		{
 			Node node;
 			Dictionary<State, Node> dict;
@@ -27,7 +27,7 @@ namespace Vindinium.DrunkenViking.Decisions
 				dict = new Dictionary<State, Node>();
 				lookup[turn] = dict;
 			}
-			node = ChildNode.Create(state);
+			node = ChildNode.Create(map, state);
 			dict[state] = node;
 
 			return node;
