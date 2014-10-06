@@ -6,7 +6,7 @@ using System.Text;
 namespace Vindinium
 {
 	[DebuggerDisplay("{DebugToString()}")]
-	public struct MineOwnership20 : IMineOwnership
+	public struct MineOwnership20 : IMineOwnership, IEquatable<MineOwnership20>
 	{
 		public const int IndexMax = 20;
 		public static readonly MineOwnership20 Empty = default(MineOwnership20);
@@ -179,7 +179,21 @@ namespace Vindinium
 			return ownership;
 		}
 
-		public override bool Equals(object obj) { return base.Equals(obj); }
 		public override int GetHashCode() { return m_Value.GetHashCode(); }
+
+		public override bool Equals(object obj) { return base.Equals(obj); }
+		public bool Equals(MineOwnership20 other)
+		{
+			return this.m_Value == other.m_Value;
+		}
+
+		public static bool operator ==(MineOwnership20 l, MineOwnership20 r)
+		{
+			return l.Equals(r);
+		}
+		public static bool operator !=(MineOwnership20 l, MineOwnership20 r)
+		{
+			return !(l == r);
+		}
 	}
 }

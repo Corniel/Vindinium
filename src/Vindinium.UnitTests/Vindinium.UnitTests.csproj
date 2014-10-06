@@ -68,7 +68,10 @@
     <Compile Include="Serialization\GameResponseTest.cs" />
     <Compile Include="StateTest.cs" />
     <Compile Include="TileTypesTest.cs" />
+    <Compile Include="Ygritte\NodeComparerTest.cs" />
+    <Compile Include="Ygritte\NodeLookupTest.cs" />
     <Compile Include="Ygritte\ScoreTest.cs" />
+    <Compile Include="Ygritte\RootNodeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

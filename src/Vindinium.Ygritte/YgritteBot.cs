@@ -40,8 +40,9 @@ namespace Vindinium.Ygritte
 			var hero = this.State.GetHero(this.Player);
 			var source = this.Map[hero];
 
-			var root = RootNode.Create(this.Map, this.State, hero, this.Player, source);
-			var md = root.GetMove(this.Timout);
+			Node.Lookup.Clear(this.State.Turn);
+			var root = new RootNode(this.State);
+			var md = root.GetMove(this.Map, this.Timout);
 			return md;
 		}
 	}

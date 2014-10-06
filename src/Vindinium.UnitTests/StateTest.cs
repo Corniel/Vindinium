@@ -9,6 +9,23 @@ namespace Vindinium.UnitTests
 	public class StateTest
 	{
 		[Test]
+		public void PlayerToMove_AreEqual()
+		{
+			var map = MapTest.Map06;
+			var state = State.Create(map);
+
+			var exp = new PlayerType[] { PlayerType.Hero1, PlayerType.Hero2, PlayerType.Hero3, PlayerType.Hero4, PlayerType.Hero1, PlayerType.Hero2, PlayerType.Hero3, PlayerType.Hero4, PlayerType.Hero1, PlayerType.Hero2 };
+			var act = new PlayerType[exp.Length];
+
+			for (var i = 0; i < act.Length; i++)
+			{
+				act[i] = state.PlayerToMove;
+				state = state.Move(map, MoveDirection.x, state.PlayerToMove);
+			}
+			CollectionAssert.AreEqual(exp, act);
+		}
+
+		[Test]
 		public void Move_EAndS_Hero1HasMine()
 		{
 			var map = MapTest.Map06;

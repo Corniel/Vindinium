@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Decisions\ChildNode.cs" />
     <Compile Include="Decisions\Move.cs" />
     <Compile Include="Decisions\MovesGenerator.cs" />
     <Compile Include="Decisions\Node.cs" />
@@ -51,10 +50,12 @@
     <Compile Include="Decisions\PlanType.cs" />
     <Compile Include="Decisions\RootNode.cs" />
     <Compile Include="Decisions\Score.cs" />
+    <Compile Include="Decisions\NodeComparer.cs" />
     <Compile Include="YgritteBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="App.config.sample" />
   </ItemGroup>
   <ItemGroup>

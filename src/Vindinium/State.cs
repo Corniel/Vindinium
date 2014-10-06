@@ -4,17 +4,20 @@ using System.Text;
 namespace Vindinium
 {
 	/// <summary>Represents a Vindinium state.</summary>
-	public struct State
+	public struct State : IEquatable<State>
 	{
-		private ushort turn;
+		private int hash;
 		private Hero hero1;
 		private Hero hero2;
 		private Hero hero3;
 		private Hero hero4;
 		private IMineOwnership ownership;
 
+		private const int TurnMask = 2047;
+		private const int HashMask = (int.MaxValue ^ 2047);
+		
 		/// <summary>Gets the turn of the state.</summary>
-		public int Turn { get { return turn; } }
+		public int Turn { get { return hash & TurnMask; } }
 
 		/// <summary>Gets the mines.</summary>
 		public IMineOwnership Mines { get { return ownership; } }
@@ -24,7 +27,7 @@ namespace Vindinium
 		{
 			get
 			{
-				switch (turn & 4)
+				switch (hash & 3)
 				{
 					case 1: return PlayerType.Hero2;
 					case 2: return PlayerType.Hero3;
@@ -183,10 +186,8 @@ namespace Vindinium
 					throw new Exception("Invalid hero.");
 				}
 #endif
-
 				var state = new State()
 				{
-					turn = (ushort)(turn + 1),
 					hero1 = hero1,
 					hero2 = hero2,
 					hero3 = hero3,
@@ -294,8 +295,20 @@ namespace Vindinium
 					throw new Exception("Invalid state");
 				}
 #endif
+				state.hash = GetHash(this.Turn + 1, state.hero1, state.hero2, state.hero3, state.hero4);
 				return state;
 			}
+		}
+
+		private static int GetHash(int turn, Hero hero1, Hero hero2, Hero hero3, Hero hero4)
+		{
+			var hash =
+				hero1.GetHashCode() ^
+				(hero2.GetHashCode() << 1) ^
+				(hero3.GetHashCode() << 2) ^
+				(hero4.GetHashCode() << 3);
+
+			return (hash & HashMask) | turn;
 		}
 
 		/// <summary>Updates the state.</summary>
@@ -303,13 +316,13 @@ namespace Vindinium
 		{
 			var state = new State()
 			{
-				turn = (ushort)game.turn,
 				hero1 = Hero.Create(game.heroes[0]),
 				hero2 = Hero.Create(game.heroes[1]),
 				hero3 = Hero.Create(game.heroes[2]),
 				hero4 = Hero.Create(game.heroes[3]),
 				ownership = ownership.UpdateFromTiles(game.board.tiles),
 			};
+			state.hash = GetHash(game.turn, state.hero1, state.hero2, state.hero3, state.hero4);
 			return state;
 		}
 
@@ -321,7 +334,7 @@ namespace Vindinium
 			sb.AppendLine(hero2.DebugToString());
 			sb.AppendLine(hero3.DebugToString());
 			sb.AppendLine(hero4.DebugToString());
-			sb.AppendFormat("Turn: {0}", turn).AppendLine();
+			sb.AppendFormat("Turn: {0}", this.Turn).AppendLine();
 			sb.AppendFormat("Mines: {0}", ownership.DebugToString());
 			return sb.ToString();
 		}
@@ -349,7 +362,7 @@ namespace Vindinium
 		{
 			var state = new State()
 			{
-				turn = (ushort)turn,
+				hash = GetHash(turn, hero1, hero2, hero3, hero4),
 				hero1 = hero1,
 				hero2 = hero2,
 				hero3 = hero3,
@@ -357,6 +370,34 @@ namespace Vindinium
 				ownership = ownership
 			};
 			return state;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return base.Equals(obj);
+		}
+		public override int GetHashCode()
+		{
+			return hash;
+		}
+
+		public bool Equals(State other)
+		{
+			return this.hash == other.hash &&
+			this.hero1 == other.hero1 &&
+			this.hero2 == other.hero2 &&
+			this.hero3 == other.hero3 &&
+			this.hero4 == other.hero4 &&
+			this.ownership.Equals(other.ownership);
+		}
+
+		public static bool operator ==(State l, State r)
+		{
+			return l.Equals(r);
+		}
+		public static bool operator !=(State l, State r)
+		{
+			return !(l == r);
 		}
 	}
 }

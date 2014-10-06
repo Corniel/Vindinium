@@ -1,14 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vindinium.Ygritte.Decisions
 {
+	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class NodeLookup
 	{
 		private Dictionary<int, Dictionary<State, Node>> lookup = new Dictionary<int, Dictionary<State, Node>>();
+
+		public void Clear()
+		{
+			lookup.Clear();
+			this.Transpositions = 0;
+		}
+		public void Clear(int turn)
+		{
+			for (int i = 0; i < turn; i++)
+			{
+				if (lookup.ContainsKey(i))
+				{
+					lookup.Remove(i);
+				}
+			}
+		}
+
+		/// <summary>Gets the depth of the current search.</summary>
+		public int Depth { get { return lookup.Max(kvp => kvp.Key) - lookup.Min(kvp => kvp.Key); } }
+
+		/// <summary>Gets the number of nodes.</summary>
+		public int Nodes { get { return lookup.Sum(kvp => kvp.Value.Count); } }
+
+		public int Transpositions { get; protected set; }
 
 		public Node Get(int turn, Map map, State state)
 		{
@@ -19,6 +42,7 @@ namespace Vindinium.Ygritte.Decisions
 			{
 				if (dict.TryGetValue(state, out node))
 				{
+					this.Transpositions++;
 					return node;
 				}
 			}
@@ -27,10 +51,18 @@ namespace Vindinium.Ygritte.Decisions
 				dict = new Dictionary<State, Node>();
 				lookup[turn] = dict;
 			}
-			node = ChildNode.Create(map, state);
+			node = new Node(state);
 			dict[state] = node;
 
 			return node;
+		}
+
+		public string DebuggerDisplay
+		{
+			get
+			{
+				return string.Format("Node lookup: Depth: {0}, Nodes: {1}, Transpositions: {2}", this.Depth, this.Nodes, this.Transpositions);
+			}
 		}
 	}
 }

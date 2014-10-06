@@ -13,7 +13,7 @@ namespace Vindinium.UnitTests.Ygritte
 	public class ScoreTest
 	{
 		[Test]
-		public void Test()
+		public void Create_SomeValues_AreEqual()
 		{
 			var state = State.Create(
 				101,
@@ -25,8 +25,8 @@ namespace Vindinium.UnitTests.Ygritte
 
 			var score = Score.Create(state);
 
-			var act = score.DebugTostring();
-			var exp = "Score: [1]0, 284, [2]1, 285, [3]1, 285, [4]3, 287";
+			var act = score.DebuggerDisplay;
+			var exp = "Score: [1]0, 284, [2]1, 285, [3]1, 285, [4]3, 286";
 
 			Assert.AreEqual(exp, act);
 		}

@@ -8,30 +8,32 @@ namespace Vindinium.Ygritte.Decisions
 {
 	public class MovesGenerator
 	{
-		private Dictionary<Tile, Distance[,]> paths = new Dictionary<Tile, Distance[,]>();
+		public static readonly MovesGenerator Instance = new MovesGenerator();
+
+		private Dictionary<Tile, MoveFromPath> paths = new Dictionary<Tile, MoveFromPath>();
 
 		public void Clear()
 		{
 			paths.Clear();
 		}
 
-		private Distance[,] Get(Map map, Tile tile)
+		private MoveFromPath GetMoveFromPath(Map map, Tile tile)
 		{
-			Distance[,] distances;
-			if (!paths.TryGetValue(tile, out distances))
+			MoveFromPath move;
+			if (!paths.TryGetValue(tile, out move))
 			{
-				distances = map.GetDistances(tile);
-				paths[tile] = distances;
+				move = new MoveFromPath(map.GetDistances(tile));
+				paths[tile] = move;
 			}
-			return distances;
+			return move;
 		}
 
-		public void AddPaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player, PlanType plan)
+		public void AddMoves(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player, PlanType plan)
 		{
 			switch (plan)
 			{
 
-				case PlanType.Crashed: moves.Add(new MoveCrashed()); break;
+				case PlanType.Crashed: moves.Add(Move.Crashed); break;
 
 				case PlanType.ToOppoMine: GetOppoMinePaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToFreeMine: GetFreeMinePaths(moves, map, state, source, hero, player); return;
@@ -40,11 +42,17 @@ namespace Vindinium.Ygritte.Decisions
 				case PlanType.ToTaverne: GetTavernePaths(moves, map, state, source, hero, player); return;
 
 				case PlanType.Flee:
-					break;
-				case PlanType.Attack:
-					break;
+				case PlanType.Attack: GetDirectionsPaths(moves, map, state, source, hero, player); return;
 				
 				default: break;
+			}
+		}
+
+		private void GetDirectionsPaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		{
+			foreach (var target in source.Neighbors)
+			{
+				moves.Add(new SingleMove(source, target));
 			}
 		}
 
@@ -52,41 +60,37 @@ namespace Vindinium.Ygritte.Decisions
 		{
 			var p = map.Mines
 				.Where(m => state.Mines[m.MineIndex].IsOppo(player))
-				.Select(t => Get(map, t))
-				.OrderBy(d => d.Get(source))
+				.Select(t => GetMoveFromPath(map, t))
+				.OrderBy(d => d.GetDistance(source))
 				.Take(2);
-
-			moves.AddRange(p.Select(m => new MoveFromPath(m)));
+			moves.AddRange(p);
 		}
 		private void GetFreeMinePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
 			var p = map.Mines
 				.Where(m => state.Mines[m.MineIndex] == PlayerType.None)
-				.Select(t => Get(map, t))
-				.OrderBy(d => d.Get(source))
+				.Select(t => GetMoveFromPath(map, t))
+				.OrderBy(d => d.GetDistance(source))
 				.Take(2);
-
-			moves.AddRange(p.Select(m => new MoveFromPath(m)));
+			moves.AddRange(p);
 		}
 		private void GetOwnMinePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
 			var p = map.Mines
 				.Where(m => state.Mines[m.MineIndex] == player)
-				.Select(t => Get(map, t))
-				.OrderBy(d => d.Get(source))
+				.Select(t => GetMoveFromPath(map, t))
+				.OrderBy(d => d.GetDistance(source))
 				.Take(1);
-
-			moves.AddRange(p.Select(m => new MoveFromPath(m)));
+			moves.AddRange(p);
 		}
 
 		private void GetTavernePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
 			var p = map.Tavernes
-				.Select(t => Get(map, t))
-				.OrderBy(d => d.Get(source))
+				.Select(t => GetMoveFromPath(map, t))
+				.OrderBy(d => d.GetDistance(source))
 				.Take(2);
-
-			moves.AddRange(p.Select(m => new MoveFromPath(m)));
+			moves.AddRange(p);
 		}
 	}
 }
