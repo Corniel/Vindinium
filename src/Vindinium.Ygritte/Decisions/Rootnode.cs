@@ -27,8 +27,6 @@ namespace Vindinium.Ygritte.Decisions
 			var hero = this.State.GetActiveHero();
 			var source = map[hero];
 
-			Node.ClearLookup();
-
 			var turn = this.Turn + 1;
 
 			foreach (var dir in source.Directions)
@@ -89,10 +87,15 @@ namespace Vindinium.Ygritte.Decisions
 
 		private void LogResult()
 		{
-			Console.Write("\r[{0,4}] {1,4}, {4}, Depth: {2}, {3}",
+			var playerstr = string.Format("[{0}]", (int)this.PlayerToMove);
+
+			Console.Write("\r[{0,4}] {1,4}, {4}, d: {2}, {3}",
 							this.Turn,
 							this.Stopwatch.ElapsedMilliseconds,
-							Node.Lookup.Depth, this.Score.DebuggerDisplay,
+							Node.Lookup.Depth, 
+							this.Score.DebuggerDisplay
+								.Replace("Score", "s")
+								.Replace(playerstr, "[*]"),
 							this.MoveMappings[this.Children[0]]);
 		}
 	}

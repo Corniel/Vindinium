@@ -30,6 +30,8 @@ namespace Vindinium.Ygritte
 			this.Map = Map.Parse(this.Client.Response.game.board.ToRows());
 			this.State = State.Create(this.Map);
 			this.Player = this.Client.Response.hero.Player;
+
+			Node.Lookup.Clear();
 		}
 
 		protected override MoveDirection GetMove()

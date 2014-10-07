@@ -31,11 +31,6 @@ namespace Vindinium.Ygritte.Decisions
 			return Lookup.Get(turn, map, state);
 		}
 
-		public static void ClearLookup()
-		{
-			Lookup.Clear();
-		}
-
 		public Score Score { get; protected set; }
 		public State State { get; protected set; }
 		public int Turn { get { return this.State.Turn; } }
