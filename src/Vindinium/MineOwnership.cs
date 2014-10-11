@@ -29,9 +29,13 @@ namespace Vindinium
 			{
 				return MineOwnership20.Create(mines.Select(mine => (PlayerType)mine).ToArray());
 			}
-			else
+			if (mines.Length <= 64)
 			{
 				return MineOwnership64.Create(mines.Select(mine => (PlayerType)mine).ToArray());
+			}
+			else
+			{
+				return MineOwnership128.Create(mines.Select(mine => (PlayerType)mine).ToArray());
 			}
 		}
 
@@ -55,6 +59,29 @@ namespace Vindinium
 				}
 			}
 			return Create(mines);
+		}
+
+		public static IMineOwnership UpdateFromTiles(IMineOwnership mines, string tiles)
+		{
+			var index = 0;
+
+			for (int p = 0; p < tiles.Length; p += 2)
+			{
+				if (tiles[p] == '$')
+				{
+					switch (tiles[p + 1])
+					{
+						case '1': mines = mines.Set(index, PlayerType.Hero1); break;
+						case '2': mines = mines.Set(index, PlayerType.Hero2); break;
+						case '3': mines = mines.Set(index, PlayerType.Hero3); break;
+						case '4': mines = mines.Set(index, PlayerType.Hero4); break;
+						case '-':
+						default: break;
+					}
+					index++;
+				}
+			}
+			return mines;
 		}
 
 		public static string ToString(IMineOwnership ownership, int length)

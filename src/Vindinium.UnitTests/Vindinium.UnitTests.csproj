@@ -61,6 +61,9 @@
     <Compile Include="DrunkenViking\NodeStateTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="MapTest.cs" />
+    <Compile Include="MineOwnership128Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MineOwnership20Test.cs" />
     <Compile Include="MineOwnership64Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
