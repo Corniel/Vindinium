@@ -17,7 +17,9 @@ namespace Vindinium.Logging
 				var games = ConfigurationManager.AppSettings["games"];
 				if (!string.IsNullOrEmpty(games))
 				{
-					return new DirectoryInfo(games);
+					var dir = new DirectoryInfo(games);
+					if (!dir.Exists) { dir.Create(); }
+					return dir;
 				}
 				return null;
 			}

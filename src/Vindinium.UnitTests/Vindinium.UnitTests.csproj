@@ -57,6 +57,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Decisions\AverageScoreDecisionTest.cs" />
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
     <Compile Include="DistanceTest.cs" />
     <Compile Include="DrunkenViking\NodeStateTest.cs" />

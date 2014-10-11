@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Vindinium.Decisions
 {
@@ -18,6 +19,20 @@ namespace Vindinium.Decisions
 		private IScore score2;
 		private IScore score3;
 		private IScore score4;
+
+		public IScore Get(PlayerType player)
+		{
+			switch (player)
+			{
+				case PlayerType.Hero1: return score1;
+				case PlayerType.Hero2: return score2;
+				case PlayerType.Hero3: return score3;
+				case PlayerType.Hero4: return score4;
+				case PlayerType.None:
+				default:
+					throw new NotSupportedException(string.Format("PlayerType '{0}' is not supported.", player));
+			}
+		}
 
 		public int Compare(ScoreCollection other, PlayerType player)
 		{
@@ -52,19 +67,27 @@ namespace Vindinium.Decisions
 
 		public string ToConsoleDisplay(PlayerType player)
 		{
-			var str = String.Format("h1: {0}, h2: {1}, h3: {2}, h4: {3}",
+			var str = String.Format(
+					CultureInfo.InvariantCulture,
+					"h1: {0}, h2: {1}, h3: {2}, h4: {3}",
 					score1.DebuggerDisplay,
 					score2.DebuggerDisplay,
 					score3.DebuggerDisplay,
 					score4.DebuggerDisplay);
 
-			var search = String.Format("h{0}: ", (int)player);
-			var replace = String.Format("h{0}*: ", (int)player);
-			
-			str = str.Replace(search, replace);
+			str = ToConsoleDisplay(str, player);
 			return str;
 		}
 		public string DebuggerDisplay { get { return ToConsoleDisplay(PlayerType.None); } }
+
+		public static string ToConsoleDisplay(string str, PlayerType player)
+		{
+			var search = String.Format("h{0}: ", (int)player);
+			var replace = String.Format("h{0}*: ", (int)player);
+
+			str = str.Replace(search, replace);
+			return str;
+		}
 
 		public UInt32 Hero1 { get { return score1.ToUInt32(); } }
 		public UInt32 Hero2 { get { return score2.ToUInt32(); } }
