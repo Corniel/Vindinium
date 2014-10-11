@@ -11,6 +11,6 @@
 		IMineOwnership Set(int index, PlayerType owner);
 		IMineOwnership UpdateFromTiles(string tiles);
 
-		string DebugToString();
+		string ToString(int length);
 	}
 }

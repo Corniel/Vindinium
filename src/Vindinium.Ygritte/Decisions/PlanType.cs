@@ -12,5 +12,7 @@
 
 		Flee,
 		Attack,
+
+		Stay,
 	}
 }

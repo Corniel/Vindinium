@@ -330,12 +330,12 @@ namespace Vindinium
 		public string ToUnitTestString()
 		{
 			var sb = new StringBuilder();
-			sb.AppendLine(hero1.DebugToString());
-			sb.AppendLine(hero2.DebugToString());
-			sb.AppendLine(hero3.DebugToString());
-			sb.AppendLine(hero4.DebugToString());
+			sb.AppendLine(hero1.DebuggerDisplay);
+			sb.AppendLine(hero2.DebuggerDisplay);
+			sb.AppendLine(hero3.DebuggerDisplay);
+			sb.AppendLine(hero4.DebuggerDisplay);
 			sb.AppendFormat("Turn: {0}", this.Turn).AppendLine();
-			sb.AppendFormat("Mines: {0}", ownership.DebugToString());
+			sb.AppendFormat("Mines: {0}", ownership);
 			return sb.ToString();
 		}
 

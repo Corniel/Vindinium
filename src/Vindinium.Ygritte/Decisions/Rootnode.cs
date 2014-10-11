@@ -22,21 +22,35 @@ namespace Vindinium.Ygritte.Decisions
 
 		private Stopwatch Stopwatch { get; set; }
 
-		public MoveDirection GetMove(Map map, TimeSpan timeout)
+		/// <summary>Gets the best move.</summary>
+		public MoveDirection BestMove
+		{
+			get
+			{
+				return this.MoveMappings[this.Children[0]];
+			}
+		}
+
+		public void InitializeMoveMappings(Map map)
 		{
 			var hero = this.State.GetActiveHero();
 			var source = map[hero];
-
-			var turn = this.Turn + 1;
 
 			foreach (var dir in source.Directions)
 			{
 				var target = source[dir];
 				var nw_sta = this.State.Move(map, hero, this.PlayerToMove, source, target);
-				var child = Node.Get(turn, map, nw_sta);
+				var child = Node.Get(this.Turn + 1, map, nw_sta);
 				child.ClearMoves();
 				this.MoveMappings[child] = dir;
 			}
+		}
+
+		public MoveDirection GetMove(Map map, TimeSpan timeout)
+		{
+			InitializeMoveMappings(map);
+
+			var turn = this.Turn + 1;
 
 			Run(map, timeout, turn);
 			// RunAsync(map, timeSpan, turn);
@@ -44,14 +58,16 @@ namespace Vindinium.Ygritte.Decisions
 			this.Stopwatch.Stop();
 			LogResult();
 			Console.WriteLine();
-			return this.MoveMappings[this.Children[0]];
+
+			return this.BestMove;
 		}
 
+		
 		private void Run(Map map, TimeSpan timeout, int turn)
 		{
 			while (Stopwatch.Elapsed < timeout)
 			{
-				this.Process(map, turn++);
+				this.Process(map, turn++, Score.MinScore);
 				LogResult();
 				turn++;
 			}
@@ -73,7 +89,7 @@ namespace Vindinium.Ygritte.Decisions
 			{
 				while (true)
 				{
-					this.Process(map, turn++);
+					this.Process(map, turn++, Score.MinScore);
 
 					if (this.Children.Count == 0)
 					{

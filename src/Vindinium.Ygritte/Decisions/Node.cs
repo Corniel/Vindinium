@@ -40,10 +40,12 @@ namespace Vindinium.Ygritte.Decisions
 
 		public List<Node> Children { get; set; }
 
-		public void Process(Map map, int turn)
+		public Score Process(Map map, int turn, Score alpha)
 		{
-			if (this.Turn >= 1999) { return; }
-			if (turn == this.Turn && this.Children.Count != 1) { return; }
+			if (this.Turn >= 1199) { return alpha; }
+
+			// if no splitting, look futher.
+			if (turn <= this.Turn && this.Children.Count != 1) { return alpha; }
 
 			var moves = this.Moves[this.PlayerToMove];
 
@@ -58,7 +60,7 @@ namespace Vindinium.Ygritte.Decisions
 
 				if (moves.Count == 0)
 				{
-					var plans = GeneratePlans(map, hero, player);
+					var plans = GeneratePlans(map, this.State, hero, player);
 					foreach (var plan in plans)
 					{
 						MovesGenerator.Instance.AddMoves(moves, map, this.State, source, hero, player, plan);
@@ -66,7 +68,7 @@ namespace Vindinium.Ygritte.Decisions
 				}
 				foreach (var move in moves)
 				{
-					var target = move.GetTarget(source);
+					var target = move.GetTarget(source, map, this.State);
 					if (target != null)
 					{
 						var state = this.State.Move(map, hero, player, source, target);
@@ -93,20 +95,44 @@ namespace Vindinium.Ygritte.Decisions
 				}
 			}
 
-			if (this.Children.Count == 1)
+			Score test = Score.MinScore;
+
+			var comparer = NodeComparer.Get(this.PlayerToMove);
+
+			for (int i = 0; i < this.Children.Count; i++)
 			{
-				this.Children[0].Process(map, turn + 1);
-			}
-			else
-			{
-				for (int i = 0; i < this.Children.Count;i++ )
+				var child = this.Children[i];
+				switch (i)
 				{
-					var child = this.Children[i];
-					child.Process(map, turn);
+					case 0:
+					case 1: test = child.Process(map, turn, alpha); break;
+					case 2:
+					case 3: test = child.Process(map, turn - 1, alpha); break;
+					default:
+					case 4: test = child.Process(map, turn - 2, alpha); break;
 				}
-				Children.Sort(NodeComparer.Get(this.PlayerToMove));
+				//var dif = comparer.Compare(alpha, test);
+				//if (dif > 0)
+				//{
+				//	alpha = alpha.UpdateAlpha(test, this.PlayerToMove);
+				//}
+				//else if (dif < 0)
+				//{
+				//	break;
+				//}
 			}
-			this.Score = this.Children[0].Score;
+			Children.Sort(comparer);
+
+			//this.Score = this.Children[0].Score;
+			//if (comparer.Compare(alpha, this.Score) > 0)
+			//{
+			//	alpha = alpha.UpdateAlpha(this.Score, this.PlayerToMove);
+			//}
+			//else
+			//{
+			//}
+
+			return alpha;
 		}
 
 		public void AddMove(Move move, PlayerType player)
@@ -126,7 +152,7 @@ namespace Vindinium.Ygritte.Decisions
 			}
 		}
 
-		public List<PlanType> GeneratePlans(Map map, Hero hero, PlayerType player)
+		public List<PlanType> GeneratePlans(Map map, State state, Hero hero, PlayerType player)
 		{
 			var plans = new List<PlanType>();
 
@@ -138,41 +164,56 @@ namespace Vindinium.Ygritte.Decisions
 			{
 				var source = map[hero];
 				int health = hero.Health;
-				// Combat, nothing else.
-				if (source.Neighbors.Any(tile => this.State.GetOccupied(tile, player) != PlayerType.None))
+				int mines = hero.Mines;
+
+
+				foreach(var other in PlayerTypes.Other[player].Select(other => state.GetHero(other)))
 				{
-					plans.Add(PlanType.Flee);
-					//plans.Add(PlanType.Attack);
+					// some what close.
+					if (Map.GetManhattanDistance(hero, other) < 5)
+					{
+						if (health  + Hero.HealthBattle <= other.Health)
+						{
+							plans.Add(PlanType.Flee);
+							plans.Add(PlanType.Attack);
+						}
+						else
+						{
+							plans.Add(PlanType.Attack);
+							plans.Add(PlanType.Flee);
+						}
+					}
 				}
-				else if (health < Hero.HealthBattle)
+
+				// We are winning, keep the position.
+				if (mines >= (map.Mines.Length >> 1))
 				{
 					plans.Add(PlanType.ToTaverne);
-					// kill yourself.
-					//plans.Add(PlanType.Attack);
-					//plans.Add(PlanType.Flee);
-				}
-				else
-				{
-					// If beside a taverne, check if usefull.
-					if (source.Neighbors.Any(tile => tile.IsTaverne))
-					{
-						plans.Add(PlanType.ToTaverne);
-					}
 
+					if (map.GetDistanceToTaverne(hero) == Distance.One)
+					{
+						plans.Add(PlanType.Stay);
+					}
+				}
+
+				// If beside a taverne, 
+				// or weak, 
+				// check if usefull.
+				else if (health < (Hero.HealthBattle << 1) || map.GetDistanceToTaverne(hero) == Distance.One)
+				{
+					plans.Add(PlanType.ToTaverne);
+				}
+				
+				// only when we can concure it.
+				if (health > Hero.HealthBattle)
+				{
 					plans.Add(PlanType.ToOppoMine);
 					plans.Add(PlanType.ToFreeMine);
-					if (hero.Mines >= (map.Mines.Length >> 1))
+
+					if (mines > 1)
 					{
 						plans.Add(PlanType.ToOwnMine);
 					}
-					//if (PlayerTypes.Other[player].Select(tp => this.State.GetHero(tp)).Any(oppo => oppo.Health + Hero.HealthBattle < health))
-					//{
-					//	plans.Add(PlanType.Attack);
-					//}
-					//else
-					//{
-					//	plans.Add(PlanType.Flee);
-					//}
 				}
 			}
 			return plans;

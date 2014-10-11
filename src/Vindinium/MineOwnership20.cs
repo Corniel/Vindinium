@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Vindinium
 {
-	[DebuggerDisplay("{DebugToString()}")]
+	[DebuggerDisplay("{ToString()}")]
 	public struct MineOwnership20 : IMineOwnership, IEquatable<MineOwnership20>
 	{
 		public const int IndexMax = 20;
@@ -116,24 +116,8 @@ namespace Vindinium
 			}
 		}
 
-		public string DebugToString()
-		{
-			var sb = new StringBuilder();
-
-			for (int index = 0; index < IndexMax; index++)
-			{
-				switch (this[index])
-				{
-					default:
-					case PlayerType.None: sb.Append('.'); break;
-					case PlayerType.Hero1: sb.Append('1'); break;
-					case PlayerType.Hero2: sb.Append('2'); break;
-					case PlayerType.Hero3: sb.Append('3'); break;
-					case PlayerType.Hero4: sb.Append('4'); break;
-				}
-			}
-			return sb.ToString();
-		}
+		public string ToString(int length) { return MineOwnership.ToString(this, length); }
+		public override string ToString() { return ToString(IndexMax); }
 
 		/// <summary>Creates mine ownership from tiles.</summary>
 		public IMineOwnership UpdateFromTiles(string tiles)

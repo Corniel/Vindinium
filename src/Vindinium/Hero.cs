@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -9,9 +10,13 @@ using System.Xml.Serialization;
 namespace Vindinium
 {
 	/// <summary>Represents a Hero (state) in Vindinium.</summary>
-	[DebuggerDisplay("{DebugToString()}")]
+	[DebuggerDisplay("{DebuggerDisplay}")]
 	public struct Hero : ISerializable, IXmlSerializable
 	{
+		public static readonly Regex Pattern = new Regex(@"^Hero\[(?<x>[1-9][0-9]*),(?<y>[1-9][0-9]*)\] H:(?<health>[1-9][0-9]*), M:(?<mines>[1-9][0-9]*), G:(?<gold>[1-9][0-9]*)(?<crashed>, Crashed)?", RegexOptions.Compiled);
+
+		public static readonly Hero Empty = default(Hero);
+
 		public const int PositionX = 8;
 		public const int PositionY = 16;
 		public const int PositionMines = 24;
@@ -191,11 +196,22 @@ namespace Vindinium
 			}
 		}
 
-		/// <summary>Returns a System.String that represents the current BIC for debug purposes.</summary>
-		public string DebugToString()
+		/// <summary>Returns a System.String that represents the current Hero for debug purposes.</summary>
+		public string DebuggerDisplay
+		{
+			get
+			{
+				return string.Format(CultureInfo.InvariantCulture,
+					"Hero[{0},{1}] Health: {2}, Mines: {3}, Gold: {4:#,##0}{5}",
+					X, Y, Health, Mines, Gold, IsCrashed ? ", Crashed" : "");
+			}
+		}
+
+		/// <summary>Returns a System.String that represents the current Hero.</summary>
+		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-				"Hero[{0},{1}] Health: {2}, Mines: {3}, Gold: {4:#,##0}{5}",
+				"Hero[{0},{1}] H:{2}, M:{3}, G:{4}{5}",
 				X, Y, Health, Mines, Gold, IsCrashed ? ", Crashed" : "");
 		}
 
@@ -324,6 +340,23 @@ namespace Vindinium
 		public static Hero Create(Serialization.Hero hero)
 		{
 			return new Hero(hero.life, hero.pos.y, hero.pos.x, hero.mineCount, hero.gold, hero.crashed);
+		}
+
+
+		public static Hero Parse(string str)
+		{
+			var match = Pattern.Match(str ?? string.Empty);
+			if (match.Success)
+			{
+				var x = int.Parse(match.Groups["x"].Value);
+				var y = int.Parse(match.Groups["y"].Value);
+				var health = int.Parse(match.Groups["health"].Value);
+				var mines = int.Parse(match.Groups["mines"].Value);
+				var gold = int.Parse(match.Groups["gold"].Value);
+				var crashed = !string.IsNullOrEmpty(match.Groups["crashed"].Value);
+				return new Hero(health, x, y, mines, gold, crashed);
+			}
+			return Hero.Empty;
 		}
 	}
 }

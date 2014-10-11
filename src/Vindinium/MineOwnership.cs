@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text;
 
 namespace Vindinium
 {
@@ -31,6 +33,47 @@ namespace Vindinium
 			{
 				return MineOwnership64.Create(mines.Select(mine => (PlayerType)mine).ToArray());
 			}
+		}
+
+		public static IMineOwnership Parse(string val)
+		{
+			if (string.IsNullOrEmpty(val)) { throw new ArgumentNullException("val"); }
+
+			var mines = new int[val.Length];
+
+			for (var i = 0; i < val.Length; i++)
+			{
+				switch (val[i])
+				{
+					case '1': mines[i] = 1; break;
+					case '2': mines[i] = 2; break;
+					case '3': mines[i] = 3; break;
+					case '4': mines[i] = 4; break;
+					default:
+					case '.': mines[i] = 0; break;
+
+				}
+			}
+			return Create(mines);
+		}
+
+		public static string ToString(IMineOwnership ownership, int length)
+		{
+			var sb = new StringBuilder();
+
+			for (int index = 0; index < length; index++)
+			{
+				switch (ownership[index])
+				{
+					default:
+					case PlayerType.None: sb.Append('.'); break;
+					case PlayerType.Hero1: sb.Append('1'); break;
+					case PlayerType.Hero2: sb.Append('2'); break;
+					case PlayerType.Hero3: sb.Append('3'); break;
+					case PlayerType.Hero4: sb.Append('4'); break;
+				}
+			}
+			return sb.ToString();
 		}
 	}
 }

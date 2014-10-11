@@ -11,5 +11,6 @@
 		<add key="maxtime" value ="700"/>
 		<add key="run-parallel" value ="false"/>
 		<add key="maps" value ="*\Vindinium\maps"/>
+		<add key="games" value ="*\Vindinium\games"/>
 	</appSettings>
 </configuration>

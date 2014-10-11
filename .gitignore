@@ -216,8 +216,8 @@ pip-log.txt
 
 #Personal
 /src/packages
-/doc
-key.txt
+/doc/key.txt
 [Aa]pp.config
 /bots
 /maps
+/games

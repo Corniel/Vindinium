@@ -10,6 +10,25 @@ namespace Vindinium.Ygritte.Decisions
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public struct Score
 	{
+		public static readonly Score MinScore = default(Score);
+
+		private static readonly Dictionary<PlayerType, ulong> Select = new Dictionary<PlayerType, ulong>()
+		{
+			{ PlayerType.Hero1, ((ulong)UInt16.MaxValue) << 00 },
+			{ PlayerType.Hero2, ((ulong)UInt16.MaxValue) << 16 },
+			{ PlayerType.Hero3, ((ulong)UInt16.MaxValue) << 32 },
+			{ PlayerType.Hero4, ((ulong)UInt16.MaxValue) << 48 },
+		};
+
+
+		private static readonly Dictionary<PlayerType, ulong> Clear = new Dictionary<PlayerType, ulong>()
+		{
+			{ PlayerType.Hero1, UInt64.MaxValue ^ Select[PlayerType.Hero1] },
+			{ PlayerType.Hero2, UInt64.MaxValue ^ Select[PlayerType.Hero2] },
+			{ PlayerType.Hero3, UInt64.MaxValue ^ Select[PlayerType.Hero3] },
+			{ PlayerType.Hero4, UInt64.MaxValue ^ Select[PlayerType.Hero4] },
+		};
+
 		private ulong m_Value;
 
 		public ulong Hero1Compare { get { return m_Value & ushort.MaxValue; } }
@@ -17,6 +36,19 @@ namespace Vindinium.Ygritte.Decisions
 		public ulong Hero3Compare { get { return m_Value & (((ulong)ushort.MaxValue) << 32); } }
 		public ulong Hero4Compare { get { return m_Value >> 48; } }
 
+		public Score UpdateAlpha(Score alpha, PlayerType player)
+		{
+			Score update = Score.MinScore;
+
+			switch (player)
+			{
+				case PlayerType.Hero1: update.m_Value = (m_Value & Clear[PlayerType.Hero1]) | (alpha.m_Value & Select[PlayerType.Hero1]); break;
+				case PlayerType.Hero2: update.m_Value = (m_Value & Clear[PlayerType.Hero2]) | (alpha.m_Value & Select[PlayerType.Hero2]); break;
+				case PlayerType.Hero3: update.m_Value = (m_Value & Clear[PlayerType.Hero3]) | (alpha.m_Value & Select[PlayerType.Hero3]); break;
+				case PlayerType.Hero4: update.m_Value = (m_Value & Clear[PlayerType.Hero4]) | (alpha.m_Value & Select[PlayerType.Hero4]); break;
+			}
+			return update;
+		}
 
 		public string DebuggerDisplay
 		{
@@ -57,9 +89,9 @@ namespace Vindinium.Ygritte.Decisions
 				ulong pt4 = (ulong)(hero4.Gold + hero4.Mines * ((1196 - state.Turn) >> 2));
 
 				pt1 += (ulong)(hero1.Health >> 4);
-				pt2 += (ulong)(hero1.Health >> 4);
-				pt3 += (ulong)(hero1.Health >> 4);
-				pt4 += (ulong)(hero1.Health >> 4);
+				pt2 += (ulong)(hero2.Health >> 4);
+				pt3 += (ulong)(hero3.Health >> 4);
+				pt4 += (ulong)(hero4.Health >> 4);
 
 
 				ulong ps1 = 0;

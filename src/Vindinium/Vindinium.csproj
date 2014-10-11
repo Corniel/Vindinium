@@ -49,10 +49,14 @@
     <Compile Include="Conversion\DistanceTypeConverter.cs" />
     <Compile Include="Distance.cs" />
     <Compile Include="Distances.cs" />
+    <Compile Include="Logging\Game.cs" />
     <Compile Include="Hero.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IMineOwnership.cs" />
+    <Compile Include="Logging\Hero.cs" />
+    <Compile Include="Logging\Map.cs" />
+    <Compile Include="Logging\Turn.cs" />
     <Compile Include="Map.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +90,7 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

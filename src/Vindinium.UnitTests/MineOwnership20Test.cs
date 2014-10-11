@@ -13,7 +13,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = MineOwnership20.Empty.Set(0, PlayerType.Hero1);
 			var exp = "1...................";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -21,7 +21,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = MineOwnership20.Empty.Set(3, PlayerType.Hero1);
 			var exp = "...1................";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = MineOwnership20.Empty.Set(4, PlayerType.Hero2);
 			var exp = "....2...............";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -37,14 +37,14 @@ namespace Vindinium.UnitTests
 		{
 			var act = MineOwnership20.Empty.Set(15, PlayerType.Hero3);
 			var exp = "...............3....";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 		[Test]
 		public void Set_63Hero4_AreEqual()
 		{
 			var act = MineOwnership20.Empty.Set(19, PlayerType.Hero4);
 			var exp = "...................4";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = MineOwnership20.Create(0, 0, 1, 1, 1, 4, 2, 0, 3, 0, 4, 1, 0, 0, 0, 0, 1);
 			var exp = "..11142.3.41....1...";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = TestValue.ChangeOwnership(PlayerType.Hero1, PlayerType.None, 20);
 			var exp = ".....42.3.4.........";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -100,7 +100,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = TestValue.ChangeOwnership(PlayerType.Hero3, PlayerType.None, 20);
 			var exp = "..11142...41....1...";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -108,7 +108,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = TestValue.ChangeOwnership(PlayerType.Hero1, PlayerType.Hero2, 20);
 			var exp = "..22242.3.42....2...";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -116,7 +116,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = TestValue.ChangeOwnership(PlayerType.Hero3, PlayerType.Hero1, 20);
 			var exp = "..11142.1.41....1...";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -124,7 +124,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = TestValue.ChangeOwnership(PlayerType.Hero1, PlayerType.Hero3, 20);
 			var exp = "..33342.3.43....3...";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]
@@ -132,7 +132,7 @@ namespace Vindinium.UnitTests
 		{
 			var act = TestValue.ChangeOwnership(PlayerType.Hero2, PlayerType.Hero4, 20);
 			var exp = "..11144.3.41....1...";
-			Assert.AreEqual(exp, act.DebugToString());
+			Assert.AreEqual(exp, act.ToString());
 		}
 
 		[Test]

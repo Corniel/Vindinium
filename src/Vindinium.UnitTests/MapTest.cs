@@ -262,5 +262,30 @@ namespace Vindinium.UnitTests
 			sw.Stop();
 			Console.WriteLine("{0:#,##0.00}k/s", runs * map.Count / sw.Elapsed.TotalMilliseconds);
 		}
+
+		[Test]
+		public void GetManhattanDistance_x3y0Tox3y0_0()
+		{
+			var map = MapTest.Map20;
+			var hero1 = Hero.Create(100, map[03, 00], 0, 0);
+			var hero2 = Hero.Create(100, map[03, 00], 0, 0);
+
+			var act = Map.GetManhattanDistance(hero1, hero2);
+			var exp = 0;
+
+			Assert.AreEqual(exp, act);
+		}
+		[Test]
+		public void GetManhattanDistance_x3y0Tox16y19_32()
+		{
+			var map = MapTest.Map20;
+			var hero1 = Hero.Create(100, map[03, 00], 0, 0);
+			var hero2 = Hero.Create(100, map[16, 19], 0, 0);
+
+			var act = Map.GetManhattanDistance(hero1, hero2);
+			var exp = 32;
+
+			Assert.AreEqual(exp, act);
+		}
 	}
 }

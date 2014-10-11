@@ -12,6 +12,20 @@ namespace Vindinium
 	/// <summary>Represents a Vindinium map.</summary>
 	public class Map : IEnumerable<Tile>
 	{
+		public static int GetManhattanDistance(Hero hero1, Hero hero2)
+		{
+			uint key = (uint)((hero1.Dimensions >> Hero.PositionX) | (hero2.Dimensions << (16 - Hero.PositionX)));
+			byte distance;
+
+			if(!ManhattanDistance.TryGetValue(key, out distance))
+			{
+				distance = (byte)(Math.Abs(hero1.X - hero2.X) + Math.Abs(hero1.Y - hero2.Y));
+				ManhattanDistance[key] = distance;
+			}
+			return distance;
+		}
+		private static readonly Dictionary<uint, byte> ManhattanDistance = new Dictionary<uint, byte>();
+
 		private Tile[,] m_Tiles;
 		private List<Tile> m_All;
 
@@ -89,6 +103,8 @@ namespace Vindinium
 					{
 						spawn.IsPassable = false;
 					}
+					// maybe a taverne is not longer available.
+					this.DistanceToTaverne = GetDistances(this.Tavernes);
 				}
 			}
 		}
@@ -143,7 +159,7 @@ namespace Vindinium
 				var filename = string.Format("{0:000}x{1:000}_{2:00}m_{3}t_hash{4}.txt",
 					this.Width, this.Height,
 					this.Mines.Length,
-					this.Count,
+					this.Count - this.Mines.Length - 4,
 					hash);
 
 				var file = new FileInfo(Path.Combine(dir.FullName, filename));
@@ -249,6 +265,7 @@ namespace Vindinium
 		private void AssignTavernes()
 		{
 			this.Tavernes = m_All.Where(tile => tile.TileType == TileType.Taverne).ToArray();
+			this.DistanceToTaverne = GetDistances(this.Tavernes);
 		}
 
 		public Distance[,] GetDistances(params Tile[] tiles)
@@ -338,6 +355,47 @@ namespace Vindinium
 				dis++;
 			}
 			return distances;
+		}
+
+		public Distance GetDistanceToTaverne(Hero hero)
+		{
+			return DistanceToTaverne.Get(this[hero]);
+		}
+		private Distance[,] DistanceToTaverne { get; set; }
+
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+
+			for (int y = 0; y < this.Height; y++)
+			{
+				sb.AppendLine();
+				for (int x = 0; x < this.Width; x++)
+				{
+					var tile = this[x, y];
+					if (tile == null)
+					{
+						sb.Append("##");
+					}
+					else if (tile.IsMine)
+					{
+						sb.Append("$-");
+					}
+					else if (tile.TileType == TileType.Taverne)
+					{
+						sb.Append("[]");
+					}
+					else if (tile.TileType == TileType.Hero1) { sb.Append("@1"); }
+					else if (tile.TileType == TileType.Hero2) { sb.Append("@2"); }
+					else if (tile.TileType == TileType.Hero3) { sb.Append("@3"); }
+					else if (tile.TileType == TileType.Hero4) { sb.Append("@4"); }
+					else
+					{
+						sb.Append("  ");
+					}
+				}
+			}
+			return sb.ToString();
 		}
 
 		public string ToUnitTestString(State state)

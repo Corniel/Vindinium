@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace Vindinium.Ygritte.Decisions
 {
@@ -61,8 +62,22 @@ namespace Vindinium.Ygritte.Decisions
 		{
 			get
 			{
-				return string.Format("Node lookup: Depth: {0}, Nodes: {1}, Transpositions: {2}", this.Depth, this.Nodes, this.Transpositions);
+				return string.Format("Node lookup: Depth: {0}, Nodes: {1:#,##0}, Transpositions: {2:#,##0}", this.Depth, this.Nodes, this.Transpositions);
 			}
+		}
+
+		public string LogNodeCounts()
+		{
+			var sb = new StringBuilder();
+
+			int depth = 1;
+
+			foreach (var kvp in lookup)
+			{
+				sb.AppendFormat("[{0,2}] {1:#,##0} ({2})", depth++, kvp.Value.Count, kvp.Key);
+				sb.AppendLine();
+			}
+			return sb.ToString();
 		}
 	}
 }

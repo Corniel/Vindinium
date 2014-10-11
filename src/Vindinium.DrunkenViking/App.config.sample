@@ -9,5 +9,6 @@
 		<add key="training" value ="true"/>
 		<add key="maxtime" value ="700"/>
 		<add key="maps" value ="*\Vindinium\maps"/>
+		<add key="games" value ="*\Vindinium\games"/>
 	</appSettings>
 </configuration>

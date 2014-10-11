@@ -17,6 +17,12 @@ namespace Vindinium.Ygritte.Decisions
 			paths.Clear();
 		}
 
+		public Distance[,] GetDistances(Map map, Tile tile)
+		{
+			var moves = GetMoveFromPath(map, tile);
+			return moves.Distances;
+		}
+
 		private MoveFromPath GetMoveFromPath(Map map, Tile tile)
 		{
 			MoveFromPath move;
@@ -34,6 +40,7 @@ namespace Vindinium.Ygritte.Decisions
 			{
 
 				case PlanType.Crashed: moves.Add(Move.Crashed); break;
+				case PlanType.Stay: moves.Add(Move.Stay); break;
 
 				case PlanType.ToOppoMine: GetOppoMinePaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToFreeMine: GetFreeMinePaths(moves, map, state, source, hero, player); return;
@@ -41,18 +48,10 @@ namespace Vindinium.Ygritte.Decisions
 
 				case PlanType.ToTaverne: GetTavernePaths(moves, map, state, source, hero, player); return;
 
-				case PlanType.Flee:
-				case PlanType.Attack: GetDirectionsPaths(moves, map, state, source, hero, player); return;
+				case PlanType.Flee: GetFleeMoves(moves, map, state, source, hero, player); return;
+				case PlanType.Attack: GetAttackMoves(moves, map, state, source, hero, player); return;
 				
 				default: break;
-			}
-		}
-
-		private void GetDirectionsPaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
-		{
-			foreach (var target in source.Neighbors)
-			{
-				moves.Add(new SingleMove(source, target));
 			}
 		}
 
@@ -91,6 +90,31 @@ namespace Vindinium.Ygritte.Decisions
 				.OrderBy(d => d.GetDistance(source))
 				.Take(2);
 			moves.AddRange(p);
+		}
+
+		private void GetAttackMoves(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		{
+			foreach (var other in PlayerTypes.Other[player])
+			{
+				var oppo = state.GetHero(other);
+				// some what close, and not covered by a taverne.
+				if (Map.GetManhattanDistance(hero, oppo) < 5 && map.GetDistanceToTaverne(oppo) > Distance.One)
+				{
+					var move = new MoveAttack(other);
+				}
+			}
+		}
+		private void GetFleeMoves(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		{
+			foreach (var other in PlayerTypes.Other[player])
+			{
+				var oppo = state.GetHero(other);
+				// some what close.
+				if (Map.GetManhattanDistance(hero, oppo) < 5)
+				{
+					var move = new MoveFlee(other);
+				}
+			}
 		}
 	}
 }

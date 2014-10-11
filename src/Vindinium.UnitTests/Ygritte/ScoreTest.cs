@@ -26,7 +26,7 @@ namespace Vindinium.UnitTests.Ygritte
 			var score = Score.Create(state);
 
 			var act = score.DebuggerDisplay;
-			var exp = "Score: [1]0, 284, [2]1, 285, [3]1, 285, [4]3, 286";
+			var exp = "Score: [1]0, 290, [2]1, 291, [3]1, 291, [4]3, 292";
 
 			Assert.AreEqual(exp, act);
 		}
