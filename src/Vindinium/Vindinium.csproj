@@ -47,6 +47,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Conversion\DistanceTypeConverter.cs" />
+    <Compile Include="Data\Player.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\RatingPoint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\Ratings.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Decisions\GoldScore.cs" />
     <Compile Include="Decisions\IScore.cs" />
     <Compile Include="Decisions\IStateEvaluator.cs" />
