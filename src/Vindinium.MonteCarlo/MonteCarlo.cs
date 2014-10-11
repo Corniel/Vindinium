@@ -15,12 +15,12 @@ namespace Vindinium.MonteCarlo
 		}
 		public static void Main(string[] args)
 		{
+			Console.SetWindowSize(100, 25);
 			MonteCarlo.DoMain(args);
 		}
 
 		/// <summary>Gets the map.</summary>
 		public Map Map { get; protected set; }
-		public State State { get; protected set; }
 		public MonteCarloSimulation Simulation { get; protected set; }
 		public PlayerType Player { get; set; }
 
@@ -39,10 +39,9 @@ namespace Vindinium.MonteCarlo
 			this.State = this.State.Update(this.Client.Response.game);
 			//Console.WriteLine(this.State.GetHero(this.Player).DebugToString());
 			var move = this.Simulation.GetMove(this.Map, this.Player, this.State, this.Timout, this.Parameters.Turns, this.MaxRuns);
-			Console.WriteLine("{0,4} Move: {1}, {2:#,##0.0}, {3:0.00}k, {4:0.0}s, {5:0.00}k/s",
+			Console.WriteLine("{0,4} Move: {1}, {2:0.00}k, {3:0.0}s, {4:0.00}k/s",
 				this.State.Turn,
-				move, 
-				this.Simulation.Score,
+				this.Simulation.Decision.ToConsoleDisplay(this.Player),
 				this.Simulation.Simulations/1000.0,
 				this.Simulation.Sw.Elapsed.TotalMilliseconds,
 				this.Simulation.Simulations / this.Simulation.Sw.Elapsed.TotalMilliseconds);

@@ -18,7 +18,7 @@ namespace Vindinium.Random
 
 		protected override MoveDirection GetMove()
 		{
-			return (MoveDirection)Rnd.Next(0, 5);
+			return MoveDirections.All[Rnd.Next(5)];
 		}
 	}
 }

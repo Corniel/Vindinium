@@ -49,6 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Decisions\AverageScore.cs" />
+    <Compile Include="Decisions\AverageScoreCollection.cs" />
+    <Compile Include="Decisions\AverageScoreDecision.cs" />
+    <Compile Include="Decisions\CurrentStateEvaluator.cs" />
     <Compile Include="MonteCarloSimulation.cs" />
     <Compile Include="MonteCarlo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +71,7 @@
   <ItemGroup>
     <Content Include="MonteCarlo.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
