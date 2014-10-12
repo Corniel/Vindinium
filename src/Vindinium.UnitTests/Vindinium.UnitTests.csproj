@@ -60,7 +60,6 @@
     <Compile Include="Decisions\AverageScoreDecisionTest.cs" />
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
     <Compile Include="DistanceTest.cs" />
-    <Compile Include="DrunkenViking\NodeStateTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="MineOwnership128Test.cs">
@@ -75,7 +74,7 @@
     <Compile Include="TileTypesTest.cs" />
     <Compile Include="Ygritte\NodeComparerTest.cs" />
     <Compile Include="Ygritte\NodeLookupTest.cs" />
-    <Compile Include="Ygritte\ScoreTest.cs" />
+    <Compile Include="Ygritte\YgritteStateEvaluatorTest.cs" />
     <Compile Include="Ygritte\RootNodeTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +98,9 @@
       <Project>{9635d3ab-3e8c-43d4-b40e-4fbcc027adf7}</Project>
       <Name>Vindinium.MonteCarlo</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DrunkenViking\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

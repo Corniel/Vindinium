@@ -14,6 +14,7 @@ namespace Vindinium.UnitTests.Ygritte
 		[Test]
 		public void Compare_EqualPositionMoreGold_RightBest()
 		{
+			var map = MapTest.Map18;
 			var left = State.Create(
 				101,
 				new Hero(100, 0, 0, 1, 10),
@@ -29,9 +30,9 @@ namespace Vindinium.UnitTests.Ygritte
 				new Hero(100, 0, 0, 1, 21),
 				new Hero(100, 0, 0, 1, 23),
 				MineOwnership20.Empty);
-			
-			var l = new Node(left);
-			var r = new Node(right);
+
+			var l = new Node(map, left);
+			var r = new Node(map, right);
 
 			var list = new List<Node>() { l, r };
 			list.Sort(NodeComparer.Get(PlayerType.Hero1));
@@ -45,6 +46,7 @@ namespace Vindinium.UnitTests.Ygritte
 		[Test]
 		public void Compare_DifferentPosition_LeftBest()
 		{
+			var map = MapTest.Map18;
 			var left = State.Create(
 				101,
 				new Hero(100, 0, 0, 2, 10),
@@ -61,8 +63,8 @@ namespace Vindinium.UnitTests.Ygritte
 				new Hero(100, 0, 0, 1, 23),
 				MineOwnership20.Empty);
 
-			var l = new Node(left);
-			var r = new Node(right);
+			var l = new Node(map, left);
+			var r = new Node(map, right);
 
 			var list = new List<Node>() { l, r };
 			list.Sort(NodeComparer.Get(PlayerType.Hero1));

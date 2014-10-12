@@ -47,13 +47,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Decisions\Move.cs" />
+    <Compile Include="Decisions\MoveAttack.cs" />
+    <Compile Include="Decisions\MoveCrashed.cs" />
+    <Compile Include="Decisions\MoveFlee.cs" />
+    <Compile Include="Decisions\MoveFromPath.cs" />
     <Compile Include="Decisions\MovesGenerator.cs" />
+    <Compile Include="Decisions\MoveSingle.cs" />
+    <Compile Include="Decisions\MoveStay.cs" />
     <Compile Include="Decisions\Node.cs" />
     <Compile Include="Decisions\NodeLookup.cs" />
     <Compile Include="Decisions\PlanType.cs" />
+    <Compile Include="Decisions\PotentialScore.cs" />
     <Compile Include="Decisions\RootNode.cs" />
-    <Compile Include="Decisions\Score.cs" />
     <Compile Include="Decisions\NodeComparer.cs" />
+    <Compile Include="Decisions\YgritteStateEvaluator.cs" />
     <Compile Include="YgritteBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

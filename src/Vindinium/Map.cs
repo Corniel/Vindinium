@@ -361,6 +361,10 @@ namespace Vindinium
 		{
 			return DistanceToTaverne.Get(this[hero]);
 		}
+		public Distance GetDistanceToTaverne(Tile tile)
+		{
+			return DistanceToTaverne.Get(tile);
+		}
 		private Distance[,] DistanceToTaverne { get; set; }
 
 		public override string ToString()

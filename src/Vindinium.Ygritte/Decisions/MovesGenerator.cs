@@ -42,7 +42,8 @@ namespace Vindinium.Ygritte.Decisions
 				case PlanType.Crashed: moves.Add(Move.Crashed); break;
 				case PlanType.Stay: moves.Add(Move.Stay); break;
 
-				case PlanType.ToOppoMine: GetOppoMinePaths(moves, map, state, source, hero, player); return;
+				case PlanType.ToMineClosetToTaverne: GetToMineClosetToTavernePaths(moves, map, state, source, hero, player); return;
+				case PlanType.ToMine: GetMinePaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToFreeMine: GetFreeMinePaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToOwnMine: GetOwnMinePaths(moves, map, state, source, hero, player); return;
 
@@ -55,10 +56,20 @@ namespace Vindinium.Ygritte.Decisions
 			}
 		}
 
-		private void GetOppoMinePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		private void GetToMineClosetToTavernePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
 			var p = map.Mines
-				.Where(m => state.Mines[m.MineIndex].IsOppo(player))
+				.Where(m => state.Mines[m.MineIndex] != player)
+				.OrderBy(m => map.GetDistanceToTaverne(m))
+				.Select(t => GetMoveFromPath(map, t))
+				.Take(1);
+			moves.AddRange(p);
+		}
+
+		private void GetMinePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		{
+			var p = map.Mines
+				.Where(m => state.Mines[m.MineIndex] != player)
 				.Select(t => GetMoveFromPath(map, t))
 				.OrderBy(d => d.GetDistance(source))
 				.Take(2);

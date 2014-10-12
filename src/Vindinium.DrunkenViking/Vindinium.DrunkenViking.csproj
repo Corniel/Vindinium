@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrunkenVikingBot.cs" />
-    <Compile Include="NodeState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies\RandomStrategy.cs" />
     <Compile Include="Strategies\ToNearestEmptyMineStrategy.cs" />

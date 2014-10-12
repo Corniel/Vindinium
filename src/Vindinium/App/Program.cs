@@ -105,11 +105,15 @@ namespace Vindinium.App
 
 		private void LogTurn()
 		{
-			if (Logging.Game.GamesDir != null)
+			if (this.Game != null)
 			{
-				this.State = this.State.Update(this.Client.Response.game);
-				this.Game.Turns.Add(Logging.Turn.Create(this.State));
-				this.Game.Save();
+				try
+				{
+					this.State = this.State.Update(this.Client.Response.game);
+					this.Game.Turns.Add(Logging.Turn.Create(this.State));
+					this.Game.Save();
+				}
+				catch { }
 			}
 		}
 
@@ -117,9 +121,15 @@ namespace Vindinium.App
 		{
 			if (Logging.Game.GamesDir != null)
 			{
-				this.Game = Logging.Game.Create(this.Client.Response.game);
-				this.State = State.Create(Map.Parse(this.Client.Response.game.board.ToRows()));
-				this.Game.Save();
+				try
+				{
+					this.Game = Logging.Game.Create(this.Client.Response.game);
+					this.State = State.Create(Map.Parse(this.Client.Response.game.board.ToRows()));
+					this.Game.Save();
+				}
+				catch{
+					this.Game = null;
+				}
 			}
 		}
 

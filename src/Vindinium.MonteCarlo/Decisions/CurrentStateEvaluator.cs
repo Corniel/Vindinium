@@ -6,7 +6,7 @@ namespace Vindinium.MonteCarlo.Decisions
 	{
 		public static readonly CurrentStateEvaluator Instance = new CurrentStateEvaluator();
 
-		public ScoreCollection Evaluate(State state, Map map)
+		public ScoreCollection Evaluate(Map map, State state)
 		{
 			var s1 = new GoldScore((ushort)state.Hero1.Gold);
 			var s2 = new GoldScore((ushort)state.Hero2.Gold);

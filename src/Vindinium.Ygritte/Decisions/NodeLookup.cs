@@ -52,7 +52,7 @@ namespace Vindinium.Ygritte.Decisions
 				dict = new Dictionary<State, Node>();
 				lookup[turn] = dict;
 			}
-			node = new Node(state);
+			node = new Node(map, state);
 			dict[state] = node;
 
 			return node;

@@ -107,7 +107,7 @@ namespace Vindinium
 
 			if (new_state.Turn >= turns)
 			{
-				var score = CurrentStateEvaluator.Instance.Evaluate(new_state, map);
+				var score = CurrentStateEvaluator.Instance.Evaluate(map, new_state);
 				return score;
 			}
 

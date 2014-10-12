@@ -23,7 +23,7 @@ namespace Vindinium.UnitTests.Ygritte
 				Hero.Create(90, map[1, 9], 0, 0),
 				MineOwnership.Create(map));
 
-			var root = new RootNode(state);
+			var root = new RootNode(map, state);
 
 			var act = root.GetMove(map, TimeSpan.FromMilliseconds(1900));
 		}
@@ -39,16 +39,16 @@ namespace Vindinium.UnitTests.Ygritte
 				Hero.Create(90, map[1, 9], 0, 0),
 				MineOwnership.Create(map));
 
-			var root = new RootNode(state);
+			var root = new RootNode(map, state);
 			root.InitializeMoveMappings(map);
 
 			var sw = new Stopwatch();
 			sw.Start();
 			for (int i = 1; i < 20; i++)
 			{
-				root.Process(map, i, Score.MinScore);
+				root.Process(map, i, PotentialScore.EmptyCollection);
 			}
-			//root.Process(map, 20, Score.MinScore);
+			//root.Process(map, 20, PontentialScore.EmptyCollection);
 			sw.Stop();
 
 			Console.WriteLine("Ellapsed: {0:0.0}", sw.Elapsed.TotalMilliseconds);
@@ -63,7 +63,7 @@ namespace Vindinium.UnitTests.Ygritte
 		}
 
 		[Test]
-		public void Process_MoveToFreeMineToSafeTheDay_()
+		public void Process_MoveToFreeMineDistance1_GoNorth()
 		{
 			var map = Map.Parse(
 				"@1[]  $-$-  []@2\r\n" +
@@ -82,14 +82,14 @@ namespace Vindinium.UnitTests.Ygritte
 				Hero.Create(90, map[7, 7], 0, 0, true),
 				MineOwnership.Create(0, 0, 2, 2));
 
-			var root = new RootNode(state);
+			var root = new RootNode(map, state);
 			root.InitializeMoveMappings(map);
 
 			var sw = new Stopwatch();
 			sw.Start();
 			for (var depth = state.Turn + 1; depth < 1220; depth++)
 			{
-				root.Process(map, depth, Score.MinScore);
+				root.Process(map, depth, PotentialScore.EmptyCollection);
 			}
 			sw.Stop();
 
@@ -106,7 +106,7 @@ namespace Vindinium.UnitTests.Ygritte
 
 
 		[Test]
-		public void Process_19ply_()
+		public void Process_MoveToFreeMineDistance3_GoNorth()
 		{
 			var map = Map.Parse(
 				"@1[]  $-$-  []@2\r\n" +
@@ -120,21 +120,26 @@ namespace Vindinium.UnitTests.Ygritte
 
 			var state = State.Create(1200 - 16,
 				Hero.Create(44, map[3, 2], 0, 9),
-				Hero.Create(90, map[2, 6], 2, 4),
+				Hero.Create(90, map[2, 6], 2, 4, true),
 				Hero.Create(90, map[7, 0], 0, 0, true),
 				Hero.Create(90, map[7, 7], 0, 0, true),
 				MineOwnership.Create(0, 0, 2, 2));
 
-			var root = new RootNode(state);
+			var root = new RootNode(map, state);
 			root.InitializeMoveMappings(map);
 
 			var sw = new Stopwatch();
 			sw.Start();
 			for (var depth = state.Turn + 1; depth < 1220; depth++)
 			{
-				root.Process(map, depth, Score.MinScore);
+				root.Process(map, depth, PotentialScore.EmptyCollection);
 			}
 			sw.Stop();
+
+			foreach (var score in root.Scores)
+			{
+				Console.WriteLine("{0} {1}", score.Item1, score.Item2.ToConsoleDisplay(state.PlayerToMove));
+			}
 
 			Console.WriteLine("Ellapsed: {0:0.0}", sw.Elapsed.TotalMilliseconds);
 
@@ -158,12 +163,12 @@ namespace Vindinium.UnitTests.Ygritte
 				Hero.Create(90, map[1, 9], 0, 0),
 				MineOwnership.Create(map));
 
-			var root = new RootNode(state);
+			var root = new RootNode(map, state);
 			root.InitializeMoveMappings(map);
 
 			var sw = new Stopwatch();
 			sw.Start();
-			root.Process(map, 12, Score.MinScore);
+			root.Process(map, 12, PotentialScore.EmptyCollection);
 			sw.Stop();
 
 			Console.WriteLine("Ellapsed: {0:0.0}", sw.Elapsed.TotalMilliseconds);

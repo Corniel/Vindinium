@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Vindinium.Decisions
+﻿namespace Vindinium.Decisions
 {
 	public interface IStateEvaluator
 	{
-		ScoreCollection Evaluate(State state, Map map);
+		ScoreCollection Evaluate(Map map, State state);
 	}
 }

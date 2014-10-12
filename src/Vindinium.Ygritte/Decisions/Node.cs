@@ -4,16 +4,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vindinium.Decisions;
 
 namespace Vindinium.Ygritte.Decisions
 {
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class Node
 	{
-		public Node(State state)
+		public Node(Map map, State state)
 		{
 			this.State = state;
-			this.Score = Score.Create(state);
+			this.Score = YgritteStateEvaluator.Instance.Evaluate(map, state);
 
 			this.Children = new List<Node>();
 			this.Moves = new Dictionary<PlayerType, List<Move>>()
@@ -31,7 +32,7 @@ namespace Vindinium.Ygritte.Decisions
 			return Lookup.Get(turn, map, state);
 		}
 
-		public Score Score { get; protected set; }
+		public ScoreCollection Score { get; protected set; }
 		public State State { get; protected set; }
 		public int Turn { get { return this.State.Turn; } }
 		public PlayerType PlayerToMove { get { return this.State.PlayerToMove; } }
@@ -40,7 +41,7 @@ namespace Vindinium.Ygritte.Decisions
 
 		public List<Node> Children { get; set; }
 
-		public Score Process(Map map, int turn, Score alpha)
+		public ScoreCollection Process(Map map, int turn, ScoreCollection alpha)
 		{
 			if (this.Turn >= 1199) { return alpha; }
 
@@ -51,6 +52,8 @@ namespace Vindinium.Ygritte.Decisions
 
 			if (this.Children.Count == 0 || moves.Count == 0)
 			{
+				// Reset is Cleared, so after us, others can add moves if needed.
+				this.IsCleared = false;
 				var player = this.PlayerToMove;
 				var hero = this.State.GetHero(player);
 				var source = map[hero];
@@ -77,9 +80,10 @@ namespace Vindinium.Ygritte.Decisions
 						var heroNew = state.GetHero(player);
 
 						// if no tarverne hit, if no mine changes, and no enermies as neigbhor.
-						if (heroNew.Health <= health &&
+						if (child.IsCleared) { }
+						else if (heroNew.Health <= health &&
 							heroNew.Mines == mines &&
-							target.Neighbors.All(t => state.GetOccupied(t, player) == PlayerType.None))
+							PlayerTypes.Other[player].All(p => Map.GetManhattanDistance(heroNew, state.GetHero(p)) > 2))
 						{
 							child.AddMove(move, player);
 						}
@@ -95,7 +99,7 @@ namespace Vindinium.Ygritte.Decisions
 				}
 			}
 
-			Score test = Score.MinScore;
+			var test = PotentialScore.EmptyCollection;
 
 			var comparer = NodeComparer.Get(this.PlayerToMove);
 
@@ -121,9 +125,11 @@ namespace Vindinium.Ygritte.Decisions
 				//	break;
 				//}
 			}
-			Children.Sort(comparer);
 
-			//this.Score = this.Children[0].Score;
+			var scores = Children.Select(ch => ch.Score.Get(PlayerType.Hero1).ToUInt32()).ToArray();
+			Children.Sort(comparer);
+			this.Score = this.Children[0].Score;
+
 			//if (comparer.Compare(alpha, this.Score) > 0)
 			//{
 			//	alpha = alpha.UpdateAlpha(this.Score, this.PlayerToMove);
@@ -146,11 +152,13 @@ namespace Vindinium.Ygritte.Decisions
 		}
 		public void ClearMoves()
 		{
+			this.IsCleared = true;
 			foreach (var player in PlayerTypes.All)
 			{
 				this.Moves[player].Clear();
 			}
 		}
+		public bool IsCleared { get; protected set; }
 
 		public List<PlanType> GeneratePlans(Map map, State state, Hero hero, PlayerType player)
 		{
@@ -199,15 +207,16 @@ namespace Vindinium.Ygritte.Decisions
 				// If beside a taverne, 
 				// or weak, 
 				// check if usefull.
-				else if (health < (Hero.HealthBattle << 1) || map.GetDistanceToTaverne(hero) == Distance.One)
+				else if (health < (Hero.HealthBattle << 1) || (map.GetDistanceToTaverne(hero) == Distance.One && health < Hero.HealthMax - Hero.HealthBattle))
 				{
 					plans.Add(PlanType.ToTaverne);
 				}
 				
-				// only when we can concure it.
+				// only when we can conquer it.
 				if (health > Hero.HealthBattle)
 				{
-					plans.Add(PlanType.ToOppoMine);
+					plans.Add(PlanType.ToMineClosetToTaverne);
+					plans.Add(PlanType.ToMine);
 					plans.Add(PlanType.ToFreeMine);
 
 					if (mines > 1)
@@ -227,7 +236,7 @@ namespace Vindinium.Ygritte.Decisions
 					this.Turn,
 					(int)this.PlayerToMove,
 					this.Children.Count,
-					this.Score.DebuggerDisplay);
+					this.Score.ToConsoleDisplay(this.PlayerToMove));
 			}
 		}
 	}

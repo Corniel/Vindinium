@@ -20,7 +20,6 @@ namespace Vindinium.Ygritte
 
 		/// <summary>Gets the map.</summary>
 		public Map Map { get; protected set; }
-		public State State { get; protected set; }
 		public PlayerType Player { get; set; }
 
 		public TimeSpan Timout { get; protected set; }
@@ -43,7 +42,7 @@ namespace Vindinium.Ygritte
 			var source = this.Map[hero];
 
 			Node.Lookup.Clear(this.State.Turn);
-			var root = new RootNode(this.State);
+			var root = new RootNode(this.Map, this.State);
 			var md = root.GetMove(this.Map, this.Timout);
 			return md;
 		}

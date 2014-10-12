@@ -6,12 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Vindinium.Decisions;
 
 namespace Vindinium.Ygritte.Decisions
 {
 	public class RootNode : Node
 	{
-		public RootNode(State state) : base(state)
+		public RootNode(Map map, State state) : base(map, state)
 		{
 			this.MoveMappings = new Dictionary<Node, MoveDirection>();
 			this.Stopwatch = new Stopwatch();
@@ -23,11 +24,16 @@ namespace Vindinium.Ygritte.Decisions
 		private Stopwatch Stopwatch { get; set; }
 
 		/// <summary>Gets the best move.</summary>
-		public MoveDirection BestMove
+		public MoveDirection BestMove{get{return this.MoveMappings[this.Children[0]];}}
+
+		/// <summary>Gets the best score.</summary>
+		public ScoreCollection BestScore { get { return this.Children[0].Score; } }
+		/// <summary>Gets the scores.</summary>
+		public List<Tuple<MoveDirection, ScoreCollection>> Scores
 		{
 			get
 			{
-				return this.MoveMappings[this.Children[0]];
+				return this.Children.Select(ch => new Tuple<MoveDirection, ScoreCollection>(MoveMappings[ch], ch.Score)).ToList();
 			}
 		}
 
@@ -61,13 +67,12 @@ namespace Vindinium.Ygritte.Decisions
 
 			return this.BestMove;
 		}
-
 		
 		private void Run(Map map, TimeSpan timeout, int turn)
 		{
 			while (Stopwatch.Elapsed < timeout)
 			{
-				this.Process(map, turn++, Score.MinScore);
+				this.Process(map, turn++, PotentialScore.EmptyCollection);
 				LogResult();
 				turn++;
 			}
@@ -89,7 +94,7 @@ namespace Vindinium.Ygritte.Decisions
 			{
 				while (true)
 				{
-					this.Process(map, turn++, Score.MinScore);
+					this.Process(map, turn++, PotentialScore.EmptyCollection);
 
 					if (this.Children.Count == 0)
 					{

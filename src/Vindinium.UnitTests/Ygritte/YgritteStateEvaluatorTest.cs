@@ -10,11 +10,12 @@ using Vindinium.Ygritte.Decisions;
 namespace Vindinium.UnitTests.Ygritte
 {
 	[TestFixture]
-	public class ScoreTest
+	public class YgritteStateEvaluatorTest
 	{
 		[Test]
-		public void Create_SomeValues_AreEqual()
+		public void Evaluate_SomeValues_AreEqual()
 		{
+			var map = MapTest.Map20;
 			var state = State.Create(
 				101,
 				new Hero(100, 0, 0, 1, 10),
@@ -23,19 +24,20 @@ namespace Vindinium.UnitTests.Ygritte
 				new Hero(100, 0, 0, 1, 13),
 				MineOwnership20.Empty);
 
-			var score = Score.Create(state);
+			var score = YgritteStateEvaluator.Instance.Evaluate(map, state);
 
 			var act = score.DebuggerDisplay;
-			var exp = "Score: [1]0, 290, [2]1, 291, [3]1, 291, [4]3, 292";
+			var exp = "h1: 270,30, h2: 271,30, h3: 271,30, h4: 272,35";
 
 			Assert.AreEqual(exp, act);
 		}
 
 		[Test]
-		public void Create_Performance_()
+		public void Evaluate_Performance_()
 		{
 			var sw = new Stopwatch();
 			var runs = 1000000;
+			var map = MapTest.Map20;
 			var rnd = new Random(17);
 			for (int i = 0; i < runs; i++)
 			{
@@ -48,10 +50,10 @@ namespace Vindinium.UnitTests.Ygritte
 					MineOwnership20.Empty);
 
 				sw.Start();
-				var score = Score.Create(state);
+				var score = YgritteStateEvaluator.Instance.Evaluate(map, state);
 				sw.Stop();
 			}
-			Console.WriteLine("{0:#,##0.00}k/s", runs / sw.Elapsed.TotalMilliseconds);
+			Console.WriteLine("{0:#,##0.00}M/s", runs / sw.Elapsed.TotalMilliseconds/1000.0);
 		}
 	}
 }
