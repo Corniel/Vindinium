@@ -23,7 +23,7 @@ namespace Vindinium.App
 		{
 			int left = this.Parameters.Runs;
 			int run = 1;
-			while (left == -1 || left-- > 0)
+			while (Program<T>.KeepRunning && (left == -1 || left-- > 0))
 			{
 				Console.WriteLine("Run {0} of {1}", run++, left == -1 ? "oo" : this.Parameters.Runs.ToString());
 
@@ -139,10 +139,21 @@ namespace Vindinium.App
 
 		public static void DoMain(string[] args)
 		{
+			Program<T>.KeepRunning = true;
+			Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
+
 			var program = (T)Activator.CreateInstance(typeof(T));
 			program.Parameters = ClientParameters.FromConfig();
 
 			program.Run();
 		}
+
+		private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+		{
+			Console.WriteLine("Last run");
+			e.Cancel = true;
+			KeepRunning = false;
+		}
+		public static bool KeepRunning { get; protected set; }
 	}
 }
