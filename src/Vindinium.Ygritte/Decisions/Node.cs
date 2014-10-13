@@ -178,9 +178,9 @@ namespace Vindinium.Ygritte.Decisions
 				foreach(var other in PlayerTypes.Other[player].Select(other => state.GetHero(other)))
 				{
 					// some what close.
-					if (Map.GetManhattanDistance(hero, other) < 5)
+					if (Map.GetManhattanDistance(hero, other) < 4)
 					{
-						if (health  + Hero.HealthBattle <= other.Health)
+						if (health + Hero.HealthBattle <= other.Health)
 						{
 							plans.Add(PlanType.Flee);
 							plans.Add(PlanType.Attack);

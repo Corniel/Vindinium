@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Vindinium.Decisions;
@@ -24,8 +22,7 @@ namespace Vindinium.Ygritte.Decisions
 		private Stopwatch Stopwatch { get; set; }
 
 		/// <summary>Gets the best move.</summary>
-		public MoveDirection BestMove{get{return this.MoveMappings[this.Children[0]];}}
-
+		public MoveDirection BestMove { get { return this.MoveMappings[this.Children[0]]; } }
 		/// <summary>Gets the best score.</summary>
 		public ScoreCollection BestScore { get { return this.Children[0].Score; } }
 		/// <summary>Gets the scores.</summary>
@@ -52,60 +49,51 @@ namespace Vindinium.Ygritte.Decisions
 			}
 		}
 
-		public MoveDirection GetMove(Map map, TimeSpan timeout)
+		public void GetMove(Map map, TimeSpan timeout)
 		{
 			InitializeMoveMappings(map);
 
 			var turn = this.Turn + 1;
 
 			Run(map, timeout, turn);
-			// RunAsync(map, timeSpan, turn);
-
 			this.Stopwatch.Stop();
 			LogResult();
 			Console.WriteLine();
-
-			return this.BestMove;
 		}
-		
+
+		/// <summary>Runs the calculations.</summary>
+		/// <remarks>
+		/// Runs in a different thread.
+		/// </remarks>
 		private void Run(Map map, TimeSpan timeout, int turn)
 		{
-			while (Stopwatch.Elapsed < timeout)
+			try
 			{
-				this.Process(map, turn++, PotentialScore.EmptyCollection);
-				LogResult();
-				turn++;
-			}
-		}
+				var source = new CancellationTokenSource((int)timeout.TotalMilliseconds);
 
-		private void RunAsync(Map map, TimeSpan timeout, int turn)
-		{
-			var run = RunProcces(map, turn);
-
-			if (Task.WhenAny(run, Task.Delay((int)timeout.TotalMilliseconds)) == run)
-			{
-			}
-			Thread.Sleep((int)timeout.TotalMilliseconds);
-		}
-
-		private async Task RunProcces(Map map, int turn)
-		{
-			var result = Task.Run(() =>
-			{
-				while (true)
+				var task = Task.Factory.StartNew(() =>
 				{
-					this.Process(map, turn++, PotentialScore.EmptyCollection);
-
-					if (this.Children.Count == 0)
+					while (true)
 					{
+						this.Process(map, turn++, PotentialScore.EmptyCollection);
+						YgritteBot.BestMove = this.BestMove;
+						LogResult();
+						turn++;
+						// Was cancellation already requested?  
+						if (source.IsCancellationRequested == true)
+						{
+							source.Token.ThrowIfCancellationRequested();
+						}
 					}
-					LogResult();
-					turn++;
+				}, source.Token);
+				if (task.Wait((int)timeout.TotalMilliseconds))
+				{
+					source.Cancel();
 				}
-			});
-			await result;
+			}
+			catch (OperationCanceledException) { }
+			catch (AggregateException) { }
 		}
-
 		private void LogResult()
 		{
 			var playerstr = string.Format("[{0}]", (int)this.PlayerToMove);
@@ -113,7 +101,7 @@ namespace Vindinium.Ygritte.Decisions
 			Console.Write("\r[{0,4}] {1,4}, {4}, d: {2}, {3}",
 							this.Turn,
 							this.Stopwatch.ElapsedMilliseconds,
-							Node.Lookup.Depth, 
+							Node.Lookup.Depth,
 							this.Score.DebuggerDisplay
 								.Replace("Score", "s")
 								.Replace(playerstr, "[*]"),

@@ -24,8 +24,8 @@ namespace Vindinium.UnitTests.Ygritte
 				MineOwnership.Create(map));
 
 			var root = new RootNode(map, state);
-
-			var act = root.GetMove(map, TimeSpan.FromMilliseconds(1900));
+			root.GetMove(map, TimeSpan.FromMilliseconds(1900));
+			var act = root.BestMove;
 		}
 
 		[Test]

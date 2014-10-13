@@ -51,7 +51,6 @@ namespace Vindinium.App
 				{
 					try
 					{
-						Console.Write("{0,4}\r", this.Client.Response.game.turn);
 						var move = GetMove();
 
 						LogTurn();
