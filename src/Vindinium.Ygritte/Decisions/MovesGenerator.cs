@@ -49,8 +49,7 @@ namespace Vindinium.Ygritte.Decisions
 
 				case PlanType.ToTaverne: GetTavernePaths(moves, map, state, source, hero, player); return;
 
-				case PlanType.Flee: GetFleeMoves(moves, map, state, source, hero, player); return;
-				case PlanType.Attack: GetAttackMoves(moves, map, state, source, hero, player); return;
+				case PlanType.Combat: GetCombatMoves(moves, map, state, source, hero, player); return;
 				
 				default: break;
 			}
@@ -103,27 +102,60 @@ namespace Vindinium.Ygritte.Decisions
 			moves.AddRange(p);
 		}
 
-		private void GetAttackMoves(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		private void GetCombatMoves(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
 			foreach (var other in PlayerTypes.Other[player])
 			{
 				var oppo = state.GetHero(other);
-				// some what close, and not covered by a taverne.
-				if (Map.GetManhattanDistance(hero, oppo) < 5 && map.GetDistanceToTaverne(oppo) > Distance.One)
-				{
-					var move = new MoveAttack(other);
-				}
-			}
-		}
-		private void GetFleeMoves(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
-		{
-			foreach (var other in PlayerTypes.Other[player])
-			{
-				var oppo = state.GetHero(other);
+				var distance = Map.GetManhattanDistance(hero, oppo);
+				
 				// some what close.
-				if (Map.GetManhattanDistance(hero, oppo) < 5)
+				if (distance <= Node.CombatDistance)
 				{
-					var move = new MoveFlee(other);
+					var heroToTaverne = map.GetDistanceToTaverne(hero);
+					var oppoToTaverne = map.GetDistanceToTaverne(oppo);
+					var heroHealth = hero.Health;
+					var oppoHealth = oppo.Health;
+					var target = map[oppo];
+					// We hit first, so we have an extra try
+					var isOddDistance = (distance & 2) == 1;
+					var hitsNeaded = (oppoHealth + Hero.HealthBattle - 1)/ Hero.HealthBattle;
+					var hitsPossible = (heroHealth + Hero.HealthBattle - 1)/ Hero.HealthBattle + (isOddDistance ? 1 : 0);
+
+					// are we interested in attacking?
+					// 1. We can kill the hero, and he has at least one mine or not on his own span, and he is not protected by a taverne.
+					if (oppoToTaverne > 1 && (oppo.Mines > 0 || target != map.GetSpawn(other)) && hitsPossible >= hitsNeaded)
+					{
+						moves.Add(new MoveAttack(other));
+						
+						// We are standing next to a taverne, we would like to investigate staying or drinking too.
+						if (heroToTaverne == 1)
+						{
+							var taverne = map.Mines.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
+							moves.Add(GetMoveFromPath(map, taverne));
+							moves.Add(Move.Stay);
+						}
+						moves.Add(new MoveFlee(other));
+					}
+					// 2. We have no mines, and it looks like we will be killed anyway.
+					else if (heroToTaverne > 1 && hero.Mines == 0 && heroToTaverne > oppoToTaverne && hitsNeaded > hitsPossible)
+					{
+						moves.Add(new MoveAttack(other));
+						moves.Add(new MoveFlee(other));
+					}
+					// We prefer to flee.
+					else
+					{
+						// We are standing next to a taverne, we would like to investigate staying or drinking too.
+						if (heroToTaverne == 1)
+						{
+							var taverne = map.Mines.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
+							moves.Add(GetMoveFromPath(map, taverne));
+							moves.Add(Move.Stay);
+						}
+						moves.Add(new MoveFlee(other));
+						moves.Add(new MoveAttack(other));
+					}
 				}
 			}
 		}

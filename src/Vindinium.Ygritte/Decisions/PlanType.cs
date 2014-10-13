@@ -11,8 +11,7 @@
 
 		ToTaverne,
 
-		Flee,
-		Attack,
+		Combat,
 
 		Stay,
 	}

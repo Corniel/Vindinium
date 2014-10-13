@@ -11,6 +11,8 @@ namespace Vindinium.Ygritte.Decisions
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class Node
 	{
+		public const int CombatDistance = 3;
+
 		public Node(Map map, State state)
 		{
 			this.State = state;
@@ -178,18 +180,9 @@ namespace Vindinium.Ygritte.Decisions
 				foreach(var other in PlayerTypes.Other[player].Select(other => state.GetHero(other)))
 				{
 					// some what close.
-					if (Map.GetManhattanDistance(hero, other) < 4)
+					if (Map.GetManhattanDistance(hero, other) <= Node.CombatDistance)
 					{
-						if (health + Hero.HealthBattle <= other.Health)
-						{
-							plans.Add(PlanType.Flee);
-							plans.Add(PlanType.Attack);
-						}
-						else
-						{
-							plans.Add(PlanType.Attack);
-							plans.Add(PlanType.Flee);
-						}
+						plans.Add(PlanType.Combat);
 					}
 				}
 

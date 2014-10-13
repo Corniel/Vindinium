@@ -29,7 +29,7 @@ namespace Vindinium.UnitTests.Ygritte
 		}
 
 		[Test]
-		public void Process_20ply_()
+		public void Process_21ply_()
 		{
 			var map = MapTest.Map18;
 			var state = State.Create(1,
@@ -44,11 +44,10 @@ namespace Vindinium.UnitTests.Ygritte
 
 			var sw = new Stopwatch();
 			sw.Start();
-			for (int i = 1; i < 20; i++)
+			for (int i = 1; i < 21; i++)
 			{
 				root.Process(map, i, PotentialScore.EmptyCollection);
 			}
-			//root.Process(map, 20, PontentialScore.EmptyCollection);
 			sw.Stop();
 
 			Console.WriteLine("Ellapsed: {0:0.0}", sw.Elapsed.TotalMilliseconds);

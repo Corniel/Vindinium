@@ -22,7 +22,10 @@ namespace Vindinium.Ygritte.Decisions
 		private Stopwatch Stopwatch { get; set; }
 
 		/// <summary>Gets the best move.</summary>
-		public MoveDirection BestMove { get { return this.MoveMappings[this.Children[0]]; } }
+		public MoveDirection BestMove
+		{
+			get { return this.Children.Count == 0 ? MoveDirection.x : this.MoveMappings[this.Children[0]]; }
+		}
 		/// <summary>Gets the best score.</summary>
 		public ScoreCollection BestScore { get { return this.Children[0].Score; } }
 		/// <summary>Gets the scores.</summary>
@@ -93,6 +96,10 @@ namespace Vindinium.Ygritte.Decisions
 			}
 			catch (OperationCanceledException) { }
 			catch (AggregateException) { }
+			catch (Exception x)
+			{
+				Console.WriteLine(x);
+			}
 		}
 		private void LogResult()
 		{
