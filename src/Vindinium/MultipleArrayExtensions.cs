@@ -20,14 +20,14 @@ namespace Vindinium
 			return new T[rows, cols];
 		}
 
-		public static T Get<T>(this T[,] distances, Tile tile)
+		public static T Get<T>(this T[,] map, Tile tile)
 		{
-			return distances[tile.X, tile.Y];
+			return map[tile.X, tile.Y];
 		}
 
-		public static void Set<T>(this T[,] distances, Tile tile, T distance)
+		public static void Set<T>(this T[,] map, Tile tile, T val)
 		{
-			distances[tile.X, tile.Y] = distance;
+			map[tile.X, tile.Y] = val;
 		}
 
 		/// <summary>Clears the distances.</summary>
