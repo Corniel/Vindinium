@@ -18,25 +18,17 @@ namespace Vindinium.Ygritte
 			this.Timout = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["maxtime"]));
 		}
 
-		/// <summary>Gets the map.</summary>
-		public Map Map { get; protected set; }
-		public PlayerType Player { get; set; }
-
 		public TimeSpan Timout { get; protected set; }
 
 		protected override void CreateGame()
 		{
-			this.Map = Map.Parse(this.Client.Response.game.board.ToRows());
-			this.State = State.Create(this.Map);
-			this.Player = this.Client.Response.hero.Player;
-
+			base.CreateGame();
 			Node.Lookup.Clear();
 		}
 
 		protected override MoveDirection GetMove()
 		{
-			this.State = this.State.Update(this.Client.Response.game);
-			this.Map.Update(this.Client.Response.game);
+			UpdateState();
 
 			var hero = this.State.GetHero(this.Player);
 			var source = this.Map[hero];

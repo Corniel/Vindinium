@@ -19,24 +19,14 @@ namespace Vindinium.MonteCarlo
 			MonteCarlo.DoMain(args);
 		}
 
-		/// <summary>Gets the map.</summary>
-		public Map Map { get; protected set; }
 		public MonteCarloSimulation Simulation { get; protected set; }
-		public PlayerType Player { get; set; }
-
 		public int MaxRuns { get; protected set; }
 		public TimeSpan Timout { get; protected set; }
 
-		protected override void CreateGame()
-		{
-			this.Map = Map.Parse(this.Client.Response.game.board.ToRows());
-			this.State = State.Create(this.Map);
-			this.Player = this.Client.Response.hero.Player;
-		}
-
 		protected override MoveDirection GetMove()
 		{
-			this.State = this.State.Update(this.Client.Response.game);
+			UpdateState();
+
 			//Console.WriteLine(this.State.GetHero(this.Player).DebugToString());
 			var move = this.Simulation.GetMove(this.Map, this.Player, this.State, this.Timout, this.Parameters.Turns, this.MaxRuns);
 			Console.WriteLine("{0,4} Move: {1}, {2:0.00}k, {3:0.0}s, {4:0.00}k/s",

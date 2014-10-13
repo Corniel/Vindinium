@@ -17,21 +17,13 @@ namespace Vindinium.DrunkenViking
 		}
 
 		protected List<Strategy> Strategies { get; set; }
-
-		/// <summary>Gets the map.</summary>
-		public Map Map { get; protected set; }
-		public State State { get; protected set; }
-		public PlayerType Player { get; set; }
-
 		public TimeSpan Timout { get; protected set; }
 
 		protected override void CreateGame()
 		{
-			this.Strategies.Clear();
-			this.Map = Map.Parse(this.Client.Response.game.board.ToRows());
-			this.State = State.Create(this.Map);
-			this.Player = this.Client.Response.hero.Player;
+			base.CreateGame();
 
+			this.Strategies.Clear();
 			this.Strategies.Add(new ToNearestSafeTaverneStrategy(this.Map));
 			this.Strategies.Add(new ToNearestTaverneStrategy(this.Map));
 			this.Strategies.Add(new ToNearestSafeMineStrategy(this.Map));
@@ -45,7 +37,7 @@ namespace Vindinium.DrunkenViking
 
 		protected override MoveDirection GetMove()
 		{
-			this.State = this.State.Update(this.Client.Response.game);
+			UpdateState();
 
 			var hero = this.State.GetHero(this.Player);
 			var location = this.Map[hero];

@@ -17,7 +17,13 @@ namespace Vindinium.App
 		public Client Client { get; protected set; }
 
 		protected Logging.Game Game { get; set; }
+
+		/// <summary>The map of the game.</summary>
+		protected Map Map { get; set; }
+		/// <summary>The state of the game.</summary>
 		protected State State { get; set; }
+		/// <summary>The player (type) of the bot.</summary>
+		protected PlayerType Player { get; set; }
 
 		public void Run()
 		{
@@ -133,9 +139,27 @@ namespace Vindinium.App
 			}
 		}
 
-		protected virtual void CreateGame() { }
+		/// <summary>Creates a game.</summary>
+		/// <remarks>
+		/// It sets map, state and player type.
+		/// </remarks>
+		protected virtual void CreateGame()
+		{
+			this.Map = Map.Parse(this.Client.Response.game.board.ToRows());
+			this.State = State.Create(this.Map);
+			this.Player = this.Client.Response.hero.Player;
+		}
 
+		/// <summary>Get the move of the bot. </summary>
 		protected abstract MoveDirection GetMove();
+
+		/// <summary>Updates the state of te bot.</summary>
+		protected void UpdateState()
+		{
+			this.State = this.State.Update(this.Client.Response.game);
+			this.Map.Update(this.Client.Response.game);
+		}
+			 
 
 		public static void DoMain(string[] args)
 		{

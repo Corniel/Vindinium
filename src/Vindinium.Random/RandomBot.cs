@@ -18,7 +18,10 @@ namespace Vindinium.Random
 
 		protected override MoveDirection GetMove()
 		{
-			return MoveDirections.All[Rnd.Next(5)];
+			UpdateState();
+
+			var location = this.Map[this.State.GetHero(this.Player)];
+			return location.Directions[this.Rnd.Next(location.Directions.Length)];
 		}
 	}
 }
