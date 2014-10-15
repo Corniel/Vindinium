@@ -24,6 +24,7 @@ namespace Vindinium
 				{ MoveDirection.W, new MT19937Generator(seed + 2) },
 				{ MoveDirection.S, new MT19937Generator(seed + 3) },
 				{ MoveDirection.E, new MT19937Generator(seed + 4) },
+				{ MoveDirection.x, new MT19937Generator(seed + 5) },
 			};
 		}
 		public bool RunParallel { get; protected set; }
@@ -59,7 +60,7 @@ namespace Vindinium
 			{
 				if (RunParallel)
 				{
-					Parallel.ForEach(source.Directions.Where(d => d != MoveDirection.x), (dir) =>
+					Parallel.ForEach(options.Keys, (dir) =>
 					{
 						var rnd = Rnds[dir];
 						var target = source[dir];
@@ -68,7 +69,7 @@ namespace Vindinium
 				}
 				else
 				{
-					foreach (var dir in source.Directions.Where(d => d != MoveDirection.x))
+					foreach (var dir in options.Keys)
 					{
 						var target = source[dir];
 						GetScore(map, state, hero, playerToMove, source, target, dir, this.Rnds[MoveDirection.N], turns);
@@ -114,7 +115,7 @@ namespace Vindinium
 			playerToMove = PlayerTypes.Next(playerToMove);
 			hero = new_state.GetHero(playerToMove);
 			source = map[hero];
-			target = hero.IsCrashed ? source : source.Targets[rnd.Next(source.Targets.Length)];
+			target = hero.IsCrashed ? source : source.Neighbors[rnd.Next(source.Neighbors.Length)];
 
 			return GetScore(map, new_state, hero, playerToMove, source, target, playerToSimulate, rnd, turns);
 		}

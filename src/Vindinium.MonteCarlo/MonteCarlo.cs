@@ -15,7 +15,7 @@ namespace Vindinium.MonteCarlo
 		}
 		public static void Main(string[] args)
 		{
-			Console.SetWindowSize(100, 25);
+			Console.SetWindowSize(100, 20);
 			MonteCarlo.DoMain(args);
 		}
 
