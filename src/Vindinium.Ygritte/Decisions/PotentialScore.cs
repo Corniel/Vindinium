@@ -3,7 +3,7 @@ using Vindinium.Decisions;
 
 namespace Vindinium.Ygritte.Decisions
 {
-	public class PotentialScore : IScore
+	public struct PotentialScore : IScore
 	{
 		public static readonly ScoreCollection EmptyCollection = new ScoreCollection(Empty, Empty, Empty, Empty);
 

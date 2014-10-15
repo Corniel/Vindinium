@@ -23,7 +23,7 @@ namespace Vindinium.Ygritte
 		protected override void CreateGame()
 		{
 			base.CreateGame();
-			Node.Lookup.Clear();
+			RootNode.Lookup.Clear();
 		}
 
 		/// <summary>Gets the best move.</summary>
@@ -34,7 +34,6 @@ namespace Vindinium.Ygritte
 			var hero = this.State.GetHero(this.Player);
 			var source = this.Map[hero];
 
-			Node.Lookup.Clear(this.State.Turn);
 			var root = new RootNode(this.Map, this.State);
 			root.GetMove(this.Map, this.Timout);
 

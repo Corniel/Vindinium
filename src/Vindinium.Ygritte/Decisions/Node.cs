@@ -43,12 +43,15 @@ namespace Vindinium.Ygritte.Decisions
 
 		public List<Node> Children { get; set; }
 
-		public ScoreCollection Process(Map map, int turn, ScoreCollection alpha)
+		public ScoreCollection Process(Map map, int turn, ScoreCollection alphas)
 		{
-			if (this.Turn >= 1199) { return alpha; }
+			var resultAlphas = PotentialScore.EmptyCollection;
 
-			// if no splitting, look futher.
-			if (turn <= this.Turn && this.Children.Count != 1) { return alpha; }
+			if (this.Turn >= 1199 || turn <= this.Turn)
+			{
+				alphas.ContinueProccesingAlphas(this.Score, this.PlayerToMove, out resultAlphas);
+				return resultAlphas; 
+			}
 
 			var moves = this.Moves[this.PlayerToMove];
 
@@ -103,44 +106,29 @@ namespace Vindinium.Ygritte.Decisions
 
 			var test = PotentialScore.EmptyCollection;
 
-			var comparer = NodeComparer.Get(this.PlayerToMove);
-
 			for (int i = 0; i < this.Children.Count; i++)
 			{
 				var child = this.Children[i];
 				switch (i)
 				{
 					case 0:
-					case 1: test = child.Process(map, turn, alpha); break;
+					case 1: test = child.Process(map, turn, alphas); break;
 					case 2:
-					case 3: test = child.Process(map, turn - 1, alpha); break;
+					case 3: test = child.Process(map, turn - 1, alphas); break;
 					default:
-					case 4: test = child.Process(map, turn - 2, alpha); break;
+					case 4: test = child.Process(map, turn - 2, alphas); break;
 				}
-				//var dif = comparer.Compare(alpha, test);
-				//if (dif > 0)
-				//{
-				//	alpha = alpha.UpdateAlpha(test, this.PlayerToMove);
-				//}
-				//else if (dif < 0)
-				//{
-				//	break;
-				//}
-			}
 
-			var scores = Children.Select(ch => ch.Score.Get(PlayerType.Hero1).ToUInt32()).ToArray();
+				if (!alphas.ContinueProccesingAlphas(test, this.PlayerToMove, out resultAlphas))
+				{
+					break;
+				}
+			}
+			var comparer = NodeComparer.Get(this.PlayerToMove);
 			Children.Sort(comparer);
 			this.Score = this.Children[0].Score;
 
-			//if (comparer.Compare(alpha, this.Score) > 0)
-			//{
-			//	alpha = alpha.UpdateAlpha(this.Score, this.PlayerToMove);
-			//}
-			//else
-			//{
-			//}
-
-			return alpha;
+			return resultAlphas;
 		}
 
 		public void AddMove(Move move, PlayerType player)

@@ -12,27 +12,35 @@ namespace Vindinium
 	/// <summary>Represents a Vindinium map.</summary>
 	public class Map : IEnumerable<Tile>
 	{
+		private static volatile object locker = new object();
+
 		public static int GetManhattanDistance(Hero hero1, Hero hero2)
 		{
 			uint key = (uint)((hero1.Dimensions >> Hero.PositionX) | (hero2.Dimensions << (16 - Hero.PositionX)));
 			byte distance;
-
-			if(!ManhattanDistance.TryGetValue(key, out distance))
+			
+			lock (locker)
 			{
-				distance = (byte)(Math.Abs(hero1.X - hero2.X) + Math.Abs(hero1.Y - hero2.Y));
-				ManhattanDistance[key] = distance;
+				if (!ManhattanDistance.TryGetValue(key, out distance))
+				{
+					distance = (byte)(Math.Abs(hero1.X - hero2.X) + Math.Abs(hero1.Y - hero2.Y));
+					ManhattanDistance[key] = distance;
+				}
 			}
 			return distance;
 		}
 		public static int GetManhattanDistance(Hero hero, Tile mine)
 		{
 			uint key = (uint)((hero.Dimensions >> Hero.PositionX) | (mine.Dimensions << (16 - Hero.PositionX)));
+			
 			byte distance;
-
-			if (!ManhattanDistance.TryGetValue(key, out distance))
+			lock (locker)
 			{
-				distance = (byte)(Math.Abs(hero.X - mine.X) + Math.Abs(hero.Y - mine.Y));
-				ManhattanDistance[key] = distance;
+				if (!ManhattanDistance.TryGetValue(key, out distance))
+				{
+					distance = (byte)(Math.Abs(hero.X - mine.X) + Math.Abs(hero.Y - mine.Y));
+					ManhattanDistance[key] = distance;
+				}
 			}
 			return distance;
 		}

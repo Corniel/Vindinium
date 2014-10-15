@@ -48,8 +48,21 @@ namespace Vindinium.Decisions
 			}
 		}
 
-		public ScoreCollection UpdateAlpha(ScoreCollection alpha, PlayerType player)
+		/// <summary>If any of the alpha's of the opponents is worse then the test score: break.
+		/// 
+		/// Otherwise update if a better alpha is found for the player.
+		/// </summary>
+		public bool ContinueProccesingAlphas(ScoreCollection test, PlayerType player, out ScoreCollection alphasOut)
 		{
+			foreach (var other in PlayerTypes.Other[player])
+			{
+				if (Compare(test, other) > 0)
+				{
+					alphasOut = this;
+					return false;
+				}
+			}
+
 			IScore s1 = score1;
 			IScore s2 = score2;
 			IScore s3 = score3;
@@ -57,12 +70,13 @@ namespace Vindinium.Decisions
 
 			switch (player)
 			{
-				case PlayerType.Hero1: if (Compare(alpha, player) < 0) { s1 = alpha.score1; } break;
-				case PlayerType.Hero2: if (Compare(alpha, player) < 0) { s1 = alpha.score2; } break;
-				case PlayerType.Hero3: if (Compare(alpha, player) < 0) { s1 = alpha.score3; } break;
-				case PlayerType.Hero4: if (Compare(alpha, player) < 0) { s1 = alpha.score4; } break;
+				case PlayerType.Hero1: if (Compare(test, player) > 0) { s1 = test.score1; } break;
+				case PlayerType.Hero2: if (Compare(test, player) > 0) { s2 = test.score2; } break;
+				case PlayerType.Hero3: if (Compare(test, player) > 0) { s3 = test.score3; } break;
+				case PlayerType.Hero4: if (Compare(test, player) > 0) { s4 = test.score4; } break;
 			}
-			return new ScoreCollection(s1, s2, s3, s4);
+			alphasOut = new ScoreCollection(s1, s2, s3, s4);
+			return true;
 		}
 
 		public string ToConsoleDisplay(PlayerType player)

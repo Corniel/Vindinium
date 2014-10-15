@@ -158,5 +158,50 @@ namespace Vindinium.UnitTests.Decisions
 			Assert.AreEqual(1, p3, "p3");
 			Assert.AreEqual(0, p4, "p4");
 		}
+
+		[Test]
+		public void ContinueProccesingAlphas_WorseAlphaForHero4_IsFalse()
+		{
+			var alphas = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
+			var test = new ScoreCollection(new GoldScore(1000), new GoldScore(2000), new GoldScore(1000), new GoldScore(1001));
+
+			ScoreCollection exp = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
+			ScoreCollection act;
+
+			var result = alphas.ContinueProccesingAlphas(test, PlayerType.Hero2, out act);
+
+			Assert.IsFalse(result);
+			Assert.AreEqual(exp.DebuggerDisplay, act.DebuggerDisplay);
+		}
+
+		[Test]
+		public void ContinueProccesingAlphas_WorseAlpha_IsTrue()
+		{
+			var alphas = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
+			var test = new ScoreCollection(new GoldScore(900), new GoldScore(750), new GoldScore(1000), new GoldScore(800));
+
+			ScoreCollection exp = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
+			ScoreCollection act;
+
+			var result = alphas.ContinueProccesingAlphas(test, PlayerType.Hero2, out act);
+
+			Assert.IsTrue(result);
+			Assert.AreEqual(exp.DebuggerDisplay, act.DebuggerDisplay);
+		}
+
+		[Test]
+		public void ContinueProccesingAlphas_BetterAlpha_IsTrue()
+		{
+			var alphas = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
+			var test = new ScoreCollection(new GoldScore(900), new GoldScore(2000), new GoldScore(1000), new GoldScore(800));
+
+			ScoreCollection exp = new ScoreCollection(new GoldScore(1000), new GoldScore(2000), new GoldScore(1000), new GoldScore(1000));
+			ScoreCollection act;
+
+			var result = alphas.ContinueProccesingAlphas(test, PlayerType.Hero2, out act);
+
+			Assert.IsTrue(result);
+			Assert.AreEqual(exp.DebuggerDisplay, act.DebuggerDisplay);
+		}
 	}
 }

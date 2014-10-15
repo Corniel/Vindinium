@@ -54,13 +54,14 @@ namespace Vindinium.Ygritte.Decisions
 
 		public void GetMove(Map map, TimeSpan timeout)
 		{
+			RootNode.Lookup.Clear(this.State.Turn);
+
 			InitializeMoveMappings(map);
 
-			var turn = this.Turn + 1;
+			var turn = this.Turn + 2;
 
 			Run(map, timeout, turn);
 			this.Stopwatch.Stop();
-			LogResult();
 			Console.WriteLine();
 		}
 
@@ -76,7 +77,7 @@ namespace Vindinium.Ygritte.Decisions
 
 				var task = Task.Factory.StartNew(() =>
 				{
-					while (true)
+					while (turn < 1200)
 					{
 						this.Process(map, turn++, PotentialScore.EmptyCollection);
 						YgritteBot.BestMove = this.BestMove;
@@ -96,14 +97,19 @@ namespace Vindinium.Ygritte.Decisions
 			}
 			catch (OperationCanceledException) { }
 			catch (AggregateException) { }
+
 			catch (Exception x)
 			{
 				Console.WriteLine(x);
+#if DEBUG
+				throw;
+#endif
 			}
 		}
 		private void LogResult()
 		{
-			var playerstr = string.Format("[{0}]", (int)this.PlayerToMove);
+			var playerSearch = string.Format("h{0}", (int)this.PlayerToMove);
+			var playerReplace = string.Format("h{0}*", (int)this.PlayerToMove);
 
 			Console.Write("\r[{0,4}] {1,4}, {4}, d: {2}, {3}",
 							this.Turn,
@@ -111,7 +117,7 @@ namespace Vindinium.Ygritte.Decisions
 							Node.Lookup.Depth,
 							this.Score.DebuggerDisplay
 								.Replace("Score", "s")
-								.Replace(playerstr, "[*]"),
+								.Replace(playerSearch, playerReplace),
 							this.MoveMappings[this.Children[0]]);
 		}
 	}

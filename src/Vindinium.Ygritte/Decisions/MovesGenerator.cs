@@ -8,6 +8,8 @@ namespace Vindinium.Ygritte.Decisions
 {
 	public class MovesGenerator
 	{
+		private static volatile object locker = new object();
+
 		public static readonly MovesGenerator Instance = new MovesGenerator();
 
 		private Dictionary<Tile, MoveFromPath> paths = new Dictionary<Tile, MoveFromPath>();
@@ -26,10 +28,19 @@ namespace Vindinium.Ygritte.Decisions
 		private MoveFromPath GetMoveFromPath(Map map, Tile tile)
 		{
 			MoveFromPath move;
-			if (!paths.TryGetValue(tile, out move))
+			lock (locker)
 			{
-				move = new MoveFromPath(map.GetDistances(tile));
-				paths[tile] = move;
+#if DEBUG
+				if (tile == null)
+				{
+					throw new ArgumentNullException("tile");
+				}
+#endif
+				if (!paths.TryGetValue(tile, out move))
+				{
+					move = new MoveFromPath(map.GetDistances(tile));
+					paths[tile] = move;
+				}
 			}
 			return move;
 		}
@@ -149,7 +160,7 @@ namespace Vindinium.Ygritte.Decisions
 						// We are standing next to a taverne, we would like to investigate staying or drinking too.
 						if (heroToTaverne == 1)
 						{
-							var taverne = map.Mines.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
+							var taverne = map.Tavernes.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
 							moves.Add(GetMoveFromPath(map, taverne));
 							moves.Add(Move.Stay);
 						}

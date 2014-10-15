@@ -8,20 +8,28 @@ namespace Vindinium.Ygritte.Decisions
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class NodeLookup
 	{
+		private static volatile object locker = new object();
+
 		private Dictionary<int, Dictionary<State, Node>> lookup = new Dictionary<int, Dictionary<State, Node>>();
 
 		public void Clear()
 		{
-			lookup.Clear();
-			this.Transpositions = 0;
+			lock (locker)
+			{
+				lookup.Clear();
+				this.Transpositions = 0;
+			}
 		}
 		public void Clear(int turn)
 		{
-			for (int i = 0; i < turn; i++)
+			lock (locker)
 			{
-				if (lookup.ContainsKey(i))
+				for (int i = 0; i < turn; i++)
 				{
-					lookup.Remove(i);
+					if (lookup.ContainsKey(i))
+					{
+						lookup.Remove(i);
+					}
 				}
 			}
 		}
@@ -37,24 +45,26 @@ namespace Vindinium.Ygritte.Decisions
 		public Node Get(int turn, Map map, State state)
 		{
 			Node node;
-			Dictionary<State, Node> dict;
-
-			if (lookup.TryGetValue(turn, out dict))
+			lock (locker)
 			{
-				if (dict.TryGetValue(state, out node))
+				Dictionary<State, Node> dict;
+
+				if (lookup.TryGetValue(turn, out dict))
 				{
-					this.Transpositions++;
-					return node;
+					if (dict.TryGetValue(state, out node))
+					{
+						this.Transpositions++;
+						return node;
+					}
 				}
+				else
+				{
+					dict = new Dictionary<State, Node>();
+					lookup[turn] = dict;
+				}
+				node = new Node(map, state);
+				dict[state] = node;
 			}
-			else
-			{
-				dict = new Dictionary<State, Node>();
-				lookup[turn] = dict;
-			}
-			node = new Node(map, state);
-			dict[state] = node;
-
 			return node;
 		}
 
