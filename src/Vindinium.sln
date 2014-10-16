@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium", "Vindinium\Vindinium.csproj", "{20BC83ED-8BCE-4DFE-BFDD-5340B252B7DB}"
 EndProject
@@ -25,6 +25,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.Njord", "Vindinium.Njord\Vindinium.Njord.csproj", "{B8DADF16-B719-4B56-A788-1B6C9FF3F92C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.Viewer", "Vindinium.Viewer\Vindinium.Viewer.csproj", "{2E940BAF-EB9D-4962-9458-2AAAA4EB7072}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.Slowhand", "Vindinium.Slowhand\Vindinium.Slowhand.csproj", "{68FBB6A2-454B-4276-A7A7-E92E74170406}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{2E940BAF-EB9D-4962-9458-2AAAA4EB7072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E940BAF-EB9D-4962-9458-2AAAA4EB7072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E940BAF-EB9D-4962-9458-2AAAA4EB7072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68FBB6A2-454B-4276-A7A7-E92E74170406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68FBB6A2-454B-4276-A7A7-E92E74170406}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68FBB6A2-454B-4276-A7A7-E92E74170406}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68FBB6A2-454B-4276-A7A7-E92E74170406}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
