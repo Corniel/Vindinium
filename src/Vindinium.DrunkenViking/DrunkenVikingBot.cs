@@ -35,7 +35,7 @@ namespace Vindinium.DrunkenViking
 			}
 		}
 
-		protected override MoveDirection GetMove()
+		public override MoveDirection GetMove()
 		{
 			UpdateState();
 

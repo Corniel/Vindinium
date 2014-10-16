@@ -13,7 +13,7 @@ namespace Vindinium
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public struct Hero : ISerializable, IXmlSerializable
 	{
-		public static readonly Regex Pattern = new Regex(@"^Hero\[(?<x>[1-9][0-9]*),(?<y>[1-9][0-9]*)\] H:(?<health>[1-9][0-9]*), M:(?<mines>[1-9][0-9]*), G:(?<gold>[1-9][0-9]*)(?<crashed>, Crashed)?", RegexOptions.Compiled);
+		public static readonly Regex Pattern = new Regex(@"^Hero\[(?<x>[0-9]+),(?<y>[0-9]+)\] H:(?<health>[0-9]+), M:(?<mines>[0-9]+), G:(?<gold>[0-9]+)(?<crashed>, Crashed)?", RegexOptions.Compiled);
 
 		public static readonly Hero Empty = default(Hero);
 

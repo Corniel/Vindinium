@@ -163,7 +163,7 @@ namespace Vindinium.UnitTests.Decisions
 		public void ContinueProccesingAlphas_WorseAlphaForHero4_IsFalse()
 		{
 			var alphas = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
-			var test = new ScoreCollection(new GoldScore(1000), new GoldScore(2000), new GoldScore(1000), new GoldScore(1001));
+			var test = new ScoreCollection(new GoldScore(1000), new GoldScore(2000), new GoldScore(1000), new GoldScore(999));
 
 			ScoreCollection exp = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
 			ScoreCollection act;
@@ -178,7 +178,7 @@ namespace Vindinium.UnitTests.Decisions
 		public void ContinueProccesingAlphas_WorseAlpha_IsTrue()
 		{
 			var alphas = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
-			var test = new ScoreCollection(new GoldScore(900), new GoldScore(750), new GoldScore(1000), new GoldScore(800));
+			var test = new ScoreCollection(new GoldScore(1100), new GoldScore(750), new GoldScore(1000), new GoldScore(1800));
 
 			ScoreCollection exp = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
 			ScoreCollection act;
@@ -193,7 +193,7 @@ namespace Vindinium.UnitTests.Decisions
 		public void ContinueProccesingAlphas_BetterAlpha_IsTrue()
 		{
 			var alphas = new ScoreCollection(new GoldScore(1000), new GoldScore(1000), new GoldScore(1000), new GoldScore(1000));
-			var test = new ScoreCollection(new GoldScore(900), new GoldScore(2000), new GoldScore(1000), new GoldScore(800));
+			var test = new ScoreCollection(new GoldScore(1900), new GoldScore(2000), new GoldScore(1000), new GoldScore(1800));
 
 			ScoreCollection exp = new ScoreCollection(new GoldScore(1000), new GoldScore(2000), new GoldScore(1000), new GoldScore(1000));
 			ScoreCollection act;

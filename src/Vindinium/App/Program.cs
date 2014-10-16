@@ -19,11 +19,19 @@ namespace Vindinium.App
 		protected Logging.Game Game { get; set; }
 
 		/// <summary>The map of the game.</summary>
-		protected Map Map { get; set; }
+		public Map Map { get; protected set; }
 		/// <summary>The state of the game.</summary>
-		protected State State { get; set; }
+		public State State { get; protected set; }
 		/// <summary>The player (type) of the bot.</summary>
-		protected PlayerType Player { get; set; }
+		public PlayerType Player { get; protected set; }
+
+		/// <summary>Sets some stuff.</summary>
+		public void Set(Map map, State state, PlayerType player)
+		{
+			this.Map = map;
+			this.State = state;
+			this.Player = player;
+		}
 
 		public void Run()
 		{
@@ -150,15 +158,14 @@ namespace Vindinium.App
 		}
 
 		/// <summary>Get the move of the bot. </summary>
-		protected abstract MoveDirection GetMove();
+		public abstract MoveDirection GetMove();
 
-		/// <summary>Updates the state of te bot.</summary>
+		/// <summary>Updates the state of the bot.</summary>
 		protected void UpdateState()
 		{
 			this.State = this.State.Update(this.Client.Response.game);
 			this.Map.Update(this.Client.Response.game);
 		}
-			 
 
 		public static void DoMain(string[] args)
 		{

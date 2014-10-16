@@ -6,7 +6,7 @@ namespace Vindinium.Random
 	{
 		public RandomBot()
 		{
-			this.Rnd = new System.Random();
+			this.Rnd = new System.Random(69);
 		}
 
 		public System.Random Rnd { get; protected set; }
@@ -16,7 +16,7 @@ namespace Vindinium.Random
 			RandomBot.DoMain(args);
 		}
 
-		protected override MoveDirection GetMove()
+		public override MoveDirection GetMove()
 		{
 			UpdateState();
 

@@ -61,6 +61,7 @@
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
     <Compile Include="DistanceTest.cs" />
     <Compile Include="HeroTest.cs" />
+    <Compile Include="Logging\GameTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="MineOwnership128Test.cs">
       <SubType>Code</SubType>
@@ -78,6 +79,7 @@
     <Compile Include="Ygritte\RootNodeTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Serialization\GameResponse.json" />
   </ItemGroup>
@@ -85,6 +87,18 @@
     <ProjectReference Include="..\Vindinium.DrunkenViking\Vindinium.DrunkenViking.csproj">
       <Project>{f021d10e-0740-4bfd-a2fb-732296939cac}</Project>
       <Name>Vindinium.DrunkenViking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vindinium.Njord\Vindinium.Njord.csproj">
+      <Project>{b8dadf16-b719-4b56-a788-1b6c9ff3f92c}</Project>
+      <Name>Vindinium.Njord</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vindinium.Random\Vindinium.Random.csproj">
+      <Project>{fd01556e-38a1-4b45-bf86-3e16610117af}</Project>
+      <Name>Vindinium.Random</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vindinium.Viewer\Vindinium.Viewer.csproj">
+      <Project>{2e940baf-eb9d-4962-9458-2aaaa4eb7072}</Project>
+      <Name>Vindinium.Viewer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vindinium.Ygritte\Vindinium.Ygritte.csproj">
       <Project>{87995977-9953-4a47-95d7-5ee43db1da49}</Project>

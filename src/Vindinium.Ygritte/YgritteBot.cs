@@ -27,7 +27,7 @@ namespace Vindinium.Ygritte
 		}
 
 		/// <summary>Gets the best move.</summary>
-		protected override MoveDirection GetMove()
+		public override MoveDirection GetMove()
 		{
 			UpdateState();
 

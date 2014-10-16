@@ -39,6 +39,14 @@ namespace Vindinium.UnitTests
 
 			Assert.AreEqual(exp, act.DebuggerDisplay);
 		}
+		[Test]
+		public void Parse_NoMinesOrGold_AreEqual()
+		{
+			var act = Hero.Parse("Hero[1,1] H:80, M:0, G:0");
+			var exp = "Hero[1,1] Health: 80, Mines: 0, Gold: 0";
+
+			Assert.AreEqual(exp, act.DebuggerDisplay);
+		}
 
 		[Test]
 		public void Initial_XAndY_AreEqual()

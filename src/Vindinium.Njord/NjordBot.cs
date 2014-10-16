@@ -22,7 +22,7 @@ namespace Vindinium.Njord
 			this.HeatMap = new double[this.Map.Width, this.Map.Height];
 		}
 
-		protected override MoveDirection GetMove()
+		public override MoveDirection GetMove()
 		{
 			var sw = new Stopwatch();
 			sw.Start();

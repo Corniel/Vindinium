@@ -157,7 +157,7 @@ namespace Vindinium
 		/// <summary>Parses a map.</summary>
 		public static Map Parse(string str)
 		{
-			var lines = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+			var lines = str.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
 			return Parse(lines);
 		}

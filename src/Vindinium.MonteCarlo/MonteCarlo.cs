@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using Vindinium.App;
+using Vindinium.Net;
 
 namespace Vindinium.MonteCarlo
 {
@@ -12,6 +13,7 @@ namespace Vindinium.MonteCarlo
 			this.Simulation = new MonteCarloSimulation(17, runParallel);
 			this.MaxRuns = int.Parse(ConfigurationManager.AppSettings["maxruns"]);
 			this.Timout = TimeSpan.FromMilliseconds(int.Parse(ConfigurationManager.AppSettings["maxtime"]));
+			this.Parameters = new ClientParameters();
 		}
 		public static void Main(string[] args)
 		{
@@ -23,11 +25,10 @@ namespace Vindinium.MonteCarlo
 		public int MaxRuns { get; protected set; }
 		public TimeSpan Timout { get; protected set; }
 
-		protected override MoveDirection GetMove()
+		public override MoveDirection GetMove()
 		{
 			UpdateState();
 
-			//Console.WriteLine(this.State.GetHero(this.Player).DebugToString());
 			var move = this.Simulation.GetMove(this.Map, this.Player, this.State, this.Timout, this.Parameters.Turns, this.MaxRuns);
 			Console.WriteLine("{0,4} Move: {1}, {2:0.00}k, {3:0.0}s, {4:0.00}k/s",
 				this.State.Turn,

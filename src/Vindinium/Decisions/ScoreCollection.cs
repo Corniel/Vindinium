@@ -56,7 +56,7 @@ namespace Vindinium.Decisions
 		{
 			foreach (var other in PlayerTypes.Other[player])
 			{
-				if (Compare(test, other) > 0)
+				if (Compare(test, other) < 0)
 				{
 					alphasOut = this;
 					return false;

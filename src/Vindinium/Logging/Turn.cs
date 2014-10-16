@@ -73,5 +73,14 @@ namespace Vindinium.Logging
 			};
 			return turn;
 		}
+
+		/// <summary>Gets the state of the turn.</summary>
+		public State State
+		{
+			get
+			{
+				return State.Create(Id, Hero1, Hero2, Hero3, Hero4, MineOwnership);
+			}
+		}
 	}
 }

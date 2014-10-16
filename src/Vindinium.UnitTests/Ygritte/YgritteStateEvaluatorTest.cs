@@ -38,7 +38,7 @@ namespace Vindinium.UnitTests.Ygritte
 			var sw = new Stopwatch();
 			var runs = 1000000;
 			var map = MapTest.Map20;
-			var rnd = new Random(17);
+			var rnd = new System.Random(17);
 			for (int i = 0; i < runs; i++)
 			{
 				var state = State.Create(
