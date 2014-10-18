@@ -85,7 +85,7 @@ namespace Vindinium.SlowHand
 					hero.Health, 
 					hero.Mines,
 					hero.Gold,
-					hero.Gold + hero.Mines * ((1200 - (int)p - this.State.Turn) >> 2)
+					hero.Gold + hero.Mines * ((1195 + (int)p - this.State.Turn) >> 2)
 				);
 			}
 			viewer.Render(this.Map, this.State);

@@ -46,7 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config.sample" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vindinium\Vindinium.csproj">

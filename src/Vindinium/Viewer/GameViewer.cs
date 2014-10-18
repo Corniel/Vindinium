@@ -86,7 +86,7 @@ namespace Vindinium.Viewer
 			Console.WriteLine();
 		}
 
-		private ConsoleColor ToConsoleColor(PlayerType tp)
+		public static ConsoleColor ToConsoleColor(PlayerType tp)
 		{
 			switch (tp)
 			{

@@ -25,8 +25,35 @@ namespace Vindinium.Logging
 			}
 		}
 
+		public static IEnumerable<Game> GetAll()
+		{
+			foreach (var dir in Game.GamesDir.GetDirectories())
+			{
+				foreach (var file in dir.GetFiles("*.xml"))
+				{
+					var game = Game.Load(file);
+					if (game.CreationTime < new DateTime(1900, 1, 1))
+					{
+						game.CreationTime = file.CreationTime;
+						game.Save(file);
+					}
+					game.FileLocation = file;
+					yield return game;
+				}
+			}
+		}
+
+		[XmlIgnore]
+		public FileInfo FileLocation { get; set; }
+
 		[XmlAttribute("id")]
 		public string Id { get; set; }
+
+		[XmlAttribute("created")]
+		public DateTime CreationTime { get; set; }
+
+		[XmlAttribute("rated")]
+		public bool Rated { get; set; }
 
 		[XmlElement("Hero")]
 		public Hero[] Heros { get; set; }
@@ -112,6 +139,7 @@ namespace Vindinium.Logging
 		{
 			var game = new Game()
 			{
+				CreationTime = DateTime.Now,
 				Id = serialization.id,
 				Map = new Map(),
 				Turns = new List<Turn>(),
