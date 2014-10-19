@@ -47,6 +47,7 @@ namespace Vindinium
 
 		private static readonly Dictionary<uint, byte> ManhattanDistance = new Dictionary<uint, byte>();
 
+		private Dictionary<Tile, Distance[,]> m_Distances = new Dictionary<Tile, Distance[,]>();
 		private Tile[,] m_Tiles;
 		private List<Tile> m_All;
 
@@ -70,6 +71,11 @@ namespace Vindinium
 
 		/// <summary>Gets the number of passable tiles.</summary>
 		public int Count { get { return m_All.Count; } }
+
+		/// <summary>Gets the number of pre calculated distances to tiles.</summary>
+		public int DistancesCount { get { return m_Distances.Count; } }
+
+		public void ClearDistances() { m_Distances.Clear(); }
 
 		/// <summary>Loops through all tiles.</summary>
 		public IEnumerator<Tile> GetEnumerator()
@@ -112,13 +118,15 @@ namespace Vindinium
 		private Tile Spawn3;
 		private Tile Spawn4;
 
+		/// <summary>Updates the games based on the response of the request.</summary>
 		public void Update(Serialization.Game game)
 		{
 			foreach (var hero in game.heroes)
 			{
-				if (hero.crashed)
+				var player = (PlayerType)hero.id;
+				if (hero.crashed && !m_IsCrashed[player])
 				{
-					var spawn = GetSpawn((PlayerType)hero.id);
+					var spawn = GetSpawn(player);
 					var current = this[hero.pos.y, hero.pos.x];
 					if (spawn.IsPassable && current == spawn)
 					{
@@ -126,9 +134,21 @@ namespace Vindinium
 					}
 					// maybe a taverne is not longer available.
 					this.DistanceToTaverne = GetDistances(this.Tavernes);
+					
+					// maybe the paths are not longer equal.
+					ClearDistances();
+
+					m_IsCrashed[player] = true;
 				}
 			}
 		}
+		private Dictionary<PlayerType, bool> m_IsCrashed = new Dictionary<PlayerType, bool>()
+		{
+			{ PlayerType.Hero1, false },
+			{ PlayerType.Hero2, false },
+			{ PlayerType.Hero3, false },
+			{ PlayerType.Hero4, false },
+		};
 
 		/// <summary>Parses a map.</summary>
 		public static Map Parse(string[] lines)
@@ -289,19 +309,63 @@ namespace Vindinium
 			this.DistanceToTaverne = GetDistances(this.Tavernes);
 		}
 
-		public Distance[,] GetDistances(params Tile[] tiles)
+		/// <summary>Gets a distances map for the specified target.</summary>
+		/// <param name="target"></param>
+		public Distance[,] GetDistances(Tile target)
 		{
-			var distances = Distances.Create(this.Height, this.Width);
+#if DEBUG
+			if (target == null)
+			{
+				throw new ArgumentNullException("target");
+			}
+#endif
+			lock (locker)
+			{
+				Distance[,] distances;
 
-			var dis = Distance.Zero;
+				if(!m_Distances.TryGetValue(target, out distances))
+				{
+					distances = Distances.Create(this);
+					var queue = new Queue<Tile>();
+					queue.Enqueue(target);
+					distances.Set(target, Distance.Zero);
+					
+					SetDistances(distances, queue, Distance.One);
+					m_Distances[target] = distances;
+				}
+				return distances;
+			}
+		}
+
+		/// <summary>Gets a distances map for the specified targets.</summary>
+		/// <param name="target"></param>
+		public Distance[,] GetDistances(params Tile[] targets)
+		{
+#if DEBUG
+			if (targets == null || targets.Length == 0)
+			{
+				throw new ArgumentNullException("targets");
+			}
+#endif
+			if (targets.Length == 1)
+			{
+				return GetDistances(targets[0]);
+			}
+			var distances = Distances.Create(this);
+
 			var queue = new Queue<Tile>();
-			foreach (var tile in tiles)
+			foreach (var tile in targets)
 			{
 				queue.Enqueue(tile);
-				distances.Set(tile, dis);
+				distances.Set(tile, Distance.Zero);
 			}
-			dis++;
+			SetDistances(distances, queue, Distance.One);
+			return distances;
+		}
 
+		/// <summary>Sets the distances.</summary>
+		private void SetDistances(Distance[,] distances, Queue<Tile> queue, Distance dis)
+		{
 			while (queue.Count > 0)
 			{
 				int size = queue.Count;
@@ -319,7 +383,6 @@ namespace Vindinium
 				}
 				dis++;
 			}
-			return distances;
 		}
 
 		public Distance[,] GetDistances(IEnumerable<Tile> targets, IEnumerable<Tile> enermies)
@@ -476,7 +539,5 @@ namespace Vindinium
 			sb.AppendLine();
 			return sb.ToString();
 		}
-
-		
 	}
 }

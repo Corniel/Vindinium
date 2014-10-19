@@ -17,6 +17,12 @@ namespace Vindinium
 			return MultipleArrayExtensions.Create<Distance>(rows, cols);
 		}
 
+		/// <summary>Creates distances.</summary>
+		public static Distance[,] Create(Map map)
+		{
+			return Create(map.Width, map.Height);
+		}
+
 		/// <summary>Represents the distance array as unit test string.</summary>
 		public static string ToUnitTestString(this Distance[,] distances)
 		{

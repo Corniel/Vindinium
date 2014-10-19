@@ -189,6 +189,24 @@ namespace Vindinium.UnitTests
 		}
 
 		[Test]
+		public void GetDistances_TileTwice_CalculatedOnces()
+		{
+			var map = MapTest.Map06;
+			var target = map.Tavernes[0];
+
+			map.ClearDistances();
+			Assert.AreEqual(0, map.DistancesCount, "Distances Count before.");
+
+			var act0 = map.GetDistances(target);
+			Assert.AreEqual(1, map.DistancesCount, "Distances Count after first call.");
+
+			var act1 = map.GetDistances(target);
+			Assert.AreEqual(1, map.DistancesCount, "Distances Count after second call.");
+
+			Assert.AreSame(act0, act1);
+		}
+
+		[Test]
 		public void GetDistances_TilesWithEnermies_DistancesArray()
 		{
 			var map = MapTest.Map20;
