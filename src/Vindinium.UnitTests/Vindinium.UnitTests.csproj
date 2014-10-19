@@ -41,6 +41,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.XML" />
     <Reference Include="Troschuetz.Random, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -59,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Decisions\AverageScoreDecisionTest.cs" />
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
+    <Compile Include="Deployment\Deployer.cs" />
     <Compile Include="DistanceTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="Logging\GameTest.cs" />
