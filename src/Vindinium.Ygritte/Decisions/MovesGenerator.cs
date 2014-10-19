@@ -142,7 +142,7 @@ namespace Vindinium.Ygritte.Decisions
 						// We are standing next to a taverne, we would like to investigate staying or drinking too.
 						if (heroToTaverne == 1)
 						{
-							var taverne = map.Mines.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
+							var taverne = map.Tavernes.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
 							moves.Add(GetMoveFromPath(map, taverne));
 							moves.Add(Move.Stay);
 						}

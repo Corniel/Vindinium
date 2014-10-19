@@ -27,7 +27,7 @@ namespace Vindinium.UnitTests.Ygritte
 			var score = YgritteStateEvaluator.Instance.Evaluate(map, state);
 
 			var act = score.DebuggerDisplay;
-			var exp = "h1: 270,30, h2: 271,30, h3: 271,30, h4: 272,35";
+			var exp = "h1: 393,60, h2: 394,60, h3: 394,60, h4: 395,20";
 
 			Assert.AreEqual(exp, act);
 		}
