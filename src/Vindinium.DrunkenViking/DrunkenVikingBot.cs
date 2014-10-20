@@ -24,6 +24,7 @@ namespace Vindinium.DrunkenViking
 			base.CreateGame();
 
 			this.Strategies.Clear();
+			this.Strategies.Add(new SafePathStrategy(this.Map));
 			this.Strategies.Add(new ToNearestSafeTaverneStrategy(this.Map));
 			this.Strategies.Add(new ToNearestTaverneStrategy(this.Map));
 			this.Strategies.Add(new ToNearestSafeMineStrategy(this.Map));

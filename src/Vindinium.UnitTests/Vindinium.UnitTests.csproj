@@ -62,6 +62,7 @@
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
     <Compile Include="Deployment\Deployer.cs" />
     <Compile Include="DistanceTest.cs" />
+    <Compile Include="DrunkenViking\Stragties\SafePathCollectionTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="Logging\GameTest.cs" />
     <Compile Include="MapTest.cs" />
@@ -115,9 +116,7 @@
       <Name>Vindinium.MonteCarlo</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DrunkenViking\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

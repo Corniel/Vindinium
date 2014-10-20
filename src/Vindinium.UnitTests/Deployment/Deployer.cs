@@ -11,7 +11,7 @@ namespace Vindinium.UnitTests.Deployment
 	{
 		public static readonly Dictionary<string, string> Mappings = new Dictionary<string, string>()
 		{
-			{ "Drunken Viking 1", "Vindinium.DrunkenViking" },
+			{ "Drunken Viking", "Vindinium.DrunkenViking" },
 			{ "Monte Carlo 1000", "Vindinium.MonteCarlo" },
 			{ "Njord", "Vindinium.Njord" },
 			{ "Slowhand", "Vindinium.Slowhand" },
@@ -34,7 +34,7 @@ namespace Vindinium.UnitTests.Deployment
 				foreach (var file in source.GetFiles().Where(f => f.Extension == ".dll" || f.Extension == ".exe"))
 				{
 					var location = Path.Combine(target.FullName, file.Name);
-					file.CopyTo(location);
+					file.CopyTo(location, true);
 				}
 			}
 		}
