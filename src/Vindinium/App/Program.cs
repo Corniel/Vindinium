@@ -42,11 +42,18 @@ namespace Vindinium.App
 				Console.WriteLine("Run {0} of {1}", run++, left == -1 ? "oo" : this.Parameters.Runs.ToString());
 
 				this.Client = new Client(this.Parameters);
-				this.Client.CreateGame();
+				try
+				{
+					this.Client.CreateGame();
+				}
+				catch (Exception x)
+				{
+					Console.WriteLine(x);
+					this.Client.IsCrashed = true;
+					continue;
+				}
 
 				CreateLogGame();
-
-				if (this.Client.IsCrashed) { continue; }
 
 				using (var writer = new StreamWriter("replay.html", true))
 				{
@@ -55,7 +62,7 @@ namespace Vindinium.App
 
 				CreateGame();
 
-				while (!this.Client.IsFinished && !this.Client.IsCrashed)
+				while (!this.Client.IsFinished)
 				{
 					try
 					{
