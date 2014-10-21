@@ -29,6 +29,19 @@ namespace Vindinium.UnitTests
 			"$-  @2[]####[]@3  $-\r\n" +
 			"      ########      \r\n");
 
+		public static readonly Map Map10Mines8 = Map.Parse(
+			"##  []########[]  ##\r\n" +
+			"    @1########@4    \r\n" +
+			"$-      ####      $-\r\n" +
+			"####            ####\r\n" +
+			"######  $-$-  ######\r\n" +
+			"######  $-$-  ######\r\n" +
+			"####            ####\r\n" +
+			"$-      ####      $-\r\n" +
+			"    @2########@3    \r\n" +
+			"##  []########[]  ##\r\n");
+
+
 		public static readonly Map Map18 = Map.Parse(
 			"$-                                $-\r\n" +
 			"    ##  $-                $-  ##    \r\n" +

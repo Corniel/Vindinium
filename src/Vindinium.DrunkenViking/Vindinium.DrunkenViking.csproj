@@ -48,10 +48,12 @@
   <ItemGroup>
     <Compile Include="DrunkenVikingBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategies\PotentialOpponent.cs" />
     <Compile Include="Strategies\PotentialPath.cs" />
     <Compile Include="Strategies\SafePath.cs" />
     <Compile Include="Strategies\RandomStrategy.cs" />
     <Compile Include="Strategies\SafePathCollection.cs" />
+    <Compile Include="Strategies\SafePathComparer.cs" />
     <Compile Include="Strategies\SafePathStrategy.cs" />
     <Compile Include="Strategies\ToNearestEmptyMineStrategy.cs" />
     <Compile Include="Strategies\ToNearestSafeMineStrategy.cs">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -10,26 +11,14 @@ namespace Vindinium.DrunkenViking.Strategies
 	{
 		public int Turns { get; protected set; }
 		public Tile Source { get; protected set; }
-		public Dictionary<PlayerType, int> Healths { get; protected set; }
+		public int Health { get; protected set; }
 		public IMineOwnership Mines { get; protected set; }
 		public MoveDirection[] Directions { get; protected set; }
 		public int Profit { get; protected set; }
 
-		public SafePath ToSafePath(int turns, int profit)
+		public SafePath ToSafePath(PlayerType player, int turns, int profit)
 		{
-			return new SafePath(this.Directions, turns, profit);
-		}
-
-		public Dictionary<PlayerType, int> CloneHealths()
-		{
-			var healths = new Dictionary<PlayerType, int>()
-			{
-				{ PlayerType.Hero1, this.Healths[PlayerType.Hero1] },
-				{ PlayerType.Hero2, this.Healths[PlayerType.Hero2] },
-				{ PlayerType.Hero3, this.Healths[PlayerType.Hero3] },
-				{ PlayerType.Hero4, this.Healths[PlayerType.Hero4] },
-			};
-			return healths;
+			return new SafePath(this.Mines.Count(player), turns, profit, this.Directions.ToArray());
 		}
 
 		[ExcludeFromCodeCoverage]
@@ -37,39 +26,31 @@ namespace Vindinium.DrunkenViking.Strategies
 		{
 			get
 			{
-				return string.Format("Source: {0}, Turns: {7}, Healths: {1}, {2}, {3}, {4}, Profit: {5}, Directions: {6}",
+				return string.Format("Source: {0}, Turns: {1}, Health: {2}, Profit: {3}, Directions: {4}",
 					this.Source.DebugToString(),
-					this.Healths[PlayerType.Hero1],
-					this.Healths[PlayerType.Hero2],
-					this.Healths[PlayerType.Hero3],
-					this.Healths[PlayerType.Hero4],
+					this.Turns,
+					this.Health,
 					this.Profit,
-					this.Directions == null ? "<none>" : String.Join(", ", this.Directions),
-					this.Turns);
+					this.Directions == null ? "<none>" : String.Join(", ", this.Directions));
 			}
 		}
+		public override string ToString() { return this.DebuggerDisplay; }
 
 		public static PotentialPath Initial(Tile source, State state)
 		{
 			return new PotentialPath()
 			{
 				Source = source,
-				Healths = new Dictionary<PlayerType, int>()
-				{
-					{ PlayerType.Hero1, state.GetHero(PlayerType.Hero1).Health },
-					{ PlayerType.Hero2, state.GetHero(PlayerType.Hero2).Health },
-					{ PlayerType.Hero3, state.GetHero(PlayerType.Hero3).Health },
-					{ PlayerType.Hero4, state.GetHero(PlayerType.Hero4).Health },
-				},
+				Health = state.GetActiveHero().Health,
 				Mines = state.Mines,
 			};
 		}
-		public static PotentialPath CreateFollowUp(Tile source, Dictionary<PlayerType, int> healths, IMineOwnership mines, MoveDirection[] directions, int turns, int profit)
+		public static PotentialPath CreateFollowUp(Tile source, int health, IMineOwnership mines, MoveDirection[] directions, int turns, int profit)
 		{
 			return new PotentialPath()
 			{
 				Source = source,
-				Healths = healths,
+				Health = health,
 				Mines = mines,
 				Directions = directions,
 				Turns = turns,

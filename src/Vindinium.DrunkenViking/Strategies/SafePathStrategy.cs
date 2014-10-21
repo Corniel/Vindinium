@@ -11,7 +11,7 @@ namespace Vindinium.DrunkenViking.Strategies
 		{
 			this.Collection = SafePathCollection.Create(this.Map, state);
 			this.Collection.Procces();
-			return this.Collection.BestPath != null;
+			return this.Collection.BestPath != null && this.Collection.BestPath.Profit > 0;
 		}
 
 		public override MoveDirection GetMove(State state, Tile location, Hero hero, PlayerType playerToMove)

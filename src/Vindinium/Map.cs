@@ -44,7 +44,21 @@ namespace Vindinium
 			}
 			return distance;
 		}
+		public static int GetManhattanDistance(Tile tile0, Tile tile1)
+		{
+			uint key = (uint)((tile0.Dimensions >> Hero.PositionX) | (tile1.Dimensions << (16 - Hero.PositionX)));
 
+			byte distance;
+			lock (locker)
+			{
+				if (!ManhattanDistance.TryGetValue(key, out distance))
+				{
+					distance = (byte)(Math.Abs(tile0.X - tile1.X) + Math.Abs(tile0.Y - tile1.Y));
+					ManhattanDistance[key] = distance;
+				}
+			}
+			return distance;
+		}
 		private static readonly Dictionary<uint, byte> ManhattanDistance = new Dictionary<uint, byte>();
 
 		private Dictionary<Tile, Distance[,]> m_Distances = new Dictionary<Tile, Distance[,]>();
