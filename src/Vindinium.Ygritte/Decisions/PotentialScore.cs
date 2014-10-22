@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Vindinium.Decisions;
 
 namespace Vindinium.Ygritte.Decisions
@@ -17,6 +18,6 @@ namespace Vindinium.Ygritte.Decisions
 
 		public uint ToUInt32() { return m_Value; }
 
-		public string DebuggerDisplay { get { return string.Format("{0:#,##0.00}", m_Value / 1000.0m); } }
+		public string DebuggerDisplay { get { return String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", m_Value / 1000.0m); } }
 	}
 }
