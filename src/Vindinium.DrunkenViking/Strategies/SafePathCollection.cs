@@ -58,7 +58,7 @@ namespace Vindinium.DrunkenViking.Strategies
 		
 		public SafePath BestPath { get { return this.SafePaths.Count == 0 ? null : this.SafePaths[0]; } }
 
-		public MoveDirection BestMove { get { return this.SafePaths.Count == 0 ? MoveDirection.x : BestPath.Directions[0]; } }
+		public MoveDirection BestMove { get { return this.SafePaths.Count == 0 ? MoveDirection.x : BestPath.Directions.ToArray()[0]; } }
 
 		public Tile Source { get; protected set; }
 
@@ -196,7 +196,7 @@ namespace Vindinium.DrunkenViking.Strategies
 				health -= Hero.HealthBattle;
 
 				var profit = potentialPath.Profit;
-				profit += (mines.Count(this.PlayerToMove) - 1) * ((int)startDistance - 1) + 1;
+				profit += (mines.Count(this.PlayerToMove) - 1) * (turns - potentialPath.Turns) + 1;
 
 				var followUp = PotentialPath.CreateFollowUp(target, health, mines, directions, turns, profit);
 				this.PotentialPaths.Enqueue(followUp);
@@ -204,7 +204,7 @@ namespace Vindinium.DrunkenViking.Strategies
 		}
 		protected void ProcessToTaverne(PotentialPath potentialPath, Tile target)
 		{
-			// We don't want to searh for none profitable paths.
+			// We don't want to search for none profitable paths.
 			if (potentialPath.Profit == 0 && this.SafePaths.Any(path => path.Profit > 0)) { return; }
 
 			var source = potentialPath.Source;

@@ -85,6 +85,7 @@
     <Compile Include="MoveDirection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MoveDirections.cs" />
     <Compile Include="MultipleArrayExtensions.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Net\ClientParameters.cs" />

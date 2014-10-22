@@ -16,13 +16,13 @@ namespace Vindinium.DrunkenViking.Strategies
 			this.Mines = mines;
 			this.Turns = turns;
 			this.Profit = profit;
-			this.Directions = directions;
+			this.Directions = new MoveDirections(directions);
 		}
 
 		public int Mines { get; protected set; }
 		public int Turns { get; protected set; }
 		public int Profit { get; protected set; }
-		public MoveDirection[] Directions { get; protected set; }
+		public MoveDirections Directions { get; protected set; }
 
 		[ExcludeFromCodeCoverage]
 		public string DebuggerDisplay
@@ -33,18 +33,14 @@ namespace Vindinium.DrunkenViking.Strategies
 					this.Mines,
 					this.Profit,
 					this.Turns,
-					this.Directions == null ? "<none>" : String.Join(", ", this.Directions));
+					this.Directions.Equals(MoveDirections.None) ? "<none>" : String.Join(", ", this.Directions));
 			}
 		}
 		public override string ToString() { return this.DebuggerDisplay; }
 
 		public override int GetHashCode()
 		{
-			var hash = 0;
-			foreach (var d in this.Directions)
-			{
-				hash |= 1 << (int)d;
-			}
+			var hash = Directions.GetHashCode();
 			hash |= Turns << 5;
 			hash |= Profit << 10;
 			hash |= Mines << 24;
@@ -56,20 +52,12 @@ namespace Vindinium.DrunkenViking.Strategies
 		}
 		public bool Equals(SafePath other)
 		{
-
-			if (other != null && 
+			return
+				other != null &&
 				this.Mines == other.Mines &&
-				this.Turns == other.Turns && 
-				this.Profit == other.Profit && 
-				this.Directions.Length == other.Directions.Length)
-			{
-				foreach (var d in this.Directions)
-				{
-					if (!other.Directions.Contains(d)) { return false; }
-				}
-				return true;
-			}
-			return false;
+				this.Turns == other.Turns &&
+				this.Profit == other.Profit &&
+				this.Directions.Equals(other.Directions);
 		}
 	}
 }
