@@ -80,8 +80,7 @@ namespace Vindinium.Ygritte.Decisions
 					while (turn < 1200)
 					{
 						this.Process(map, turn++, PotentialScore.EmptyCollection);
-						YgritteBot.BestMove = this.BestMove;
-						LogResult();
+						YgritteBot.BestMove = new App.Move(this.BestMove, LogResult());
 						turn++;
 						// Was cancellation already requested?  
 						if (source.IsCancellationRequested == true)
@@ -106,12 +105,12 @@ namespace Vindinium.Ygritte.Decisions
 #endif
 			}
 		}
-		private void LogResult()
+		private string LogResult()
 		{
 			var playerSearch = string.Format("h{0}", (int)this.PlayerToMove);
 			var playerReplace = string.Format("h{0}*", (int)this.PlayerToMove);
 
-			Console.Write("\r[{0,4}] {1,4}, {4}, d: {2}, {3}",
+			var log = String.Format("[{0,4}] {1,4}, {4}, d: {2}, {3}",
 							this.Turn,
 							this.Stopwatch.ElapsedMilliseconds,
 							Node.Lookup.Depth,
@@ -119,6 +118,9 @@ namespace Vindinium.Ygritte.Decisions
 								.Replace("Score", "s")
 								.Replace(playerSearch, playerReplace),
 							this.MoveMappings[this.Children[0]]);
+
+			Console.Write("\r{0}", log);
+			return log;
 		}
 	}
 }

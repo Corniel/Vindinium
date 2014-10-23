@@ -16,12 +16,12 @@ namespace Vindinium.Random
 			RandomBot.DoMain(args);
 		}
 
-		public override MoveDirection GetMove()
+		public override Move GetMove()
 		{
 			UpdateState();
 
 			var location = this.Map[this.State.GetHero(this.Player)];
-			return location.Directions[this.Rnd.Next(location.Directions.Length)];
+			return new Move(location.Directions[this.Rnd.Next(location.Directions.Length)]);
 		}
 	}
 }

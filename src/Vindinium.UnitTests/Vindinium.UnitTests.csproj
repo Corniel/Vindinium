@@ -64,7 +64,6 @@
     <Compile Include="DistanceTest.cs" />
     <Compile Include="DrunkenViking\Stragties\SafePathCollectionTest.cs" />
     <Compile Include="HeroTest.cs" />
-    <Compile Include="Logging\GameTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="MineOwnership128Test.cs">
       <SubType>Code</SubType>

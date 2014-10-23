@@ -25,18 +25,19 @@ namespace Vindinium.MonteCarlo
 		public int MaxRuns { get; protected set; }
 		public TimeSpan Timout { get; protected set; }
 
-		public override MoveDirection GetMove()
+		public override Move GetMove()
 		{
 			UpdateState();
 
-			var move = this.Simulation.GetMove(this.Map, this.Player, this.State, this.Timout, this.Parameters.Turns, this.MaxRuns);
-			Console.WriteLine("{0,4} Move: {1}, {2:0.00}k, {3:0.0}s, {4:0.00}k/s",
+			var direction = this.Simulation.GetMove(this.Map, this.Player, this.State, this.Timout, this.Parameters.Turns, this.MaxRuns);
+			var evaluation = String.Format("{0,4} Move: {1}, {2:0.00}k, {3:0.0}s, {4:0.00}k/s",
 				this.State.Turn,
 				this.Simulation.Decision.ToConsoleDisplay(this.Player),
 				this.Simulation.Simulations/1000.0,
 				this.Simulation.Sw.Elapsed.TotalMilliseconds,
 				this.Simulation.Simulations / this.Simulation.Sw.Elapsed.TotalMilliseconds);
-			return move;
+			Console.WriteLine(evaluation);
+			return new Move(direction, evaluation);
 		}
 	}
 }

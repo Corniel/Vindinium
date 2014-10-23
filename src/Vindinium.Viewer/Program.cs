@@ -144,6 +144,11 @@ namespace Vindinium.Viewer
 						);
 					}
 					RenderSingleLine();
+					if (!String.IsNullOrEmpty(this.SelectedGame.Turns[turn].Evaluation))
+					{
+						Console.WriteLine(this.SelectedGame.Turns[turn].Evaluation);
+						RenderSingleLine();
+					}
 					
 					viewer.Render(map, state);
 				}

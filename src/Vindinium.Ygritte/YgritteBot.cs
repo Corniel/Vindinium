@@ -27,7 +27,7 @@ namespace Vindinium.Ygritte
 		}
 
 		/// <summary>Gets the best move.</summary>
-		public override MoveDirection GetMove()
+		public override Vindinium.App.Move GetMove()
 		{
 			UpdateState();
 
@@ -41,6 +41,6 @@ namespace Vindinium.Ygritte
 		}
 
 		/// <summary>The best move available.</summary>
-		public static MoveDirection BestMove { get; set; }
+		public static Vindinium.App.Move BestMove { get; set; }
 	}
 }

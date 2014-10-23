@@ -22,7 +22,7 @@ namespace Vindinium.Njord
 			this.HeatMap = new double[this.Map.Width, this.Map.Height];
 		}
 
-		public override MoveDirection GetMove()
+		public override Move GetMove()
 		{
 			var sw = new Stopwatch();
 			sw.Start();
@@ -35,9 +35,10 @@ namespace Vindinium.Njord
 			var values = location.Directions.ToDictionary(d => d, d=> HeatMap.Get(location[d]));
 			var direction = values.OrderByDescending(kvp => kvp.Value).First().Key;
 
-			Console.WriteLine("{0,4} {1} {2,6}µs", this.State.Turn, direction, (1000.0 * sw.Elapsed.TotalMilliseconds).ToString("#,##0"));
+			var evaluation = String.Format("{0,4} {1} {2,6}µs", this.State.Turn, direction, (1000.0 * sw.Elapsed.TotalMilliseconds).ToString("#,##0"));
+			Console.WriteLine(evaluation);
 			sw.Stop();
-			return direction;
+			return new Move(direction, evaluation);
 		}
 
 		private void UpdateBlocked()

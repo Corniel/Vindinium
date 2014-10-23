@@ -36,7 +36,7 @@ namespace Vindinium.DrunkenViking
 			}
 		}
 
-		public override MoveDirection GetMove()
+		public override Move GetMove()
 		{
 			UpdateState();
 
@@ -47,17 +47,18 @@ namespace Vindinium.DrunkenViking
 			{
 				if (strategy.Applies(this.State, location, hero, this.Player))
 				{
-					var move = strategy.GetMove(this.State, location, hero, this.Player);
-					Console.WriteLine("{0,4} Move: {1}, Gold: {2}, Strategy: {3}",
+					var direction = strategy.GetMove(this.State, location, hero, this.Player);
+					var evaluation = String.Format("{0,4} Move: {1}, Gold: {2}, Strategy: {3}",
 						this.State.Turn,
-						move,
+						direction,
 						hero.Gold,
 						strategy.GetType().Name.Replace("Strategy", ""));
 
-					return move;
+					Console.WriteLine(evaluation);
+					return new Move(direction, evaluation);
 				}
 			}
-			return MoveDirection.x;
+			return Move.None;
 		}
 	}
 }

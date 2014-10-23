@@ -53,6 +53,9 @@ namespace Vindinium.Logging
 		[XmlAttribute("h4")]
 		public string Hero4String { get; set; }
 
+		[XmlAttribute("e")]
+		public string Evaluation { get; set; }
+
 		[XmlIgnore]
 		public Vindinium.Hero Hero4
 		{

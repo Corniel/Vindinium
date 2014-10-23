@@ -69,7 +69,7 @@ namespace Vindinium.App
 						var move = GetMove();
 
 						LogTurn();
-						this.Client.Move(move);
+						this.Client.Move(move.Direction);
 						LogMove(move);
 					}
 					catch (WebException x)
@@ -99,11 +99,15 @@ namespace Vindinium.App
 			}
 		}
 
-		private void LogMove(MoveDirection move)
+		private void LogMove(Move move)
 		{
 			if (Logging.Game.GamesDir != null)
 			{
-				this.Game.Turns.Last().Move = move.ToString();
+				this.Game.Turns.Last().Move = move.ToLogMove();
+				if (!string.IsNullOrEmpty(move.Evaluation))
+				{
+					this.Game.Turns.Last().Evaluation = move.Evaluation;
+				}
 
 				foreach (var p in PlayerTypes.All)
 				{
@@ -165,7 +169,7 @@ namespace Vindinium.App
 		}
 
 		/// <summary>Get the move of the bot. </summary>
-		public abstract MoveDirection GetMove();
+		public abstract Move GetMove();
 
 		/// <summary>Updates the state of the bot.</summary>
 		protected void UpdateState()

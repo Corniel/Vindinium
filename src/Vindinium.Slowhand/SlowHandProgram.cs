@@ -23,7 +23,7 @@ namespace Vindinium.SlowHand
 		public MoveDirection Move { get; protected set; }
 
 		
-		public override MoveDirection GetMove()
+		public override Move GetMove()
 		{
 			var sw = new Stopwatch();
 			sw.Start();
@@ -66,7 +66,7 @@ namespace Vindinium.SlowHand
 
 			Console.Clear();
 			Render();
-			return this.Move;
+			return new Move(this.Move);
 		}
 
 		private void Render()

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Move.cs" />
     <Compile Include="App\Program.cs" />
     <Compile Include="Bits.cs">
       <SubType>Code</SubType>
