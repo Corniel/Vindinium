@@ -1,14 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using Vindinium.Serialization;
 
 namespace Vindinium.UnitTests.Serialization
 {
-	[TestClass]
+	[TestFixture]
 	public class GameResponseTest
 	{
-		[TestMethod]
+		[Test]
 		public void ToJson_Object_AreEqual()
 		{
 			var response = new GameResponse()
@@ -40,7 +40,7 @@ namespace Vindinium.UnitTests.Serialization
 
 		}
 
-		[TestMethod]
+		[Test]
 		public void FromJson_GameResponseString_AreEqual()
 		{
 			var json = "";
