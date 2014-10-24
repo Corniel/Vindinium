@@ -12,24 +12,12 @@ namespace Vindinium
 		Hero4 = 4,
 	}
 
-	public static class PlayerTypes
+	public static class PlayerTypeExensions
 	{
-		/// <summary>Gets all player types.</summary>
-		public static PlayerType[] All = new PlayerType[] { PlayerType.Hero1, PlayerType.Hero2, PlayerType.Hero3, PlayerType.Hero4 };
-
 		/// <summary>Gets the others for a player type.</summary>
-		public static readonly Dictionary<PlayerType, PlayerType[]> Other = new Dictionary<PlayerType, PlayerType[]>()
+		public static PlayerType Next(this PlayerType playerToMove)
 		{
-			{ PlayerType.Hero1, new PlayerType[]{ PlayerType.Hero2, PlayerType.Hero3, PlayerType.Hero4 } },
-			{ PlayerType.Hero2, new PlayerType[]{ PlayerType.Hero3, PlayerType.Hero4, PlayerType.Hero1 } },
-			{ PlayerType.Hero3, new PlayerType[]{ PlayerType.Hero4, PlayerType.Hero1, PlayerType.Hero2 } },
-			{ PlayerType.Hero4, new PlayerType[]{ PlayerType.Hero1, PlayerType.Hero2, PlayerType.Hero3 } },
-		};
-
-		/// <summary>Gets the others for a player type.</summary>
-		public static PlayerType Next(PlayerType playerToMove)
-		{
-			return Other[playerToMove][0];
+			return PlayerTypes.Other[playerToMove][0];
 		}
 
 		public static bool IsOppo(this PlayerType player, PlayerType check)

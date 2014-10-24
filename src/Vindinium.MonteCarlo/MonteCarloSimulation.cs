@@ -112,7 +112,7 @@ namespace Vindinium
 				return score;
 			}
 
-			playerToMove = PlayerTypes.Next(playerToMove);
+			playerToMove = playerToMove.Next();
 			hero = new_state.GetHero(playerToMove);
 			source = map[hero];
 			target = hero.IsCrashed ? source : source.Neighbors[rnd.Next(source.Neighbors.Length)];

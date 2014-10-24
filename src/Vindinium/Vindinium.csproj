@@ -93,6 +93,7 @@
     <Compile Include="PlayerType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PlayerTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\Board.cs" />
     <Compile Include="Serialization\Game.cs" />
