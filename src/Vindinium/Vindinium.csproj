@@ -106,6 +106,9 @@
     <Compile Include="Tile.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TileExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TileType.cs">
       <SubType>Code</SubType>
     </Compile>
