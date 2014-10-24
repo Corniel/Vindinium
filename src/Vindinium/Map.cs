@@ -110,6 +110,8 @@ namespace Vindinium
 		
 		/// <summary>Gets the Tavernes of the map.</summary>
 		public Tile[] Tavernes { get; protected set; }
+		/// <summary>Gets the tiles that are neighbors of Tavernes.</summary>
+		public Tile[] TaverneNeighbors { get; protected set; }
 		/// <summary>Gets the mines of the map.</summary>
 		public Tile[] Mines { get; protected set; }
 
@@ -319,7 +321,8 @@ namespace Vindinium
 		}
 		private void AssignTavernes()
 		{
-			this.Tavernes = m_All.Where(tile => tile.TileType == TileType.Taverne).ToArray();
+			this.Tavernes = m_All.Where(tile => tile.IsTaverne).ToArray();
+			this.TaverneNeighbors = m_All.Where(tile => tile.Neighbors.Any(n => n.IsTaverne) && tile.IsPassable).ToArray();
 			this.DistanceToTaverne = GetDistances(this.Tavernes);
 		}
 

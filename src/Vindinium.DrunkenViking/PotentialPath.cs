@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Vindinium.DrunkenViking.Strategies
+namespace Vindinium.DrunkenViking
 {
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class PotentialPath
@@ -13,7 +13,8 @@ namespace Vindinium.DrunkenViking.Strategies
 		public Tile Source { get; protected set; }
 		public int Health { get; protected set; }
 		public IMineOwnership Mines { get; protected set; }
-		public MoveDirection[] Directions { get; protected set; }
+		public MoveDirections Directions { get; protected set; }
+		public List<PotentialOpponent> Opponents { get; set; }
 		public int Profit { get; protected set; }
 
 		public SafePath ToSafePath(PlayerType player, int turns, int profit)
@@ -31,24 +32,26 @@ namespace Vindinium.DrunkenViking.Strategies
 					this.Turns,
 					this.Health,
 					this.Profit,
-					this.Directions == null ? "<none>" : String.Join(", ", this.Directions));
+					this.Directions.DebuggerDisplay);
 			}
 		}
 		public override string ToString() { return this.DebuggerDisplay; }
 
-		public static PotentialPath Initial(Tile source, State state)
+		public static PotentialPath Initial(Tile source, Map map, State state)
 		{
 			return new PotentialPath()
 			{
 				Source = source,
 				Health = state.GetActiveHero().Health,
 				Mines = state.Mines,
+				Opponents = PotentialOpponent.Create(map, state).ToList(),
 			};
 		}
-		public static PotentialPath CreateFollowUp(Tile source, int health, IMineOwnership mines, MoveDirection[] directions, int turns, int profit)
+		public PotentialPath CreateFollowUp(Tile source, int health, IMineOwnership mines, MoveDirections directions, int turns, int profit)
 		{
 			return new PotentialPath()
 			{
+				Opponents = this.Opponents,
 				Source = source,
 				Health = health,
 				Mines = mines,

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace Vindinium.DrunkenViking.Strategies
+namespace Vindinium.DrunkenViking
 {
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class SafePath :  IEquatable<SafePath>
 	{
+		public static readonly SafePath NoPath = new SafePath(0, 1, 0, MoveDirection.x);
+
 		public SafePath(int mines, int turns, int profit, params MoveDirection[] directions)
 		{
 			if (turns < 1) { throw new ArgumentOutOfRangeException("turns", "At least on turn should be involved."); }
@@ -58,6 +59,14 @@ namespace Vindinium.DrunkenViking.Strategies
 				this.Turns == other.Turns &&
 				this.Profit == other.Profit &&
 				this.Directions.Equals(other.Directions);
+		}
+
+		public string Evaluation
+		{
+			get
+			{
+				return DebuggerDisplay;
+			}
 		}
 	}
 }

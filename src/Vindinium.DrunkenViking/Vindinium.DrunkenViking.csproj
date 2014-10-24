@@ -47,28 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrunkenVikingBot.cs" />
+    <Compile Include="Processors\DrinkBeerProcessor.cs" />
+    <Compile Include="Processors\Processor.cs" />
+    <Compile Include="Processors\ToTavernePorcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\PotentialOpponent.cs" />
-    <Compile Include="Strategies\PotentialPath.cs" />
-    <Compile Include="Strategies\SafePath.cs" />
-    <Compile Include="Strategies\RandomStrategy.cs" />
-    <Compile Include="Strategies\SafePathCollection.cs" />
-    <Compile Include="Strategies\SafePathComparer.cs" />
-    <Compile Include="Strategies\SafePathStrategy.cs" />
-    <Compile Include="Strategies\ToNearestEmptyMineStrategy.cs" />
-    <Compile Include="Strategies\ToNearestSafeMineStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Strategies\ToNearestSafeTaverneStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Strategies\ToNearestTaverneStrategy.cs" />
-    <Compile Include="Strategies\ToTrippleMineStrategy.cs" />
-    <Compile Include="Strategies\ToDoubleMineStrategy.cs" />
-    <Compile Include="Strategy.cs" />
-    <Compile Include="Strategies\SuicideStrategy.cs" />
-    <Compile Include="Strategies\ToNearestMineStrategy.cs" />
-    <Compile Include="TileClaim.cs" />
+    <Compile Include="PotentialOpponent.cs" />
+    <Compile Include="PotentialPath.cs" />
+    <Compile Include="SafePath.cs" />
+    <Compile Include="SafePathCollection.cs" />
+    <Compile Include="SafePathComparer.cs" />
+    <Compile Include="Processors\ToMineProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

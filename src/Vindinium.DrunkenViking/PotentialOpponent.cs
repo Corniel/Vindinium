@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vindinium.DrunkenViking.Strategies
+namespace Vindinium.DrunkenViking
 {
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	public class PotentialOpponent
@@ -96,8 +96,28 @@ namespace Vindinium.DrunkenViking.Strategies
 			foreach (var player in PlayerTypes.Other[state.PlayerToMove])
 			{
 				var hero = state.GetHero(player);
+				var health = hero.Health;
+				var source = map[hero];
 
-				yield return new PotentialOpponent(player, 0, hero.Health, map[hero], hero.IsCrashed);
+				yield return new PotentialOpponent(player, 0, hero.Health, source, hero.IsCrashed);
+
+				if (!hero.IsCrashed)
+				{
+					foreach (var target in map.TaverneNeighbors)
+					{
+						var time = (int)map.GetDistances(target).Get(source);
+
+						var healthNew = Math.Max(Hero.HealthMin, health - time);
+
+						while(healthNew < Hero.HealthMax)
+						{
+							time++;
+							healthNew = Math.Max(Hero.HealthMin, healthNew - 1);
+							healthNew = Math.Min(Hero.HealthMax, healthNew + Hero.HealthTavern);
+							yield return new PotentialOpponent(player, time, healthNew, target);
+						}
+					}
+				}
 			}
 		}
 	}

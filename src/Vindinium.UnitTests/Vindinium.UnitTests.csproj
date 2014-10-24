@@ -61,7 +61,9 @@
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
     <Compile Include="Deployment\Deployer.cs" />
     <Compile Include="DistanceTest.cs" />
-    <Compile Include="DrunkenViking\Stragties\SafePathCollectionTest.cs" />
+    <Compile Include="DrunkenViking\PotentialPathAssert.cs" />
+    <Compile Include="DrunkenViking\Processors\DrinkBeerProcessorTest.cs" />
+    <Compile Include="DrunkenViking\SafePathCollectionTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="MineOwnership128Test.cs">

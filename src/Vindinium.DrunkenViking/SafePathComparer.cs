@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vindinium.DrunkenViking.Strategies
+namespace Vindinium.DrunkenViking
 {
 	public class SafePathComparer: IComparer<SafePath>
 	{
