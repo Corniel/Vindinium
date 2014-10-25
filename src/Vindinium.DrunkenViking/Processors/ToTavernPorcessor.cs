@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Vindinium.DrunkenViking.Processors
 {
-	public class ToTavernePorcessor : Processor
+	public class ToTavernPorcessor : Processor
 	{
 		public override void Process(PotentialPath potentialPath, SafePathCollection collection)
 		{
-			foreach (var taverne in this.Map.Tavernes)
+			foreach (var Tavern in this.Map.Taverns)
 			{
-				foreach (var target in taverne.Neighbors.Where(n => n.IsPassable))
+				foreach (var target in Tavern.Neighbors.Where(n => n.IsPassable))
 				{
-					ProcessToTaverne(potentialPath, target, collection);
+					ProcessToTavern(potentialPath, target, collection);
 				}
 			}
 		}
 
-		public void ProcessToTaverne(PotentialPath potentialPath, Tile target, SafePathCollection collection)
+		public void ProcessToTavern(PotentialPath potentialPath, Tile target, SafePathCollection collection)
 		{
 			var source = potentialPath.Source;
 			var distances = GetEmptyDistances();
@@ -30,7 +30,7 @@ namespace Vindinium.DrunkenViking.Processors
 			var health = potentialPath.Health;
 			var turns = potentialPath.Turns;
 
-			// We don't consider it a safe path (yet) when we are already beside a Taverne.
+			// We don't consider it a safe path (yet) when we are already beside a Tavern.
 			if (potentialPath.Turns == 0 && startDistance == Distance.Zero) { return; }
 
 			var queue = new Queue<Tile>();
@@ -82,7 +82,7 @@ namespace Vindinium.DrunkenViking.Processors
 						.Where(dir => distances.Get(source[dir]) < startDistance)
 						.ToArray();
 
-					// We just found a direct safe paht to a taverne.
+					// We just found a direct safe paht to a Tavern.
 					collection.Add(new SafePath(potentialPath.Mines.Count(this.PlayerToMove), turns, profit, directions));
 				}
 				else

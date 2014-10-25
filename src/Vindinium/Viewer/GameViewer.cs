@@ -30,7 +30,7 @@ namespace Vindinium.Viewer
 							Write(mine, ToConsoleColor(state.Mines[tile.MineIndex]));
 							
 						}
-						else if (tile.TileType == TileType.Taverne)
+						else if (tile.TileType == TileType.Tavern)
 						{
 							Write("[]", ConsoleColor.Yellow, ConsoleColor.Black);
 						}

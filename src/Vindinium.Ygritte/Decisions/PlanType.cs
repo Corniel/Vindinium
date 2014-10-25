@@ -4,12 +4,12 @@
 	{
 		Crashed,
 
-		ToMineClosetToTaverne,
+		ToMineClosetToTavern,
 		ToMine,
 		ToFreeMine,
 		ToOwnMine,
 
-		ToTaverne,
+		ToTavern,
 
 		Combat,
 

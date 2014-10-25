@@ -49,7 +49,7 @@
     <Compile Include="DrunkenVikingBot.cs" />
     <Compile Include="Processors\DrinkBeerProcessor.cs" />
     <Compile Include="Processors\Processor.cs" />
-    <Compile Include="Processors\ToTavernePorcessor.cs" />
+    <Compile Include="Processors\ToTavernPorcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PotentialOpponent.cs" />
     <Compile Include="PotentialPath.cs" />

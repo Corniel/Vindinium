@@ -9,7 +9,7 @@ namespace Vindinium.UnitTests.DrunkenViking.Processors
 	public class DrinkBeerProcessorTest
 	{
 		[Test]
-		public void Process_Health100BesideATaverne_NoPaths()
+		public void Process_Health100BesideATavern_NoPaths()
 		{
 			var map = MapTest.Map10Mines8;
 			var state = State.Create(0,
@@ -32,7 +32,7 @@ namespace Vindinium.UnitTests.DrunkenViking.Processors
 		}
 
 		[Test]
-		public void Process_Health99BesideATaverne_NoPaths()
+		public void Process_Health99BesideATavern_NoPaths()
 		{
 			var map = MapTest.Map10Mines8;
 			var state = State.Create(0,
@@ -55,7 +55,7 @@ namespace Vindinium.UnitTests.DrunkenViking.Processors
 		}
 
 		[Test]
-		public void Process_Health98BesideATaverne_1Paths()
+		public void Process_Health98BesideATavern_1Paths()
 		{
 			var map = MapTest.Map10Mines8;
 			var state = State.Create(0,
@@ -82,7 +82,7 @@ namespace Vindinium.UnitTests.DrunkenViking.Processors
 		}
 
 		[Test]
-		public void Process_Health50BesideATaverne_1Paths()
+		public void Process_Health50BesideATavern_1Paths()
 		{
 			var map = MapTest.Map10Mines8;
 			var state = State.Create(0,
@@ -108,7 +108,7 @@ namespace Vindinium.UnitTests.DrunkenViking.Processors
 			PotentialPathAssert.AreEqual(1, source, 99, mines, MoveDirections.E, -2, act[0]);
 		}
 		[Test]
-		public void Process_Health49BesideATaverne_1Paths()
+		public void Process_Health49BesideATavern_1Paths()
 		{
 			var map = MapTest.Map10Mines8;
 			var state = State.Create(0,

@@ -15,7 +15,7 @@ namespace Vindinium
 		GoldMine4 = 8,
 		GoldMine = 9,
 		Empty = 10,
-		Taverne = 11,
+		Tavern = 11,
 		Impassable = 12,
 		 
 	}
@@ -40,7 +40,7 @@ namespace Vindinium
 				case "$3": return TileType.GoldMine3;
 				case "$4": return TileType.GoldMine4;
 
-				case "[]": return TileType.Taverne;
+				case "[]": return TileType.Tavern;
 
 				case "##": return TileType.Impassable;
 

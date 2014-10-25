@@ -119,7 +119,7 @@ namespace Vindinium.UnitTests
 			var act = Map06;
 
 			Assert.AreEqual(4, act.Mines.Length, "Mines");
-			Assert.AreEqual(4, act.Tavernes.Length, "Tavernes");
+			Assert.AreEqual(4, act.Taverns.Length, "Taverns");
 			Assert.AreEqual(36, act.Count, "act.Count");
 		}
 
@@ -129,7 +129,7 @@ namespace Vindinium.UnitTests
 			var act = Map20;
 
 			Assert.AreEqual(28, act.Mines.Length, "Mines");
-			Assert.AreEqual(4, act.Tavernes.Length, "Tavernes");
+			Assert.AreEqual(4, act.Taverns.Length, "Taverns");
 			Assert.AreEqual(212, act.Count, "act.Count");
 
 			Assert.AreEqual("Tile[3,0] GoldMine, Neighbors: 2", act.Mines[0].DebugToString());
@@ -205,7 +205,7 @@ namespace Vindinium.UnitTests
 		public void GetDistances_TileTwice_CalculatedOnces()
 		{
 			var map = MapTest.Map06;
-			var target = map.Tavernes[0];
+			var target = map.Taverns[0];
 
 			map.ClearDistances();
 			Assert.AreEqual(0, map.DistancesCount, "Distances Count before.");
@@ -223,7 +223,7 @@ namespace Vindinium.UnitTests
 		public void GetDistances_TilesWithEnermies_DistancesArray()
 		{
 			var map = MapTest.Map20;
-			var targets = map.Tavernes;
+			var targets = map.Taverns;
 			var oppos = new Tile[]{ map[4,0], map[7, 17]};
 
 			Distance[,] distances = MapTest.Map20.GetDistances(targets, oppos);

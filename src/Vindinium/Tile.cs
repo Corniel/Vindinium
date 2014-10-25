@@ -21,8 +21,8 @@ namespace Vindinium
 			this.Targets = m_Targets.Values.ToArray();
 
 			this.IsMine = tp >= TileType.GoldMine1 && tp <= TileType.GoldMine;
-			this.IsTaverne = tp == TileType.Taverne;
 			this.IsPassable = tp == TileType.Empty || (tp >= TileType.Hero1 && tp <= TileType.Hero4);
+			this.MineNeighbors = new Tile[0];
 		}
 
 		public int X { get; protected set; }
@@ -31,9 +31,24 @@ namespace Vindinium
 
 		public TileType TileType { get; protected set; }
 
-		public bool IsMine { get; protected set; }
-		public bool IsTaverne { get; protected set; }
+		/// <summary>Returns true if the tile can be passed b a hero.</summary>
+		/// <remarks>
+		/// THe type of a passable tile is Empty, or Spawn(1-4).
+		/// </remarks>
 		public bool IsPassable { get; internal set; }
+		public bool IsMine { get; protected set; }
+
+		/// <summary>Gets the index of the mine.</summary>
+		public int MineIndex { get; internal set; }
+
+		public bool IsTavern { get { return this.TileType == TileType.Tavern; } }
+
+		public bool IsBesidesTavern { get { return this.TavernNeighbor != null; } }
+		public Tile TavernNeighbor { get; protected set; }
+
+		public bool IsBesidesMine { get { return this.MineNeighborCount != 0; } }
+		public int MineNeighborCount { get { return this.MineNeighbors.Length; } }
+		public Tile[] MineNeighbors { get; protected set; }
 
 		/// <summary>Gets the player type of the hero who occupies the tile.</summary>
 		/// <remarks>
@@ -50,10 +65,6 @@ namespace Vindinium
 			}
 			return PlayerType.None;
 		}
-
-		/// <summary>Gets the index of the mine.</summary>
-		public int MineIndex { get; internal set; }
-		
 
 		public Tile[] Neighbors { get; protected set; }
 		public Tile[] Targets { get; protected set; }
@@ -83,6 +94,12 @@ namespace Vindinium
 
 			// All possible directions including stay.
 			this.Directions = m_Targets.Keys.Where(d => m_Targets[d] != null).ToArray();
+
+			if (this.IsPassable)
+			{
+				this.TavernNeighbor = this.Neighbors.FirstOrDefault(n => n.IsTavern);
+				this.MineNeighbors = this.Neighbors.Where(n => n.IsMine).ToArray();
+			}
 		}
 
 		[ExcludeFromCodeCoverage]

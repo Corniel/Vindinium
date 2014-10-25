@@ -225,7 +225,7 @@ namespace Vindinium
 					target = source;
 				}
 				// Drink a beer.
-				else if (target.TileType == TileType.Taverne)
+				else if (target.TileType == TileType.Tavern)
 				{
 					target = source;
 

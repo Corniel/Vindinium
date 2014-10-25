@@ -177,26 +177,26 @@ namespace Vindinium.Ygritte.Decisions
 				// We are winning, keep the position.
 				if (mines >= (map.Mines.Length >> 1))
 				{
-					plans.Add(PlanType.ToTaverne);
+					plans.Add(PlanType.ToTavern);
 
-					if (map.GetDistanceToTaverne(hero) == Distance.One)
+					if (map.GetDistanceToTavern(hero) == Distance.One)
 					{
 						plans.Add(PlanType.Stay);
 					}
 				}
 
-				// If beside a taverne, 
+				// If beside a Tavern, 
 				// or weak, 
 				// check if usefull.
-				else if (health < (Hero.HealthBattle << 1) || (map.GetDistanceToTaverne(hero) == Distance.One && health < Hero.HealthMax - Hero.HealthBattle))
+				else if (health < (Hero.HealthBattle << 1) || (map.GetDistanceToTavern(hero) == Distance.One && health < Hero.HealthMax - Hero.HealthBattle))
 				{
-					plans.Add(PlanType.ToTaverne);
+					plans.Add(PlanType.ToTavern);
 				}
 				
 				// only when we can conquer it.
 				if (health > Hero.HealthBattle)
 				{
-					plans.Add(PlanType.ToMineClosetToTaverne);
+					plans.Add(PlanType.ToMineClosetToTavern);
 					plans.Add(PlanType.ToMine);
 					plans.Add(PlanType.ToFreeMine);
 

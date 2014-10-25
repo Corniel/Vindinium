@@ -108,12 +108,14 @@ namespace Vindinium
 		/// <summary>Gets the width of the map.</summary>
 		public int Width { get { return m_Tiles.GetLength(0); } }
 		
-		/// <summary>Gets the Tavernes of the map.</summary>
-		public Tile[] Tavernes { get; protected set; }
-		/// <summary>Gets the tiles that are neighbors of Tavernes.</summary>
-		public Tile[] TaverneNeighbors { get; protected set; }
+		/// <summary>Gets the taverns of the map.</summary>
+		public Tile[] Taverns { get; protected set; }
+		/// <summary>Gets the passable tiles that are neighbors of taverns.</summary>
+		public Tile[] TavernNeighbors { get; protected set; }
 		/// <summary>Gets the mines of the map.</summary>
 		public Tile[] Mines { get; protected set; }
+		/// <summary>Gets the passable tiles that are neighbors of mines.</summary>
+		public Tile[] MineNeighbors { get; protected set; }
 
 		/// <summary>Gets the (re)spawn tile for a player.</summary>
 		public Tile GetSpawn(PlayerType player)
@@ -148,8 +150,8 @@ namespace Vindinium
 					{
 						spawn.IsPassable = false;
 					}
-					// maybe a taverne is not longer available.
-					this.DistanceToTaverne = GetDistances(this.Tavernes);
+					// maybe a Tavern is not longer available.
+					this.DistanceToTavern = GetDistances(this.Taverns);
 					
 					// maybe the paths are not longer equal.
 					ClearDistances();
@@ -185,7 +187,7 @@ namespace Vindinium
 			map.AssignNeighbors();
 			map.AssignMines();
 			map.AssignSpawns();
-			map.AssignTavernes();
+			map.AssignTaverns();
 
 			map.LogMap(lines);
 			return map;
@@ -271,6 +273,7 @@ namespace Vindinium
 			{
 				m_Tiles[tile.X, tile.Y] = tile;
 			}
+			this.MineNeighbors = m_All.Where(t => t.IsBesidesMine).ToArray();
 		}
 		private void AssignMines()
 		{
@@ -319,11 +322,11 @@ namespace Vindinium
 			this.Spawn3 = m_All.First(tile => tile.TileType == TileType.Hero3);
 			this.Spawn4 = m_All.First(tile => tile.TileType == TileType.Hero4);
 		}
-		private void AssignTavernes()
+		private void AssignTaverns()
 		{
-			this.Tavernes = m_All.Where(tile => tile.IsTaverne).ToArray();
-			this.TaverneNeighbors = m_All.Where(tile => tile.Neighbors.Any(n => n.IsTaverne) && tile.IsPassable).ToArray();
-			this.DistanceToTaverne = GetDistances(this.Tavernes);
+			this.Taverns = m_All.Where(tile => tile.IsTavern).ToArray();
+			this.TavernNeighbors = m_All.Where(tile => tile.IsBesidesTavern).ToArray();
+			this.DistanceToTavern = GetDistances(this.Taverns);
 		}
 
 		/// <summary>Gets a distances map for the specified target.</summary>
@@ -458,15 +461,15 @@ namespace Vindinium
 			return distances;
 		}
 
-		public Distance GetDistanceToTaverne(Hero hero)
+		public Distance GetDistanceToTavern(Hero hero)
 		{
-			return DistanceToTaverne.Get(this[hero]);
+			return DistanceToTavern.Get(this[hero]);
 		}
-		public Distance GetDistanceToTaverne(Tile tile)
+		public Distance GetDistanceToTavern(Tile tile)
 		{
-			return DistanceToTaverne.Get(tile);
+			return DistanceToTavern.Get(tile);
 		}
-		private Distance[,] DistanceToTaverne { get; set; }
+		private Distance[,] DistanceToTavern { get; set; }
 
 		public override string ToString()
 		{
@@ -486,7 +489,7 @@ namespace Vindinium
 					{
 						sb.Append("$-");
 					}
-					else if (tile.TileType == TileType.Taverne)
+					else if (tile.TileType == TileType.Tavern)
 					{
 						sb.Append("[]");
 					}
@@ -543,7 +546,7 @@ namespace Vindinium
 							case PlayerType.Hero4: sb.Append("$4"); break;
 						}
 					}
-					else if (tile.TileType == TileType.Taverne)
+					else if (tile.TileType == TileType.Tavern)
 					{
 						sb.Append("[]");
 					}

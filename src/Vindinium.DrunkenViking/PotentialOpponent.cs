@@ -103,7 +103,7 @@ namespace Vindinium.DrunkenViking
 
 				if (!hero.IsCrashed)
 				{
-					foreach (var target in map.TaverneNeighbors)
+					foreach (var target in map.TavernNeighbors)
 					{
 						var time = (int)map.GetDistances(target).Get(source);
 

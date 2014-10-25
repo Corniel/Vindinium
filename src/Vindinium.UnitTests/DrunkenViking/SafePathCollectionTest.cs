@@ -7,7 +7,7 @@ namespace Vindinium.UnitTests.DrunkenViking
 	[TestFixture]
 	public class SafePathCollectionTest
 	{
-		/// <summary>Get 1 mine and walk to a taverne.</summary>
+		/// <summary>Get 1 mine and walk to a Tavern.</summary>
 		/// <remarks>
 		///  1 2 3########    @2 
 		/// $-  @1[]####[]..  $-
@@ -44,7 +44,7 @@ namespace Vindinium.UnitTests.DrunkenViking
 			Assert.AreEqual(exp, act);
 		}
 
-		/// <summary>Do a run a long 4 mines and hit the taverne.</summary>
+		/// <summary>Do a run a long 4 mines and hit the Tavern.</summary>
 		/// <remarks>
 		/// ##  []########[]@2##
 		///     ..########15    
@@ -82,7 +82,7 @@ namespace Vindinium.UnitTests.DrunkenViking
 		}
 
 
-		/// <summary>Do a run a long 4 mines and hit the taverne.</summary>
+		/// <summary>Do a run a long 4 mines and hit the Tavern.</summary>
 		/// <remarks>
 		/// ##@2[]########[]  ##
 		///     ..########      

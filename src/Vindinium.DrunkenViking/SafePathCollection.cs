@@ -76,7 +76,7 @@ namespace Vindinium.DrunkenViking
 			{
 				new DrinkBeerProcessor(),
 				new ToMineProcessor(),
-				new ToTavernePorcessor(),
+				new ToTavernPorcessor(),
 			};
 			foreach (var processor in processors)
 			{

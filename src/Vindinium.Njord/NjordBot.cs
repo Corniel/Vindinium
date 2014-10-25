@@ -108,12 +108,12 @@ namespace Vindinium.Njord
 
 			if (hero.Health < Hero.HealthMax - Hero.HealthBattle)
 			{
-				// Set taverne scores.
-				foreach (var taverne in this.Map.Tavernes)
+				// Set Tavern scores.
+				foreach (var Tavern in this.Map.Taverns)
 				{
-					var score = this.HeatMap.Get(taverne);
+					var score = this.HeatMap.Get(Tavern);
 					score += 0.01 * (100 - hero.Health);
-					this.HeatMap.Set(taverne, score);
+					this.HeatMap.Set(Tavern, score);
 				}
 			}
 			var iterations = 1 + System.Math.Min((1200 - this.State.Turn) >> 2, 19);

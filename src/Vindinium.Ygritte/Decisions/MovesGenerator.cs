@@ -53,12 +53,12 @@ namespace Vindinium.Ygritte.Decisions
 				case PlanType.Crashed: moves.Add(Move.Crashed); break;
 				case PlanType.Stay: moves.Add(Move.Stay); break;
 
-				case PlanType.ToMineClosetToTaverne: GetToMineClosetToTavernePaths(moves, map, state, source, hero, player); return;
+				case PlanType.ToMineClosetToTavern: GetToMineClosetToTavernPaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToMine: GetMinePaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToFreeMine: GetFreeMinePaths(moves, map, state, source, hero, player); return;
 				case PlanType.ToOwnMine: GetOwnMinePaths(moves, map, state, source, hero, player); return;
 
-				case PlanType.ToTaverne: GetTavernePaths(moves, map, state, source, hero, player); return;
+				case PlanType.ToTavern: GetTavernPaths(moves, map, state, source, hero, player); return;
 
 				case PlanType.Combat: GetCombatMoves(moves, map, state, source, hero, player); return;
 				
@@ -66,11 +66,11 @@ namespace Vindinium.Ygritte.Decisions
 			}
 		}
 
-		private void GetToMineClosetToTavernePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		private void GetToMineClosetToTavernPaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
 			var p = map.Mines
 				.Where(m => state.Mines[m.MineIndex] != player)
-				.OrderBy(m => map.GetDistanceToTaverne(m))
+				.OrderBy(m => map.GetDistanceToTavern(m))
 				.Select(t => GetMoveFromPath(map, t))
 				.Take(1);
 			moves.AddRange(p);
@@ -104,9 +104,9 @@ namespace Vindinium.Ygritte.Decisions
 			moves.AddRange(p);
 		}
 
-		private void GetTavernePaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
+		private void GetTavernPaths(List<Move> moves, Map map, State state, Tile source, Hero hero, PlayerType player)
 		{
-			var p = map.Tavernes
+			var p = map.Taverns
 				.Select(t => GetMoveFromPath(map, t))
 				.OrderBy(d => d.GetDistance(source))
 				.Take(2);
@@ -123,8 +123,8 @@ namespace Vindinium.Ygritte.Decisions
 				// some what close.
 				if (distance <= Node.CombatDistance)
 				{
-					var heroToTaverne = map.GetDistanceToTaverne(hero);
-					var oppoToTaverne = map.GetDistanceToTaverne(oppo);
+					var heroToTavern = map.GetDistanceToTavern(hero);
+					var oppoToTavern = map.GetDistanceToTavern(oppo);
 					var heroHealth = hero.Health;
 					var oppoHealth = oppo.Health;
 					var target = map[oppo];
@@ -134,22 +134,22 @@ namespace Vindinium.Ygritte.Decisions
 					var hitsPossible = (heroHealth + Hero.HealthBattle - 1)/ Hero.HealthBattle + (isOddDistance ? 1 : 0);
 
 					// are we interested in attacking?
-					// 1. We can kill the hero, and he has at least one mine or not on his own span, and he is not protected by a taverne.
-					if (oppoToTaverne > 1 && (oppo.Mines > 0 || target != map.GetSpawn(other)) && hitsPossible >= hitsNeaded)
+					// 1. We can kill the hero, and he has at least one mine or not on his own span, and he is not protected by a Tavern.
+					if (oppoToTavern > 1 && (oppo.Mines > 0 || target != map.GetSpawn(other)) && hitsPossible >= hitsNeaded)
 					{
 						moves.Add(new MoveAttack(other));
 						
-						// We are standing next to a taverne, we would like to investigate staying or drinking too.
-						if (heroToTaverne == 1)
+						// We are standing next to a Tavern, we would like to investigate staying or drinking too.
+						if (heroToTavern == 1)
 						{
-							var taverne = map.Tavernes.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
-							moves.Add(GetMoveFromPath(map, taverne));
+							var Tavern = map.Taverns.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
+							moves.Add(GetMoveFromPath(map, Tavern));
 							moves.Add(Move.Stay);
 						}
 						moves.Add(new MoveFlee(other));
 					}
 					// 2. We have no mines, and it looks like we will be killed anyway.
-					else if (heroToTaverne > 1 && hero.Mines == 0 && heroToTaverne > oppoToTaverne && hitsNeaded > hitsPossible)
+					else if (heroToTavern > 1 && hero.Mines == 0 && heroToTavern > oppoToTavern && hitsNeaded > hitsPossible)
 					{
 						moves.Add(new MoveAttack(other));
 						moves.Add(new MoveFlee(other));
@@ -157,11 +157,11 @@ namespace Vindinium.Ygritte.Decisions
 					// We prefer to flee.
 					else
 					{
-						// We are standing next to a taverne, we would like to investigate staying or drinking too.
-						if (heroToTaverne == 1)
+						// We are standing next to a Tavern, we would like to investigate staying or drinking too.
+						if (heroToTavern == 1)
 						{
-							var taverne = map.Tavernes.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
-							moves.Add(GetMoveFromPath(map, taverne));
+							var Tavern = map.Taverns.FirstOrDefault(m => Map.GetManhattanDistance(hero, m) == 1);
+							moves.Add(GetMoveFromPath(map, Tavern));
 							moves.Add(Move.Stay);
 						}
 						moves.Add(new MoveFlee(other));
