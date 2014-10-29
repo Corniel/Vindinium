@@ -33,9 +33,7 @@ namespace Vindinium.Viewer
 				}
 			}
 		}
-
 		
-
 		public Program() { }
 		public Ratings PlayerRatings { get; protected set; }
 		public List<Game> Games { get; protected set; }
@@ -234,7 +232,7 @@ namespace Vindinium.Viewer
 						gameFilter = string.Empty;
 						break;
 					case ConsoleKey.Backspace:
-						gameFilter = gameFilter.Substring(0, Math.Max(1, gameFilter.Length - 1));
+						gameFilter = String.IsNullOrEmpty(gameFilter) ? "" : gameFilter.Substring(0, Math.Max(1, gameFilter.Length - 1));
 						Console.Write("\r");
 						Console.Write(gameFilter + " ");
 						Console.CursorLeft = Console.CursorLeft - 1;
