@@ -20,7 +20,7 @@ namespace Vindinium.Viewer
 			Console.SetWindowSize(120, 40);
 
 			var program = Program.Load();
-			
+
 			while (true)
 			{
 				if (program.SelectedGame != null)
@@ -33,7 +33,7 @@ namespace Vindinium.Viewer
 				}
 			}
 		}
-		
+
 		public Program() { }
 		public Ratings PlayerRatings { get; protected set; }
 		public List<Game> Games { get; protected set; }
@@ -52,6 +52,29 @@ namespace Vindinium.Viewer
 				this.Games.Add(game);
 			}
 			this.Games = this.Games.OrderByDescending(g => g.CreationTime).ToList();
+
+
+			var shared = new DirectoryInfo(Path.Combine(Game.GamesDir.FullName, "Shared"));
+			if (!shared.Exists) { shared.Create(); }
+
+			var ids = this.Games.Select(game => game.Id).Distinct().ToList();
+
+			foreach (var id in ids)
+			{
+				var games = this.Games.Where(game => game.Id == id).ToList();
+				if (games.Count > 1)
+				{
+					var merge = Game.Merge(games);
+					merge.Save(shared);
+					
+					foreach (var game in games)
+					{
+						game.FileLocation.Delete();
+						this.Games.Remove(game);
+					}
+					this.Games.Add(merge);
+				}
+			}
 			Console.WriteLine();
 		}
 		private void ProcessRatings()
@@ -110,7 +133,7 @@ namespace Vindinium.Viewer
 			var turnMax = this.SelectedGame.Turns.Count - 1;
 			var rerender = true;
 			var map = this.SelectedGame.Map.Mp;
-	
+
 			while (true)
 			{
 				if (rerender)
@@ -137,7 +160,7 @@ namespace Vindinium.Viewer
 							hero.Mines,
 							hero.Gold,
 							hero.Gold + hero.Mines * ((1195 + (int)p - state.Turn) >> 2),
-							player.Name.Substring(0, Math.Min(16, player.Name.Length)) + (hero.IsCrashed ? "*": ""),
+							player.Name.Substring(0, Math.Min(16, player.Name.Length)) + (hero.IsCrashed ? "*" : ""),
 							player.Elo
 						);
 					}
@@ -147,7 +170,7 @@ namespace Vindinium.Viewer
 						Console.WriteLine(this.SelectedGame.Turns[turn].Evaluation);
 						RenderSingleLine();
 					}
-					
+
 					viewer.Render(map, state);
 				}
 
@@ -227,7 +250,7 @@ namespace Vindinium.Viewer
 						RenderGamesOverview();
 						break;
 					case ConsoleKey.Delete:
-						Console.Write("\r"+ new string(' ', gameFilter.Length));
+						Console.Write("\r" + new string(' ', gameFilter.Length));
 						Console.CursorLeft = 0;
 						gameFilter = string.Empty;
 						break;
@@ -284,7 +307,7 @@ namespace Vindinium.Viewer
 			var filter = (this.GameFilter ?? String.Empty).Trim().ToLower();
 			foreach (var game in this.Games)
 			{
-				if(String.IsNullOrEmpty(filter) || 
+				if (String.IsNullOrEmpty(filter) ||
 					game.Heros.Any(hero => hero.Name.ToLower().Contains(filter)))
 				{
 					yield return game;

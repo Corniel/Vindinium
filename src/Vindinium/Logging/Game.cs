@@ -62,6 +62,34 @@ namespace Vindinium.Logging
 		[XmlElement("Turn")]
 		public List<Turn> Turns { get; set; }
 
+		public static Game Merge(IEnumerable<Game> games)
+		{
+			if (!games.Any()) { return null; }
+			var first = games.First();
+
+			var result = new Game()
+			{
+				Id = first.Id,
+				CreationTime = first.CreationTime,
+				Rated = first.Rated,
+				Turns = first.Turns,
+				Heros = first.Heros,
+				Map = first.Map,
+			};
+
+			foreach (var game in games.Skip(1))
+			{
+				if (game.CreationTime < result.CreationTime)
+				{
+					result.CreationTime = game.CreationTime;
+				}
+				result.Turns.AddRange(game.Turns);
+			}
+
+			result.Turns = result.Turns.OrderBy(t => t.Id).ToList();
+			return result;
+		}
+
 		#region I/O operations
 
 		public void Save() { Save(GamesDir); }
@@ -91,6 +119,7 @@ namespace Vindinium.Logging
 		{
 			using (var stream = new FileStream(file.FullName, mode, FileAccess.Write))
 			{
+				this.FileLocation = file;
 				Save(stream);
 			}
 		}
