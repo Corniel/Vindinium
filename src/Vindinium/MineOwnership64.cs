@@ -40,6 +40,10 @@ namespace Vindinium
 			}
 		}
 
+		public IMineOwnership ChangeOwnership(PlayerType curOwner, PlayerType newOwner)
+		{
+			return ChangeOwnership(curOwner, newOwner, IndexMax);
+		}
 		public IMineOwnership Set(int index, PlayerType player)
 		{
 			var index2 = (31 & index) << 1;

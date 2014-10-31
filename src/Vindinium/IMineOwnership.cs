@@ -7,6 +7,7 @@
 		int Count(PlayerType player);
 		int Count(PlayerType player, int length);
 
+		IMineOwnership ChangeOwnership(PlayerType curOwner, PlayerType newOwner);
 		IMineOwnership ChangeOwnership(PlayerType curOwner, PlayerType newOwner, int mineCount);
 		IMineOwnership Set(int index, PlayerType owner);
 		IMineOwnership UpdateFromTiles(string tiles);

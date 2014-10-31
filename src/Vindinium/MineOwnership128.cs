@@ -40,6 +40,10 @@ namespace Vindinium
 			}
 			return mines;
 		}
+		public IMineOwnership ChangeOwnership(PlayerType curOwner, PlayerType newOwner)
+		{
+			return ChangeOwnership(curOwner, newOwner, IndexMax);
+		}
 		public IMineOwnership ChangeOwnership(PlayerType curOwner, PlayerType newOwner, int mineLength)
 		{
 			var mines = new MineOwnership128()
