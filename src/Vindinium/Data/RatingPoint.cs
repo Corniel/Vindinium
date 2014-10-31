@@ -8,7 +8,7 @@ namespace Vindinium.Data
 	[Serializable, DebuggerDisplay("{DebuggerDisplay}")]
 	public class RatingPoint : IComparable<RatingPoint>, IEquatable<RatingPoint>
 	{
-		private const string DatePattern = "yyyy-MM-dd hh:mm";
+		private const string DatePattern = "yyyy-MM-dd HH:mm";
 		[XmlAttribute("e")]
 		public int Elo { get; set; }
 
