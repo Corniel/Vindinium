@@ -61,9 +61,7 @@
     <Compile Include="Decisions\ScoreCollectionTest.cs" />
     <Compile Include="Deployment\Deployer.cs" />
     <Compile Include="DistanceTest.cs" />
-    <Compile Include="DrunkenViking\PotentialPathAssert.cs" />
-    <Compile Include="DrunkenViking\Processors\DrinkBeerProcessorTest.cs" />
-    <Compile Include="DrunkenViking\SafePathCollectionTest.cs" />
+    <Compile Include="HealthTest.cs" />
     <Compile Include="HeroTest.cs" />
     <Compile Include="MapTest.cs" />
     <Compile Include="MineOwnership128Test.cs">
@@ -87,10 +85,6 @@
     <EmbeddedResource Include="Serialization\GameResponse.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vindinium.DrunkenViking\Vindinium.DrunkenViking.csproj">
-      <Project>{f021d10e-0740-4bfd-a2fb-732296939cac}</Project>
-      <Name>Vindinium.DrunkenViking</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vindinium.Njord\Vindinium.Njord.csproj">
       <Project>{b8dadf16-b719-4b56-a788-1b6c9ff3f92c}</Project>
       <Name>Vindinium.Njord</Name>
