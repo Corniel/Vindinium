@@ -130,8 +130,8 @@ namespace Vindinium.Ygritte.Decisions
 					var target = map[oppo];
 					// We hit first, so we have an extra try
 					var isOddDistance = (distance & 2) == 1;
-					var hitsNeaded = (oppoHealth + Hero.HealthBattle - 1)/ Hero.HealthBattle;
-					var hitsPossible = (heroHealth + Hero.HealthBattle - 1)/ Hero.HealthBattle + (isOddDistance ? 1 : 0);
+					var hitsNeaded = oppoHealth.HitThreashold;
+					var hitsPossible = heroHealth.HitThreashold + (isOddDistance ? 1 : 0);
 
 					// are we interested in attacking?
 					// 1. We can kill the hero, and he has at least one mine or not on his own span, and he is not protected by a Tavern.

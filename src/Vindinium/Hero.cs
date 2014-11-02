@@ -31,13 +31,6 @@ namespace Vindinium
 		public const ulong MaskClearHealth = (ulong.MaxValue ^ MaskHealth);
 		public const ulong MaskIsCrashed = 1UL << PostionIsCrashed;
 
-		public const int HealthMax = 100;
-		public const int HealthTavern = 50;
-		public const int HealthBattle = 20;
-		public const int HealthThirst = 1;
-		public const int HealthThirsted = 1;
-		public const int HealthMin = 0;
-
 		public const int CostsTavern = 2;
 
 		private const int DimensionMin = 0;
@@ -45,14 +38,10 @@ namespace Vindinium
 		private const int GoldMin = 0;
 
 		/// <summary>Constructs a new Hero</summary>
-		public Hero(int health, int x, int y, int mines, int gold, bool isCrashed = false)
+		public Hero(Health health, int x, int y, int mines, int gold, bool isCrashed = false)
 		{
 			#region Garding (Debug only)
 #if DEBUG
-			if (health < Hero.HealthMin || health > Hero.HealthMax)
-			{
-				throw new ArgumentOutOfRangeException("health");
-			}
 			if (x < Hero.DimensionMin || x > Hero.DimensionMax)
 			{
 				throw new ArgumentOutOfRangeException("x");
@@ -132,7 +121,7 @@ namespace Vindinium
 		#region properties
 
 		/// <summary>Gets the health of the Hero.</summary>
-		public int Health { get { return (int)(m_Value & MaskHealth); } }
+		public Health Health { get { return (Health)(m_Value & MaskHealth); } }
 
 		/// <summary>Gets the x coordinate of the Hero.</summary>
 		public int X { get { return (int)((m_Value >> PositionX) & MaskDimension); } }
@@ -179,21 +168,11 @@ namespace Vindinium
 		}
 
 		/// <summary>Gets a version of the hero who is just slapped.</summary>
-		public Hero Slapped(int health)
+		public Hero SetHealth(Health health)
 		{
-#if DEBUG
-			if (health < 1 || health != this.Health)
-			{
-				throw new ArgumentOutOfRangeException("health", "should be at least 1.");
-			}
-#endif
-			unchecked
-			{
-				health -= Hero.HealthBattle;
-				var val = m_Value & Hero.MaskClearHealth;
-				val |= (ulong)health;
-				return new Hero() { m_Value = val };
-			}
+			var val = m_Value & Hero.MaskClearHealth;
+			val |= (ulong)health;
+			return new Hero() { m_Value = val };
 		}
 
 		/// <summary>Returns a System.String that represents the current Hero for debug purposes.</summary>
@@ -243,7 +222,7 @@ namespace Vindinium
 		/// <summary>Gets an initial Hero.</summary>
 		public static Hero Initial(int x, int y)
 		{
-			return new Hero(Hero.HealthMax, x, y, 0, 0);
+			return new Hero(Health.MaxValue, x, y, 0, 0);
 		}
 
 		/// <summary>Gets an initial Hero.</summary>
@@ -285,7 +264,7 @@ namespace Vindinium
 
 			var hero = new Hero();
 
-			hero.m_Value = (ulong)Hero.HealthMax;
+			hero.m_Value = (ulong)Health.MaxValue;
 			hero.m_Value |= location.Dimensions;
 			hero.m_Value |= ((ulong)gold) << PositionGold;
 
@@ -293,14 +272,10 @@ namespace Vindinium
 		}
 
 		/// <summary>Creates a new hero.</summary>
-		public static Hero Create(int health, Tile location, int mines, int gold, bool isCrashed = false)
+		public static Hero Create(Health health, Tile location, int mines, int gold, bool isCrashed = false)
 		{
 			#region Garding (Debug only)
 #if DEBUG
-			if (health < Hero.HealthMin || health > Hero.HealthMax)
-			{
-				throw new ArgumentOutOfRangeException("health");
-			}
 			if (location.X < Hero.DimensionMin || location.X > Hero.DimensionMax)
 			{
 				throw new ArgumentOutOfRangeException("location.X");

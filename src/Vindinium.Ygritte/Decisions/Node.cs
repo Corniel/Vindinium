@@ -161,7 +161,7 @@ namespace Vindinium.Ygritte.Decisions
 			else
 			{
 				var source = map[hero];
-				int health = hero.Health;
+				var health = hero.Health;
 				int mines = hero.Mines;
 
 
@@ -188,13 +188,13 @@ namespace Vindinium.Ygritte.Decisions
 				// If beside a Tavern, 
 				// or weak, 
 				// check if usefull.
-				else if (health < (Hero.HealthBattle << 1) || (map.GetDistanceToTavern(hero) == Distance.One && health < Hero.HealthMax - Hero.HealthBattle))
+				else if (health.HitThreashold < 3 || (map.GetDistanceToTavern(hero) == Distance.One && health.HitThreashold < 4))
 				{
 					plans.Add(PlanType.ToTavern);
 				}
 				
 				// only when we can conquer it.
-				if (health > Hero.HealthBattle)
+				if (health.HitThreashold > 1)
 				{
 					plans.Add(PlanType.ToMineClosetToTavern);
 					plans.Add(PlanType.ToMine);

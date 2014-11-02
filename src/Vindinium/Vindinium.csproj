@@ -48,6 +48,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Conversion\DistanceTypeConverter.cs" />
+    <Compile Include="Conversion\HealthTypeConverter.cs" />
     <Compile Include="Data\Player.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -64,6 +65,7 @@
     <Compile Include="Decisions\ScoreCollectionComparer.cs" />
     <Compile Include="Distance.cs" />
     <Compile Include="Distances.cs" />
+    <Compile Include="Health.cs" />
     <Compile Include="Logging\Game.cs" />
     <Compile Include="Hero.cs">
       <SubType>Code</SubType>

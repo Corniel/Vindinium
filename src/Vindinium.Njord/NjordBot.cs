@@ -78,9 +78,9 @@ namespace Vindinium.Njord
 
 				var oppo = this.State.GetHero(player);
 				var score = this.HeatMap.Get(this.Map[oppo]);
-				double healthdif = hero.Health - oppo.Health;
+				double healthdif = (int)hero.Health - (int)oppo.Health;
 
-				if (healthdif > Hero.HealthBattle)
+				if (healthdif > 20)
 				{
 					score += (oppo.Mines - 1) * 6000;
 				}
@@ -98,7 +98,7 @@ namespace Vindinium.Njord
 				var dis = Map.GetManhattanDistance(hero, mine);
 
 				// Only mines we can reach.
-				if (owner != this.Player && dis < hero.Health - 2 * Hero.HealthBattle)
+				if (owner != this.Player && dis < (int)hero.Health - 40)
 				{
 					var score = HeatMap.Get(mine);
 					score += owner == PlayerType.None ? 10000 : 9000;
@@ -106,13 +106,13 @@ namespace Vindinium.Njord
 				}
 			}
 
-			if (hero.Health < Hero.HealthMax - Hero.HealthBattle)
+			if (hero.Health.HitThreashold < 5)
 			{
 				// Set Tavern scores.
 				foreach (var Tavern in this.Map.Taverns)
 				{
 					var score = this.HeatMap.Get(Tavern);
-					score += 0.01 * (100 - hero.Health);
+					score += 0.01 * (100 - (int)hero.Health);
 					this.HeatMap.Set(Tavern, score);
 				}
 			}

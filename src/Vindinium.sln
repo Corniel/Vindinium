@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.Random", "Vindinium.Random\Vindinium.Random.csproj", "{FD01556E-38A1-4B45-BF86-3E16610117AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.DrunkenViking", "Vindinium.DrunkenViking\Vindinium.DrunkenViking.csproj", "{F021D10E-0740-4BFD-A2FB-732296939CAC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.Ygritte", "Vindinium.Ygritte\Vindinium.Ygritte.csproj", "{87995977-9953-4A47-95D7-5EE43DB1DA49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vindinium.Njord", "Vindinium.Njord\Vindinium.Njord.csproj", "{B8DADF16-B719-4B56-A788-1B6C9FF3F92C}"
@@ -50,10 +48,6 @@ Global
 		{FD01556E-38A1-4B45-BF86-3E16610117AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD01556E-38A1-4B45-BF86-3E16610117AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD01556E-38A1-4B45-BF86-3E16610117AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F021D10E-0740-4BFD-A2FB-732296939CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F021D10E-0740-4BFD-A2FB-732296939CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F021D10E-0740-4BFD-A2FB-732296939CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F021D10E-0740-4BFD-A2FB-732296939CAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87995977-9953-4A47-95D7-5EE43DB1DA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87995977-9953-4A47-95D7-5EE43DB1DA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87995977-9953-4A47-95D7-5EE43DB1DA49}.Release|Any CPU.ActiveCfg = Release|Any CPU

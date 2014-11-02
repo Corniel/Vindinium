@@ -26,7 +26,7 @@ namespace Vindinium.Ygritte.Decisions
 			var turnsLeft = (1200 - (int)player - state.Turn) >> 2;
 
 			var score = 1000 * gold;
-			score += 2 * (250 + health) * (1 + mines) * turnsLeft;
+			score += 2 * (250 + (int)health) * (1 + mines) * turnsLeft;
 
 			return new PotentialScore(score);
 		}

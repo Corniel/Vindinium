@@ -195,7 +195,7 @@ namespace Vindinium
 					ownership = ownership,
 				};
 
-				int health = hero.Health;
+				var health = hero.Health;
 				int mines = hero.Mines;
 				int gold = hero.Gold;
 
@@ -207,9 +207,9 @@ namespace Vindinium
 					// Try to get the mine.
 					if (ownerPlayer != player)
 					{
-						health = Math.Max(Hero.HealthMin, health - Hero.HealthBattle);
+						health = health.Slammed();
 
-						if (health > Hero.HealthMin)
+						if (health.IsAlive)
 						{
 							mines++;
 							state.ownership = state.ownership.Set(target.MineIndex, player);
@@ -232,7 +232,7 @@ namespace Vindinium
 					if (gold >= Hero.CostsTavern)
 					{
 						gold -= Hero.CostsTavern;
-						health = Math.Min(health + Hero.HealthTavern, Hero.HealthMax);
+						health = health.Drink();
 					}
 				}
 				// move or combat.
@@ -246,7 +246,7 @@ namespace Vindinium
 					}
 				}
 				// died trying to get a mine.
-				if (health == Hero.HealthMin)
+				if (health.IsDead)
 				{
 					state.ownership = state.ownership.ChangeOwnership(player, PlayerType.None, map.Mines.Length);
 					hero = Hero.Respawn(map.GetSpawn(player), gold);
@@ -263,8 +263,8 @@ namespace Vindinium
 						{
 							if (neighbor_tile == target)
 							{
-								var other_health = other_hero.Health;
-								if (other_health <= Hero.HealthBattle)
+								var other_health = other_hero.Health.Slammed();
+								if (other_health.IsDead)
 								{
 									var other_gold = other_hero.Gold;
 									mines += other_hero.Mines;
@@ -275,12 +275,16 @@ namespace Vindinium
 									}
 									state.ownership = state.ownership.ChangeOwnership(other_player, player, map.Mines.Length);
 								}
+								else
+								{
+									state.SetHero(other_player, other_hero.SetHealth(other_health));
+								}
 								break;
 							}
 						}
 					}
 					gold += mines;
-					health = Math.Max(Hero.HealthThirst, health - Hero.HealthThirst);
+					health = health.Step();
 					hero = Hero.Create(health, target, mines, gold);
 				}
 
