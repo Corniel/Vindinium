@@ -81,7 +81,7 @@ namespace Vindinium.Ygritte.Decisions
 					{
 						this.Process(map, turn++, PotentialScore.EmptyCollection);
 						YgritteBot.BestMove = new App.Move(this.BestMove, LogResult());
-						turn++;
+
 						// Was cancellation already requested?  
 						if (source.IsCancellationRequested == true)
 						{
