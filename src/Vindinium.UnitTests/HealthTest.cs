@@ -17,9 +17,9 @@ namespace Vindinium.UnitTests
 
         /// <summary>Health.MinValue should be equal to the default of health.</summary>
         [Test]
-		public void MinValue_None_EqualsDefault()
+		public void Dead_None_EqualsDefault()
         {
-            Assert.AreEqual(default(Health), Health.MinValue);
+            Assert.AreEqual(default(Health), Health.Dead);
         }
 
         #endregion
@@ -82,14 +82,14 @@ namespace Vindinium.UnitTests
         [Test]
         public void GetHash_Empty_Hash()
         {
-            Assert.AreEqual(0, Health.MinValue.GetHashCode());
+            Assert.AreEqual(1, Health.MinValue.GetHashCode());
         }
 
         /// <summary>GetHash should not fail for the test struct.</summary>
         [Test]
         public void GetHash_TestStruct_Hash()
         {
-            Assert.AreEqual(16, HealthTest.TestStruct.GetHashCode());
+            Assert.AreEqual(17, HealthTest.TestStruct.GetHashCode());
         }
 
         [Test]
@@ -341,6 +341,36 @@ namespace Vindinium.UnitTests
 			}
 		}
 
+		[Test]
+		public void IsAlive_Dead_IsFalse()
+		{
+			Assert.IsFalse(Health.Dead.IsAlive);
+		}
+		[Test]
+		public void IsDead_Dead_IsTrue()
+		{
+			Assert.IsTrue(Health.Dead.IsDead);
+		}
+
+		[Test]
+		public void IsAlive_1To100_IsTrue()
+		{
+			for (int i = 1; i <= 100; i++)
+			{
+				Health h = i;
+				Assert.IsTrue(h.IsAlive, "{0}", i);
+			}
+		}
+		[Test]
+		public void IsDead_1To100_IsFalse()
+		{
+			for (int i = 1; i <= 100; i++)
+			{
+				Health h = i;
+				Assert.IsFalse(h.IsDead, "{0}", i);
+			}
+		}
+
         #endregion
 
 		#region Methods
@@ -414,7 +444,6 @@ namespace Vindinium.UnitTests
 		}
 
 		#endregion
-
 	}
 
     [Serializable]

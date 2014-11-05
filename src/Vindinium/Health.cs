@@ -15,42 +15,49 @@ namespace Vindinium
     [TypeConverter(typeof(HealthTypeConverter))]
     public struct Health : ISerializable, IXmlSerializable, IFormattable, IComparable, IComparable<Health>
     {
+		private const int DEAD = 0;
+		private const int MIN = 1;
+		private const int MAX = 100;
+
+		private const int STEP = 1;
+		private const int HIT = 20;
+		private const int TAVERN = 50;
+
+
+		/// <summary>Constructs a new health value type.</summary>
 		private Health(int health)
 		{
 #if DEBUG
-			if (health < 1 || health > 100)
+			if (health < MIN || health > MAX)
 			{
 				throw new ArgumentOutOfRangeException("health", "The value should be in the range [1,100].");
 			}
 #endif
-			m_Value = health - 1;
+			m_Value = health;
 		}
 
 		/// <summary>Represents an empty/not set health.</summary>
-		public static readonly Health Dead = new Health() { m_Value = -1 };
+		public static readonly Health Dead = new Health() { m_Value = DEAD };
 
         /// <summary>Represents an empty/not set health.</summary>
-		public static readonly Health MinValue = new Health() { m_Value = 0 };
+		public static readonly Health MinValue = new Health() { m_Value = MIN };
 
         /// <summary>Represents an unknown (but set) health.</summary>
-		public static readonly Health MaxValue = new Health() { m_Value = 99 };
+		public static readonly Health MaxValue = new Health() { m_Value = MAX };
 
         #region Properties
 
         /// <summary>The inner value of the health.</summary>
         private Int32 m_Value;
 
-		/// <summary>The int32 value of the health.</summary>
-		private Int32 Int32Value { get { return m_Value + 1; } }
-
 		/// <summary>The number of hits that can be absorbed.</summary>
-		public Int32 HitThreashold { get { return 1 + m_Value / 20; } }
+		public Int32 HitThreashold { get { return 1 + (m_Value - 1) / HIT; } }
 
 		/// <summary>Returns true if still alive, otherwise false.</summary>
-		public bool IsAlive { get { return m_Value >= 0; } }
+		public bool IsAlive { get { return m_Value > DEAD; } }
 
 		/// <summary>Returns true if dead, otherwise false.</summary>
-		public bool IsDead { get { return m_Value == -1; } }
+		public bool IsDead { get { return m_Value == DEAD; } }
 
         #endregion
 
@@ -59,18 +66,19 @@ namespace Vindinium
 		/// <summary>Do a step.</summary>
 		public Health Step()
 		{
-			return new Health() { m_Value = m_Value > 0 ? m_Value - 1 : 0 };
+			return new Health() { m_Value = m_Value > MIN ? m_Value - STEP : MIN };
 		}
 
 		public Health Step(int turns)
 		{
-			return new Health() { m_Value = m_Value - turns >= 0 ? m_Value - turns : 0 };
+			var health = m_Value - turns * STEP;
+			return new Health() { m_Value = health < MIN ? MIN : health };
 		}
 
 		/// <summary>Drinks a beer.</summary>
 		public Health Drink()
 		{
-			return new Health() { m_Value = m_Value > 48 ? 99 : m_Value + 50 };
+			return new Health() { m_Value = m_Value >= (MAX - TAVERN) ? MAX : m_Value + TAVERN };
 		}
 
 		/// <summary>Handles being slammed.</summary>
@@ -79,7 +87,7 @@ namespace Vindinium
 		/// </remarks>
 		public Health Slammed()
 		{
-			return new Health() { m_Value = m_Value > 19 ? m_Value - 20 : -1 };
+			return new Health() { m_Value = m_Value > HIT ? m_Value - HIT : DEAD };
 		}
 
         #endregion
@@ -139,7 +147,7 @@ namespace Vindinium
         /// <summary>Returns a System.String that represents the current health for debug purposes.</summary>
          private string DebugToString()
         {
-			return string.Format(CultureInfo.InvariantCulture, "Health: {0}, Threshold {1}", Int32Value, HitThreashold);
+			return string.Format(CultureInfo.InvariantCulture, "Health: {0}, Threshold {1}", m_Value, HitThreashold);
         }
 
          /// <summary>Returns a System.String that represents the current health.</summary>
@@ -175,7 +183,7 @@ namespace Vindinium
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-			return Int32Value.ToString(format, formatProvider);
+			return m_Value.ToString(format, formatProvider);
         }
 
         #endregion
@@ -273,12 +281,12 @@ namespace Vindinium
         public static explicit operator Health(string str) { return Health.Parse(str, CultureInfo.CurrentCulture); }
 
         /// <summary>Casts a health to a System.Int32.</summary>
-        public static explicit operator Int32(Health val) { return val.Int32Value; }
+		public static explicit operator Int32(Health val) { return val.m_Value; }
         /// <summary>Casts an System.Int32 to a health.</summary>
         public static implicit operator Health(Int32 val) { return new Health(val); }
 
 		/// <summary>Casts a health to a System.Int32.</summary>
-		public static explicit operator UInt64(Health val) { return (ulong)val.Int32Value; }
+		public static explicit operator UInt64(Health val) { return (ulong)val.m_Value; }
 		/// <summary>Casts an System.Int32 to a health.</summary>
 		public static implicit operator Health(UInt64 val) { return new Health((int)val); }
 
@@ -383,7 +391,7 @@ namespace Vindinium
                 return false;
             }
 			Int32 val;
-            if (Int32.TryParse(s, NumberStyles.Integer, formatProvider, out val) && val >= MinValue.Int32Value && val <= MaxValue.Int32Value)
+			if (Int32.TryParse(s, NumberStyles.Integer, formatProvider, out val) && val >= MIN && val <= MAX)
             {
 				result = new Health(val);
                 return true;
