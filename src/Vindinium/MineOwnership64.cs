@@ -225,6 +225,7 @@ namespace Vindinium
 		}
 		
 		public override bool Equals(object obj) { return base.Equals(obj); }
+		public bool Equals(IMineOwnership other) { return Equals((MineOwnership64)other); }
 		public bool Equals(MineOwnership64 other)
 		{
 			return

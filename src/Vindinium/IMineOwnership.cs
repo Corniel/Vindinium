@@ -1,6 +1,8 @@
-﻿namespace Vindinium
+﻿using System;
+
+namespace Vindinium
 {
-	public interface IMineOwnership
+	public interface IMineOwnership : IEquatable<IMineOwnership>
 	{
 		PlayerType this[int index]{get;}
 

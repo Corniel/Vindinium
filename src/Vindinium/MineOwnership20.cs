@@ -151,6 +151,7 @@ namespace Vindinium
 		public override int GetHashCode() { return m_Value.GetHashCode(); }
 
 		public override bool Equals(object obj) { return base.Equals(obj); }
+		public bool Equals(IMineOwnership other) { return Equals((MineOwnership20)other); }
 		public bool Equals(MineOwnership20 other)
 		{
 			return this.m_Value == other.m_Value;
