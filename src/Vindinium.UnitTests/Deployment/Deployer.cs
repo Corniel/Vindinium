@@ -11,11 +11,12 @@ namespace Vindinium.UnitTests.Deployment
 	{
 		public static readonly Dictionary<string, string> Mappings = new Dictionary<string, string>()
 		{
-			{ "Drunken Viking", "Vindinium.DrunkenViking" },
+			//{ "Drunken Viking", "Vindinium.DrunkenViking" },
 			{ "Monte Carlo 1000", "Vindinium.MonteCarlo" },
 			{ "Njord", "Vindinium.Njord" },
 			{ "Slowhand", "Vindinium.Slowhand" },
-			{ "Ygritte", "Vindinium.Ygritte" },
+			{ "Ygritte 1", "Vindinium.Ygritte" },
+			{ "Ygritte", "Vindinium.Ygritte2" },
 		};
 
 #if !DEBUG

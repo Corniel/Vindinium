@@ -3,8 +3,6 @@
 	public class Move
 	{
 		public static readonly Move None = new Move(MoveDirection.x);
-		private MoveDirection moveDirection;
-
 
 		public Move(MoveDirection direction) : this(direction, null) { }
 		public Move(MoveDirection direction, string evaluation)

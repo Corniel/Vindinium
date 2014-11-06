@@ -74,6 +74,7 @@
     <Compile Include="Serialization\GameResponseTest.cs" />
     <Compile Include="StateTest.cs" />
     <Compile Include="TileTypesTest.cs" />
+    <Compile Include="Ygritte2\RootNodeTest.cs" />
     <Compile Include="Ygritte\NodeComparerTest.cs" />
     <Compile Include="Ygritte\NodeLookupTest.cs" />
     <Compile Include="Ygritte\YgritteStateEvaluatorTest.cs" />
@@ -96,6 +97,10 @@
     <ProjectReference Include="..\Vindinium.Viewer\Vindinium.Viewer.csproj">
       <Project>{2e940baf-eb9d-4962-9458-2aaaa4eb7072}</Project>
       <Name>Vindinium.Viewer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vindinium.Ygritte2\Vindinium.Ygritte2.csproj">
+      <Project>{b148130f-41ac-47f6-adbc-cab81fba2873}</Project>
+      <Name>Vindinium.Ygritte2</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vindinium.Ygritte\Vindinium.Ygritte.csproj">
       <Project>{87995977-9953-4a47-95d7-5ee43db1da49}</Project>

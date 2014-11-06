@@ -24,6 +24,10 @@ namespace Vindinium
 		{
 			return map[tile.X, tile.Y];
 		}
+		public static T Get<T>(this T[,] map, Hero hero)
+		{
+			return map[hero.X, hero.Y];
+		}
 
 		public static void Set<T>(this T[,] map, Tile tile, T val)
 		{
